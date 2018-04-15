@@ -1,1 +1,245 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video, input  {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+html, body, form, fieldset, p, div, h1, h2, h3, h4, h5, h6 {
+    -webkit-text-size-adjust: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    font-family: arial, sans-serif;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+ins {
+    text-decoration: none;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+/* generator by mobi */
+/* 瀵煎叆鍏ㄥ眬鏂规硶 */
+* {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+img {
+  max-width: 100%;
+  vertical-align: top;
+}
+a {
+  text-decoration: none;
+}
+html,
+body {
+  height: 100%;
+}
+#layout {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  padding-top: 44px;
+}
+#content {
+  padding-bottom: 70px;
+}
+#header {
+  width: 100%;
+  height: 45px;
+  background: -webkit-linear-gradient(left, #8E59F9, #07DCBE);
+  position: fixed;
+  -webkit-backface-visibility: hidden;
+  top: 0;
+  left: 0;
+}
+#header.fixfixed {
+  position: absolute;
+}
+#header #logo {
+  display: block;
+  background: url(http://cdn1.showjoy.com/images/ea/ea84c4ee81ef4f1d98dda0c596148389.png) no-repeat center center;
+  background-size: 82px 35px;
+  width: 100%;
+  /*
+     * 鍔犲叆鍑犱箮涓嶅彲瑙佺殑鏂囧瓧锛屼慨澶嶉儴鍒哸ndroid绔祻瑙堝櫒fixed鍐呭厓绱犲浘鐗囨ā绯婄殑闂
+     * @see http://stackoverflow.com/questions/17343897/css-positionfixed-causes-blurry-images-in-android-browsers
+     */
+}
+#header #logo:after {
+  content: '.';
+  color: #4c3855;
+  font-size: 1px;
+  float: right;
+}
+#header .ui-toolbar-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 45px;
+  line-height: 45px;
+  padding: 0 80px;
+}
+#header .ui-toolbar-left {
+  width: 35px;
+  height: 45px;
+  position: absolute;
+  left: 0;
+}
+#header .ui-pos-bottom-left .ui-arrow {
+  left: 21px;
+}
+#header .ui-toolbar-right {
+  position: absolute;
+  right: 0;
+  height: 45px;
+  min-width: 35px;
+}
+#header .ui-toolbar-right .ui-dropmenu {
+  top: 45px;
+  right: 0;
+}
+#header .ui-toolbar-right .ui-dropmenu a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#header .ui-toolbar-btn {
+  width: 40px !important;
+}
+#header .ui-pos-bottom-right .ui-arrow {
+  left: initial;
+  right: 10px;
+}
+.ui-toolbar-right-btn.active {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAXAQMAAAClNVQSAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAGUExURScRMCsWNBtRIrEAAAACdFJOUwLw+RhdpgAAAFRJREFUCNcly7EVgCAQBFHQwNASKIXSoDRLoQRDA54jc26wE/2U0pZix5+zR8oVqSPS7giPn5lm5w0GwUBYQFhB2EAIwrwyZQgXE56my4TVDNkP3Qd8QzvOmobH8QAAAABJRU5ErkJggg==");
+  background-position: center bottom -1px;
+  background-size: 50%;
+  background-repeat: no-repeat;
+}
+.global-search {
+  display: none;
+  padding: 7px 5px 0;
+  height: 49px;
+  background-color: #2B1634;
+}
+.global-search .search-form {
+  position: relative;
+  width: 100%;
+  height: 35px;
+  border-radius: 4px;
+  display: -webkit-box;
+}
+.global-search .search-form .search-input {
+  display: block;
+  -webkit-box-flex: 1;
+  height: 35px;
+  font-size: 13px;
+  color: #422f4a;
+  padding-left: 8px;
+  padding-right: 35px;
+  background-color: #f6f2f7;
+  border-radius: 0;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.global-search .search-form .clear-content {
+  display: none;
+  position: absolute;
+  right: 70px;
+  top: 0;
+  bottom: 0;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAYUExURQAAAJ+fn6CgoJ6enqGhof39/dvb27y8vPe4uisAAAAEdFJOUwCCzUfHztREAAAAtklEQVQY02VRwQ3CMAwMEgMgwQSFBUAMQFsrWaBmglgs0OyPfW6rNPUj6sln3/UcgtWzo+4atrqRVb/CF3ndHZ5orQvwY8PDvu2Ed4XHHR0DRi9Zn/TFwFlfts/CM9EH48KZEjMWmLeohMITPGKd8A9tXQgcmdFW7ELibaIFF0gYBl+Xc67mte2EAXqmLSD08GPaEYTR/TIk4Nf+RyZ48AB0YYLU7AG1ebR5tXke8m7vcbhXfc8/LCdiY/TVbpMAAAAASUVORK5CYII=");
+  background-size: 50%;
+  background-repeat: no-repeat;
+  width: 30px;
+  background-position: center;
+}
+.global-search .search-form .search-btn {
+  display: block;
+  position: relative;
+  width: 71px;
+  height: 35px;
+  color: #fff;
+  background-color: #8D59F9;
+  border: none;
+  padding: 0;
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  font-size: 14px;
+}
+.global-search .search-form .search-btn .search-icon {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+.global-search .search-form .search-btn .search-text {
+  vertical-align: middle;
+}
+.shopping-bag {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  right: 10px;
+  bottom: 70px;
+  z-index: 999;
+}
+.shopping-bag .item-num {
+  position: absolute;
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #ca0813;
+  right: 7px;
+  top: 7px;
+  font-size: 10px;
+  color: #fff;
+  line-height: 16px;
+  text-align: center;
+}
+.shopping-bag-position {
+  bottom: 125px;
+}
+.backtop {
+  display: none;
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  right: 10px;
+  bottom: 70px;
+  z-index: 999;
+}
 *{-webkit-overflow-scrolling:touch}@keyframes fall{from{top:0;-webkit-transform:rotate(0);transform:rotate(0)}to{top:100%;-webkit-transform:rotate(180deg);transform:rotate(180deg)}}@-webkit-keyframes fall{from{top:0;-webkit-transform:rotate(0);transform:rotate(0)}to{top:100%;-webkit-transform:rotate(180deg);transform:rotate(180deg)}}@keyframes arrows{from{bottom:12.5rem;opacity:1}to{bottom:14.5rem;opacity:.5}}@-webkit-keyframes arrows{from{bottom:12.5rem;opacity:1}to{bottom:14.5rem;opacity:.5}}.count-money-game-wrap{position:absolute;z-index:0;overflow:hidden}.count-money-game-wrap .float-money{position:absolute;width:5rem;top:0;left:0;z-index:1}.count-money-game-wrap .fall-animation{animation:fall .5s linear;-webkit-animation:fall .5s linear}.count-money-game-wrap .count-money-game-hand{position:absolute;bottom:0;z-index:2}.count-money-game-wrap .money-100{position:absolute;width:11rem;top:20.8rem;left:6.2rem;z-index:4}.count-money-game-wrap .game-number{pointer-events:none}.count-money-game-wrap .count-money-game-header{position:absolute;top:0;z-index:6}.count-money-game-wrap .count-money-game-thumb{position:absolute;bottom:4.2rem;left:4.2rem;z-index:6}.count-money-game-wrap .remaining-second{position:absolute;left:6.3rem;top:5rem;font-size:3.3rem;color:#ead0a7;z-index:6}.count-money-game-wrap .remaining-ms{position:absolute;right:6.5rem;top:5rem;font-size:3.3rem;color:#ead0a7;z-index:6}.count-money-game-wrap .accumulated-money-text{position:absolute;width:100%;top:14rem;text-align:center;font-size:1.3rem;color:#ead0a7;z-index:6}.count-money-game-wrap .game-count{position:absolute;width:100%;top:10.18rem;text-align:center;font-size:1.2rem;padding-left:3px;color:#a2050f;z-index:6}.game-shadow .shadow-wrap{pointer-events:none;position:absolute;top:0;background-color:#4c4c4c;opacity:.8;width:100%;height:41.6875rem}.game-shadow .shadow-img{position:absolute;top:0}.game-shadow .shadow-img .shadow-arrows{position:absolute;bottom:12.5rem;left:10rem;width:2.75rem;animation:arrows 1.5s infinite;-webkit-animation:arrows 1.5s infinite}.game-result{display:none}.game-result .result-img{position:absolute;top:0}.game-result .result-group{position:relative;top:0;width:100%;height:0}.game-result .result-group .money-count{position:absolute;width:100%;top:4.2rem;font-size:1.8rem;color:#be111b;text-align:center;letter-spacing:.1rem}.game-result .result-group .play-again{position:absolute;width:4.6rem;height:1.5rem;bottom:41.1rem;right:4.7rem}.game-result .result-group .share-game{position:absolute;width:5.2rem;height:1.5rem;bottom:41.1rem;left:4.3rem}.game-result .result-group .result-content-dom .discount-count{position:absolute;text-align:center;width:4rem;height:3.5rem;top:11.7rem;left:12.5rem;font-size:3.7rem;color:#e4c998}.game-result .result-group .result-content-dom .discount-full{position:absolute;width:5rem;height:1rem;font-size:.7rem;top:15.75rem;left:11.6rem;color:#a1040e;text-align:center}.game-result .result-group .result-content-dom .free-content{position:absolute;top:20rem;width:100%;text-align:center;color:#be111b;font-size:.9rem}.game-result .result-group .result-content-dom .free-content .free-order-number{font-size:1rem;font-weight:700}.game-result .result-group .result-content-dom .free-content .look-details{color:#be111b}
