@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=375, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no,email=no">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <link rel="stylesheet" type="text/css" href="http://cdn1.showjoy.com/assets/f2e/joyf2e/vendor/0.0.2/gmu/reset.css" />
+    <link href="http://cdn1.showjoy.com/assets/f2e/showjoy-assets/common-m/0.0.4/m-header/m-header.css" rel="stylesheet" />
+    <script type="text/javascript" src="http://cdn1.showjoy.com/assets/f2e/joyf2e/vendor/0.0.2/gmu/zepto.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <title>五一数钱小游戏</title>
+
+    <!-- local css files -->
+    <link rel="stylesheet" href="./count-money-game.min.css"/>
+
+  </head>
+
+  <body>
+
+    <div class="count-money-game-wrap">
+      <!-- 背景层 -->
+      <div id="game-background" class="game-background">
+        <img class="count-money-game-background" src="http://cdn1.showjoy.com/images/85/85e1054f06e243ba8da721ecabb838c6.png">
+        <img id="float-money-1" class="float-money" src="http://cdn1.showjoy.com/images/c3/c36daf52296b4fb9a1bebf8bf97b2435.png">
+        <img id="float-money-2" class="float-money" src="http://cdn1.showjoy.com/images/0a/0a1bcb2dc97348cfa121488505c42d31.png">
+        <img id="float-money-3" class="float-money" src="http://cdn1.showjoy.com/images/04/0454ea434e224ab18c7d75dab908d864.png">
+      </div>
+      <!-- 左下角手层 -->
+      <!-- <div class="game-hand"> -->
+          <img class="count-money-game-hand" src="http://cdn1.showjoy.com/images/14/14363b1484c3441a8de0d6515dfd4dbd.png">
+      <!-- </div> -->
+      <!-- 可数人民币层 -->
+      <div id="game-moneys" class="game-moneys">
+          <img class="money-100" src="http://cdn1.showjoy.com/images/0f/0f4ac3cac24748d09d2f003e9b21570f.png">
+          <img class="money-100" src="http://cdn1.showjoy.com/images/0f/0f4ac3cac24748d09d2f003e9b21570f.png">
+          <img class="money-100" src="http://cdn1.showjoy.com/images/0f/0f4ac3cac24748d09d2f003e9b21570f.png">
+          <img class="money-100" src="http://cdn1.showjoy.com/images/0f/0f4ac3cac24748d09d2f003e9b21570f.png">
+          <img class="money-100" src="http://cdn1.showjoy.com/images/0f/0f4ac3cac24748d09d2f003e9b21570f.png">
+      </div>
+      <!-- 统计数字层(带手指) -->
+      <!-- <div class="game-number"> -->
+          <img class="count-money-game-header game-number" src="http://cdn1.showjoy.com/images/18/1854edad192a4a44a651f4381b37b289.png">
+          <!-- 手指 -->
+          <img class="count-money-game-thumb game-number" src="http://cdn1.showjoy.com/images/d7/d7e9cbeed37f49f8aa112b0c79abe4af.png">
+          <!-- 统计数字 -->
+          <span id="second-time" class="remaining-second">15</span>
+          <span id="ms-time" class="remaining-ms">00</span>
+          <span class="accumulated-money-text">已数&nbsp;&nbsp;&nbsp;￥
+            <span id="moneyTotal" style="margin-left: -0.5rem">0</span>
+          </span>
+          <span id="game-count" class="game-count">3</span>
+      <!-- </div> -->
+    </div>
+  <!-- 遮罩层 -->
+  <div id="game-shadow" class="game-shadow">
+      <div id="shadow-wrap" class="shadow-wrap"></div>
+      <div id="shadow-img" class="shadow-img">
+        <img src="http://cdn1.showjoy.com/images/cd/cdaf478c85474f7695cbbfa0209e54b0.png" />
+        <img id="shadow-arrows" class="shadow-arrows" src="http://cdn1.showjoy.com/images/5e/5ef9a207b84d4b2a9eb362dcd346e045.png">
+      </div>
+    </div>
+    <!-- 结果界面 -->
+    <div id="result-wrap" class="game-result">
+      <div id="result-group" class="result-group">
+        <div id="money-count" class="money-count"></div>
+        <div id="play-again" class="play-again"></div>
+        <div id="share-game" class="share-game"></div>
+        <div id="result-content-dom" class="result-content-dom"></div>
+      </div>
+    </div>
+    <!-- local javascript files -->
+    <script src="./count-money-game.min.js"></script>
+  </body>
+</html>
