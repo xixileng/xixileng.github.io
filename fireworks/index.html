@@ -1,0 +1,188 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ECharts</title>
+</head>
+
+<body style="background:#1B1B1B">
+<!--Step:1 Prepare a dom for ECharts which (must) has size (width & hight)--> 
+<!--Step:1 为ECharts准备一个具备大小（宽高）的Dom-->
+<div id="mainMap" style="height:95%;width: 90%;">
+</div>
+<!--Step:2 Import echarts.js--> 
+<!--Step:2 引入echarts.js-->
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script> 
+<script src="./build/dist/echarts.js" charset="UTF-8"></script>
+<script type="text/javascript">
+	$('#document').ready(function(){
+		 getEcharts();
+	 });
+
+var geoCoord1={};
+for(var i=0;i<200;i++){
+geoCoord1["点"+i]=[Math.random()*1.5+113.75,Math.random()+30.375]};
+
+function getEcharts(){
+    // Step:3 conifg ECharts's path, link to echarts.js from current page.
+    // Step:3 为模块加载器配置echarts的路径，从当前页面链接到echarts.js，定义所需图表路径
+    require.config({
+        paths: {
+            echarts: 'build/dist'
+        }
+    });
+    
+    // Step:4 require echarts and use it in the callback.
+    // Step:4 动态加载echarts然后在回调函数中开始使用，注意保持按需加载结构定义图表路径
+    require(
+        [
+            'echarts',
+            'echarts/chart/map'
+        ],
+        function (ec) {
+            // --- 地图 ---
+            var myChart2 = ec.init(document.getElementById('mainMap'));
+            myChart2.setOption({	
+				dataRange: {
+                    show:false,				
+					min : 0,
+					max : 1,
+					calculable : true,
+					color: ['#ff3333', 'orange', 'yellow','#9f9','#3f0'],
+					textStyle:{
+						color:'#fff'
+					    }
+				    },
+				   legend: {
+				   show:false,
+                   orient: 'vertical',
+                   y: '52%',
+                   x:'left',
+                   data:[],
+                   textStyle: {
+                   color: '#fff'
+                      }
+                   },
+				   toolbox: {
+                      show : false,
+                      orient : 'vertical',
+                      x: 'left',
+                      y: '0px',
+                      feature : {
+                      mark : {show: true},
+                      dataView : {show: true, readOnly: false},
+                      restore : {show: true},
+                      saveAsImage : {show: true}
+                       }
+                   },
+				series : [
+					{
+						name: '烟花',
+						type: 'map',
+						roam: true,
+						hoverable: false,
+						mapType: '湖北|武汉市',						
+						itemStyle:{
+							normal:{							    
+								//borderColor:'rgba(100,149,237,1)',
+								borderColor:'#1B1B1B',
+								borderWidth:0.8,
+								areaStyle:{
+									color: '#1b1b1b'
+								}
+							}
+						},
+						data:[],					
+						geoCoord: {
+							'点x':[114.5,29.95],
+							'点y':[114.5,30.8],
+							//'点3':[Math.random()+114,Math.random()+30.375],
+							
+						},
+						
+						markPoint : {						   
+							symbol:'heart',
+							symbolSize :8,
+							effect : {
+								show: true,
+								shadowBlur : 0
+							},
+							itemStyle:{
+								normal:{
+									label:{show:false}
+								},
+								emphasis: {
+									label:{show:false,position:'top'}
+								}
+							},
+							/*
+							data :  (function(){
+                                  var data = [];
+                                  var len = 100;
+                                 // var geoCoord
+                                  while(len--) {
+                                 // geoCoord = placeList[len % placeList.length].geoCoord;
+                                  data.push({
+                                  name : Math.random(),
+                                  value : Math.random(),
+                                  geoCoord : [
+                                  Math.random()+114,
+                                  Math.random()+30.375
+                                    ]
+                                  })
+                                }
+                                 return data;
+                             })()*/
+							 	
+							data :  (function(){
+                                  var data = [{name:'点x',value:Math.random()},
+								              {name:'点y',value:Math.random()},];
+                                  for(var key in geoCoord1) {
+                                  data.push({
+                                  name : key,
+                                  value : Math.random(),
+                                  geoCoord : geoCoord1[key]
+                                  })
+                                }
+                                 return data;
+                             })()
+						},	
+					
+						markLine : {
+							smooth:true,
+							smoothness:0.1,
+							effect : {
+								show: true,
+								scaleSize: 2,
+								period: 15,
+								color: 'white',
+								shadowBlur: 10
+							},
+							itemStyle : {
+								normal: {
+									label:{show:false},
+									borderWidth:2,
+									lineStyle: {
+										type: 'dotted',
+										shadowBlur: 10
+									}
+								}
+							},
+							data : (function(){
+                                  var data = [[{name:'点x',smoothness:0},{name:'点y',value:Math.random()}]];
+								  for(var key in geoCoord1){
+								  data.push([{name:'点y'},{name:key,value:Math.random(),geoCoord : geoCoord1[key]}])
+								  }                                
+                                 return data;
+                             })()
+						}
+						
+					
+					},
+					
+				]
+        });
+	});
+}
+    </script>
+</body>
+</html>
