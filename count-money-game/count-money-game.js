@@ -162,6 +162,7 @@ CountMoneyGame.prototype = {
           success: type < 4,
           worth: 15,
           couponName: '满199元可用',
+          orderNumber: '8888888888'
         }
         if(data.success) {
           // 据说这样更符合面向对象编程理念,重点是eslint对switch缩进判断很坑啊~~~
