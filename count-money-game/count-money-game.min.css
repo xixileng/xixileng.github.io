@@ -242,4 +242,229 @@ body {
   bottom: 70px;
   z-index: 999;
 }
-*{-webkit-overflow-scrolling:touch}@keyframes fall{from{top:0;-webkit-transform:rotate(0);transform:rotate(0)}to{top:100%;-webkit-transform:rotate(180deg);transform:rotate(180deg)}}@-webkit-keyframes fall{from{top:0;-webkit-transform:rotate(0);transform:rotate(0)}to{top:100%;-webkit-transform:rotate(180deg);transform:rotate(180deg)}}@keyframes arrows{from{bottom:12.5rem;opacity:1}to{bottom:14rem;opacity:.5}}@-webkit-keyframes arrows{from{bottom:12.5rem;opacity:1}to{bottom:14rem;opacity:.5}}.count-money-game-wrap{position:absolute;z-index:0;overflow:hidden}.count-money-game-wrap .float-money{position:absolute;width:5rem;top:0;left:0;z-index:1}.count-money-game-wrap .fall-animation{animation:fall .5s linear;-webkit-animation:fall .5s linear}.count-money-game-wrap .count-money-game-hand{position:absolute;bottom:0;z-index:2}.count-money-game-wrap .money-100{position:absolute;width:11rem;top:20.8rem;left:6.2rem;z-index:4}.count-money-game-wrap .game-number{pointer-events:none}.count-money-game-wrap .count-money-game-header{position:absolute;top:0;z-index:6}.count-money-game-wrap .count-money-game-thumb{position:absolute;bottom:4.2rem;left:4.2rem;z-index:6}.count-money-game-wrap .remaining-second{position:absolute;left:6.3rem;top:5rem;font-size:3.3rem;font-weight:bold;color:#ead0a7;z-index:6}.count-money-game-wrap .remaining-ms{position:absolute;right:6.5rem;top:5rem;font-weight:bold;font-size:3.3rem;color:#ead0a7;z-index:6}.count-money-game-wrap .accumulated-money-text{position:absolute;width:100%;top:14rem;text-align:center;font-weight: bold;font-size:1.3rem;color:#ead0a7;z-index:6}.count-money-game-wrap .game-count{position:absolute;width:100%;top:10.18rem;font-weight:bold;text-align:center;font-size:1.2rem;padding-left:3px;color:#a2050f;z-index:6}.game-shadow .shadow-wrap{pointer-events:none;position:absolute;top:0;background-color:#000000;opacity:0.7;width:100%;height:41.6875rem}.game-shadow .shadow-img{position:absolute;top:0}.game-shadow .shadow-img .shadow-arrows{position:absolute;bottom:12.5rem;left:10rem;width:2.75rem;animation:arrows 1.5s infinite;-webkit-animation:arrows 1.5s infinite}.game-result{pointer-events: none;display:none}.game-result .result-img{position:absolute;top:0}.game-result .result-group{position:relative;top:0;width:100%;height:0}.game-result .result-group .money-count{position:absolute;width:100%;top:4.2rem;font-size:1.8rem;color:#be111b;text-shadow: 0 0 1px #be111b;text-align:center;letter-spacing:.1rem}.game-result .result-group .play-again{position:absolute;width:4.6rem;height:1.5rem;bottom:41.1rem;right:4.7rem}.game-result .result-group .share-game{position:absolute;width:5.2rem;height:1.5rem;bottom:41.1rem;left:4.3rem}.game-result .result-group .result-content-dom .discount-count{position:absolute;text-align:center;width:4rem;height:3.5rem;top:11.7rem;left:12.5rem;font-size:3.7rem;color:#e4c998}.game-result .result-group .result-content-dom .discount-full{position:absolute;width:5rem;height:1rem;font-size:.7rem;top:15.75rem;left:11.6rem;color:#a1040e;text-align:center}.game-result .result-group .result-content-dom .free-content{position:absolute;top:20rem;width:100%;text-align:center;color:#be111b;font-size:.9rem}.game-result .result-group .result-content-dom .free-content .free-order-number{font-size:1rem;font-weight:700}.game-result .result-group .result-content-dom .free-content .look-details{color:#be111b}
+/* generator by mobi */
+/* 导入全局方法 */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+@keyframes fall {
+  from {
+    top: 0;
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    top: 100%;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+}
+@-webkit-keyframes fall {
+  from {
+    top: 0;
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
+  }
+  to {
+    top: 100%;
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+}
+@keyframes arrows {
+  from {
+    bottom: 12.5rem;
+    opacity: 1;
+  }
+  to {
+    bottom: 14rem;
+    opacity: 0.5;
+  }
+}
+@-webkit-keyframes arrows {
+  from {
+    bottom: 12.5rem;
+    opacity: 1;
+  }
+  to {
+    bottom: 14rem;
+    opacity: 0.5;
+  }
+}
+.count-money-game-wrap {
+  position: absolute;
+  z-index: 0;
+  overflow: hidden;
+}
+.count-money-game-wrap .float-money {
+  position: absolute;
+  width: 5rem;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.count-money-game-wrap .fall-animation {
+  animation: fall 0.5s linear;
+  -webkit-animation: fall 0.5s linear;
+  /*Safari and Chrome*/
+}
+.count-money-game-wrap .count-money-game-hand {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+}
+.count-money-game-wrap .money-100 {
+  position: absolute;
+  width: 11rem;
+  top: 20.8rem;
+  left: 6.2rem;
+  z-index: 4;
+}
+.count-money-game-wrap .game-number {
+  pointer-events: none;
+}
+.count-money-game-wrap .count-money-game-header {
+  position: absolute;
+  top: 0;
+  z-index: 6;
+}
+.count-money-game-wrap .count-money-game-thumb {
+  position: absolute;
+  bottom: 4.2rem;
+  left: 4.2rem;
+  z-index: 6;
+}
+.count-money-game-wrap .remaining-second {
+  position: absolute;
+  left: 6.3rem;
+  top: 5rem;
+  font-size: 3.3rem;
+  font-weight: bold;
+  color: #ead0a7;
+  z-index: 6;
+}
+.count-money-game-wrap .remaining-ms {
+  position: absolute;
+  right: 6.5rem;
+  top: 5rem;
+  font-size: 3.3rem;
+  font-weight: bold;
+  color: #ead0a7;
+  z-index: 6;
+}
+.count-money-game-wrap .accumulated-money-text {
+  position: absolute;
+  width: 100%;
+  top: 14rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ead0a7;
+  z-index: 6;
+}
+.count-money-game-wrap .game-count {
+  position: absolute;
+  width: 100%;
+  top: 10.18rem;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.2rem;
+  padding-left: 3px;
+  color: #a2050f;
+  z-index: 6;
+}
+.game-shadow .shadow-wrap {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  background-color: #000000;
+  opacity: 0.7;
+  width: 100%;
+  height: 41.6875rem;
+}
+.game-shadow .shadow-img {
+  position: absolute;
+  top: 0;
+}
+.game-shadow .shadow-img .shadow-arrows {
+  position: absolute;
+  bottom: 12.5rem;
+  left: 10rem;
+  width: 2.75rem;
+  animation: arrows 1.5s infinite;
+  -webkit-animation: arrows 1.5s infinite;
+  /*Safari and Chrome*/
+}
+.game-result {
+  display: none;
+  pointer-events: none;
+}
+.game-result .result-img {
+  position: absolute;
+  top: 0;
+}
+.game-result .result-group {
+  position: relative;
+  top: 0;
+  width: 100%;
+  height: 0;
+}
+.game-result .result-group .money-count {
+  position: absolute;
+  width: 100%;
+  top: 4.2rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #be111b;
+  text-align: center;
+  letter-spacing: 0.1rem;
+}
+.game-result .result-group .play-again {
+  position: absolute;
+  width: 4.6rem;
+  height: 1.5rem;
+  bottom: 41.1rem;
+  right: 4.7rem;
+}
+.game-result .result-group .share-game {
+  position: absolute;
+  width: 5.2rem;
+  height: 1.5rem;
+  bottom: 41.1rem;
+  left: 4.3rem;
+}
+.game-result .result-group .result-content-dom .discount-count {
+  position: absolute;
+  text-align: center;
+  width: 4rem;
+  height: 3.5rem;
+  top: 11.7rem;
+  left: 12.5rem;
+  font-size: 3.7rem;
+  color: #e4c998;
+}
+.game-result .result-group .result-content-dom .discount-full {
+  position: absolute;
+  width: 5rem;
+  height: 1rem;
+  font-size: 0.7rem;
+  top: 15.75rem;
+  left: 11.6rem;
+  color: #a1040e;
+  text-align: center;
+}
+.game-result .result-group .result-content-dom .free-content {
+  position: absolute;
+  top: 20rem;
+  width: 100%;
+  text-align: center;
+  color: #be111b;
+  font-size: 0.9rem;
+}
+.game-result .result-group .result-content-dom .free-content .free-order-number {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.game-result .result-group .result-content-dom .free-content .look-details {
+  color: #be111b;
+}
