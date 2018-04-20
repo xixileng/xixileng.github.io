@@ -121,7 +121,7 @@ CountMoneyGame.prototype = {
           zIndex: this.money_index - 1,
         });
         // 掉钱
-        $('#money-audio').play();
+        document.getElementById('money-audio').play();
         this.fallMoney();
       }, undefined, true);
     });
@@ -148,7 +148,7 @@ CountMoneyGame.prototype = {
   // 游戏结束
   gameOver() {
     clearInterval(this.timeInterval);
-    $('#result-audio').play();
+    document.getElementById('result-audio').play();
     this.countResult();
   },
   countResult() {
