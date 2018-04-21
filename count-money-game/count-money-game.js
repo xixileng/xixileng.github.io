@@ -25,15 +25,15 @@ function CountMoneyGame() {
   this.initial_y = parseFloat($('.money-100').css('top'));
   this.money_index = parseInt($('.money-100').css('z-index'));
   // 优惠券
-  this.result_discount = 'http://cdn1.showjoy.com/images/55/552c2be43a8e478fa12a1789f49b5275.png';
+  this.result_discount = '//cdn1.showjoy.com/images/55/552c2be43a8e478fa12a1789f49b5275.png';
   // 0元购物券
-  this.result_zero = 'http://cdn1.showjoy.com/images/50/508530819b8b493a90975d55f9a6b19a.png';
+  this.result_zero = '//cdn1.showjoy.com/images/50/508530819b8b493a90975d55f9a6b19a.png';
   // 免单
-  this.result_free = 'http://cdn1.showjoy.com/images/96/96eec1fa08a54684a2dbf7d29603071f.png';
+  this.result_free = '//cdn1.showjoy.com/images/96/96eec1fa08a54684a2dbf7d29603071f.png';
   // 未满6900
-  this.result_nothing = 'http://cdn1.showjoy.com/images/d0/d026e37e1107409f97e7ad323293b5bd.png';
+  this.result_nothing = '//cdn1.showjoy.com/images/d0/d026e37e1107409f97e7ad323293b5bd.png';
   // 满6900未中奖
-  this.result_no_award = 'http://cdn1.showjoy.com/images/12/12bc6c23ba9546c897f488e38d196e72.png';
+  this.result_no_award = '//cdn1.showjoy.com/images/12/12bc6c23ba9546c897f488e38d196e72.png';
   this.result_url = '';
   // 动画结束事件兼容性判断
   this.animationType = this.game_background.style.WebkitAnimation === undefined ? 'animationend' : 'webkitAnimationEnd';
@@ -113,6 +113,8 @@ CountMoneyGame.prototype = {
     });
     // 数完该张
     gameMoneys.on('touchend', (e) => {
+      document.getElementById('money-audio').load();
+      document.getElementById('money-audio').play();
       this.touchendHandle(e, (target) => {
         // 结束动画回调,让钱归位复用
         target.css({
@@ -265,8 +267,6 @@ CountMoneyGame.prototype = {
   },
   // 滑动结束事件
   touchendHandle(e, next = () => {}, cancel = () => {}, isMoney = false) {
-    document.getElementById('money-audio').pause();
-    document.getElementById('money-audio').play();
     e.preventDefault();
     const target = isMoney ? $(e.target) : $(e.currentTarget);
     this.endY = +e.changedTouches[0].clientY;
