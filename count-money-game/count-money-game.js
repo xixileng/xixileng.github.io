@@ -76,6 +76,7 @@ CountMoneyGame.prototype = {
     const gameMoneys = $('#game-moneys');
     let opacity = 0;
     shadowImg.on('touchstart',(e) => {
+      document.getElementById('money-audio').load();
       this.touchstartHandle(e);
     });
     shadowImg.on('touchmove',(e) => {
@@ -113,7 +114,7 @@ CountMoneyGame.prototype = {
     });
     // 数完该张
     gameMoneys.on('touchend', (e) => {
-      document.getElementById('money-audio').load();
+      // document.getElementById('money-audio').load();
       document.getElementById('money-audio').play();
       this.touchendHandle(e, (target) => {
         // 结束动画回调,让钱归位复用
