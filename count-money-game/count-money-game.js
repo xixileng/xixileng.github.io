@@ -121,7 +121,6 @@ CountMoneyGame.prototype = {
           zIndex: this.money_index - 1,
         });
         // 掉钱
-        document.getElementById('money-audio').play();
         this.fallMoney();
       }, undefined, true);
     });
@@ -266,6 +265,8 @@ CountMoneyGame.prototype = {
   },
   // 滑动结束事件
   touchendHandle(e, next = () => {}, cancel = () => {}, isMoney = false) {
+    document.getElementById('money-audio').pause();
+    document.getElementById('money-audio').play();
     e.preventDefault();
     const target = isMoney ? $(e.target) : $(e.currentTarget);
     this.endY = +e.changedTouches[0].clientY;
