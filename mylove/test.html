@@ -1,0 +1,179 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+  html, body {
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+  #main{
+    height: 100%;
+    width: 100%;
+  }
+  .beMyGirlfriend {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    transform: translateX(-40%);
+    width: 60%;
+    border: solid 1px #d65555;
+    border-radius: 40px;
+    padding-top: 30px;
+    background-color: #f7f0f0;
+    height: 300px;
+    text-align: center;
+    font-size: 52px;
+    animation:changeColor 4s linear 0s infinite alternate;
+    -webkit-animation:changeColor 4s linear 0s infinite alternate;
+  }
+  .confirmBtn {
+    position: absolute;
+    width: 100%;
+    bottom: 40px;
+    left: 40%;
+    transform: translateX(-40%);
+  }
+  
+  .agree {
+    font-size: 40px;
+    color: #e01e40;
+    padding: 0 10px;
+    border-radius: 20px;
+    margin-right: 200px;
+  }
+  .disagree {
+    color: #c5bebe;
+    padding: 0 10px;
+    border-radius: 20px;
+    font-size: 40px;
+  }
+  
+  @keyframes changeColor {
+    0% {color: #f1ad32;}
+    20% {color: #fa71b5;}
+    40% {color: #fcaa02;}
+    75% {color: #adbdf7;}
+    100% {color: #c2cd07;}
+  }
+
+  @-webkit-keyframes changeColor {
+      0% {color: #f1ad32;}
+      20% {color: #fa71b5;}
+      40% {color: #fcaa02;}
+      75% {color: #adbdf7;}
+      100% {color: #c2cd07;}
+  }
+</style>
+</head> 
+<body>
+  <div id="main">
+    <canvas id="love"></canvas>
+  </div>
+<script>
+  window.onload = function(){
+      // initChart();
+      initWord();
+  }
+  function initChart() {
+   const isLoveMe = document.createElement('div');
+   isLoveMe.id = 'loveMe';
+   isLoveMe.className = 'beMyGirlfriend';
+   isLoveMe.innerHTML = `🌹❤️曹佳丽同学❤️你愿意做我女朋友吗❤️🌹?
+   <div class='confirmBtn'><button id='agree' class='agree'>我愿意(*^_^*)</button><button id='disagree' class='disagree'>我不愿意!</button></div>`;
+   document.body.appendChild(isLoveMe);
+   const agree = document.getElementById('agree');
+   const disagree = document.getElementById('disagree');
+   agree.addEventListener('click', agreeHandle, false);
+   disagree.addEventListener('click', disagreeHandle, false);
+  }
+  function agreeHandle(e) {
+    document.body.removeChild(document.getElementById('loveMe'));
+  }
+  function disagreeHandle(e) {
+    e.target.innerHTML = '点左边的乖😙';
+  }
+  function initWord() {
+    const main = document.getElementById('main');
+    const love = document.getElementById('love');
+    love.width = parseFloat(main.offsetWidth );
+    love.height = parseFloat(main.offsetHeight );
+    const ctx=love.getContext("2d");    
+
+    drawHeart({x: 60, y: 100, count: 3}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 100, y: 140, count: 13}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 60, y: 660, count: 3}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    
+    drawHeart({x: 320, y: 100, count: 15}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 360, y: 660, count: 4}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    
+    drawHeart({x: 540, y: 240, count: 11}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 580, y: 220, count: 3}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 580, y: 660, count: 3}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 700, y: 240, count: 11}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    
+    drawHeart({x: 760, y: 220, count: 12}, function(img, x, y, i){
+      ctx.drawImage(img, 15 * i + x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 1090, y: 220, count: 12}, function(img, x, y, i){
+      ctx.drawImage(img, 15 * -i + x, 40 * i + y, 40, 40);
+    });
+    
+    drawHeart({x: 1150, y: 220, count: 12}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 1190, y: 220, count: 4}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 1190, y: 420, count: 4}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 1190, y: 660, count: 4}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    
+    drawHeart({x: 1490, y: 120, count: 14}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+    drawHeart({x: 1530, y: 660, count: 5}, function(img, x, y, i){
+      ctx.drawImage(img, 40 * i + x, y, 40, 40);
+    });
+    drawHeart({x: 1730, y: 120, count: 14}, function(img, x, y, i){
+      ctx.drawImage(img, x, 40 * i + y, 40, 40);
+    });
+  }
+  
+  function drawHeart(obj, callback) {
+    while (obj.count --) {
+      const img = new Image();
+      img.src = './heart.svg';          
+      (function(i) {
+       img.onload = function () {
+         callback(img, obj.x, obj.y, i);
+       }; 
+      })(obj.count)
+    }
+  }
+   
+</script>
+</body>
+</html>
