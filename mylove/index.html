@@ -78,7 +78,6 @@
   window.onload = function(){
     initCanvas();
     initChart();
-    <!-- initWord(); -->
   }
   
   function initCanvas() {
@@ -263,7 +262,7 @@
   function drawHeart(obj, callback) {
     while (obj.count --) {
       const img = new Image();
-      img.src = './heart.svg';          
+      img.src = './heart.svg';
       (function(i) {
        img.onload = function () {
          callback(img, obj.x, obj.y, i);
