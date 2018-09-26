@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <script src='./font/iconfont.js'></script>
+  <script src="./font/iconfont.js"></script>
   <script src='https://cdn.bootcss.com/echarts/3.7.0/echarts.js'></script>
 </head>
 
@@ -41,7 +41,7 @@
       width: 100%;
       height: 150px;
       text-align: center;
-      font-size: 5em;
+      font-size: 4em;
     }
 
     .word {
@@ -50,7 +50,7 @@
       background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(255, 255, 0, 1)), to(rgba(255, 255, 255, 1)));
       background-clip: text;
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      /* -webkit-text-fill-color: transparent; */
     }
 
     #sun {
@@ -221,6 +221,7 @@
   </div>
   <div id="heartDiv"></div>
   <script>
+    var isMobile = /Mobile/gi.test(navigator.userAgent);
     window.onload = function () {
       initChart();
       initWord();
@@ -396,23 +397,31 @@
     //初始化桃心
     function initHeart() {
       var hearts = ['heartbeat', 'heart-1', 'heart-2', 'heart-', 'heart-3', 'heart-4'];
+      var length = hearts.length;
       var heartDiv = document.getElementById("heartDiv");
       for (var i = 0; i < 20; i++) {
-        creatHeart(heartDiv, hearts[Math.floor(Math.random() * hearts.length)]);
+        creatHeart(heartDiv, hearts[Math.floor(Math.random() * length)]);
       }
       setInterval(function () {
         heartDiv.innerHTML = "";
         for (var i = 0; i < 25 * Math.random() + 15; i++) {
-          creatHeart(heartDiv, hearts[Math.floor(Math.random() * hearts.length)]);
+          creatHeart(heartDiv, hearts[~~(Math.random() * length)]);
         }
       }, 1500);
     }
     function creatHeart(div, icon) {
       var canvas = document.getElementsByTagName('canvas')[0];
-      var width = Math.floor(Math.random() * canvas.width); height = Math.floor(Math.random() * canvas.height);
-      width > canvas.width - 80 ? width -= 80 : ""; height > canvas.height - 80 ? height -= 80 : "";
+      var left = ~~(Math.random() * canvas.width);
+      var right = ~~(Math.random() * canvas.height);
+      if (isMobile) {
+        left = left * 0.3;
+        right = right * 0.3;
+      } else {
+        left > (canvas.width - 80) ? left -= 80 : "";
+        right > (canvas.height - 80) ? right -= 80 : "";
+      }
       var heartSpan = document.createElement('span');
-      heartSpan.style.cssText = 'position:absolute;left:' + width + 'px;top:' + height + 'px;';
+      heartSpan.style.cssText = 'position:absolute;left:' + left + 'px;top:' + right + 'px;';
       heartSpan.innerHTML = `<svg class="icon" aria-hidden="true"><use xlink:href="#icon-${icon}"></use></svg>`;
       div.appendChild(heartSpan);
     }
