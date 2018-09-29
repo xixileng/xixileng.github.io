@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://at.alicdn.com/t/font_849144_hp65zsytovp.css">
   <title>❄故宫的雪❄</title>
   <style>
     html,
@@ -24,44 +25,76 @@
       -moz-background-size: 100% 100%;
     }
 
-    #range {
+    .operation {
       position: absolute;
       right: 0;
-      transform: rotate(-90deg) translate(-55%, 30px);
-      -webkit-transform: rotate(-90deg) translate(-55%, 30px);
+      width: 50px;
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
-    #showSun {
-      position: absolute;
-      right: 0;
+    #range {
+      height: 130px;
+      transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+    }
+
+    .end {
+      margin-bottom: 15px;
+    }
+
+    .noend {
+      margin-bottom: 5px;
     }
 
     #sun {
       position: absolute;
+      width: 100px;
+      height: 100px;
+      left: 50px;
+      top: 50px;
     }
   </style>
 </head>
 
 <body>
-  <input type="range" min="10" max="200" id="range">
-  <button id="showSun">点击出太阳</button>
+  <div class="operation">
+    <input id="range" class="end" type="range" min="10" max="200">
+    <button id="showSun" class="end">
+      <i class="iconfont icon-sun"></i>
+    </button>
+    <button id="addSideNum" class="noend">
+      <i class="iconfont icon-snow_2"></i>
+    </button>
+    <button id="reduceSideNum" class="end">
+      <i class="iconfont icon-snow_1"></i>
+    </button>
+    <button id="addSnowSize" class="noend">
+      <i class="iconfont icon-hands_zoom"></i>
+    </button>
+    <button id="reduceSnowSize" class="end">
+      <i class="iconfont icon-hands_zoom_"></i>
+    </button>
+  </div>
   <img id="sun" src="./sun.png" alt="..." style="display: none;">
   <canvas id="canvas"></canvas>
   <script>
     const cos = Math.cos;
     const sin = Math.sin;
     const PI = Math.PI;
-    const SIDE_NUM = 6;  // 雪花形状（正N边形）
+    let sideNum = 6;  // 雪花形状（正N边形）
     let snowCount = 100;  // 雪花总数量
     let _WIDTH = window.innerWidth;  // 设备窗口宽度
     let _HEIGHT = window.innerHeight;  // 设备窗口高度
-    let space = ~~(_HEIGHT / 4 * 16.6 / snowCount);  // 雪花出现时间间隔
+    let snowSize = [4, 12]; // 雪花的大小范围
+    let threshold = 8;  // 显示第三层棱角的阈值
+    let speed = [1, 3];  // 雪花的速度
+    let space = ~~(_HEIGHT / ((speed[0] + speed[1]) / 2) * 16.6 / snowCount);  // 雪花出现时间间隔
     let snows = [];  // 存放雪花的数组
     let snow;  // 单个雪花
     let timeouts = []; // 雪花的定时器数组
-    let minSize = 4;
-    let maxSize = 12;
-    let threshold = 8;  // 显示第三层棱角的阈值
     let canvas;
     let ctx;
 
@@ -82,12 +115,19 @@
       init(x = random(0, _WIDTH), y = 0) {
         this.x = x;
         this.y = y;
-        this.r = random(minSize, maxSize);
+        this.r = random(...snowSize);
         this._x = random(0.2, 2);
-        this._y = random(2, 4);
+        this._y = random(...speed);
+        this.rotateSpeed = this._y / 2;
+        this.angle = 0;
       },
       draw() {
-        ctx.drawImage(this.snowCanvas, this.x, this.y)
+        // ctx.drawImage(this.snowCanvas, this.x, this.y)
+        ctx.save()
+        ctx.translate(this.x + this.snowCanvas.width / 2, this.y + this.snowCanvas.height / 2)
+        ctx.rotate(this.angle % 360 * PI / 180)
+        ctx.drawImage(this.snowCanvas, -this.snowCanvas.width / 2, -this.snowCanvas.height / 2);
+        ctx.restore()
         this.update();
       },
       update() {
@@ -101,6 +141,7 @@
         } else {
           this.init();
         }
+        this.angle += this.rotateSpeed;
       }
     };
 
@@ -109,34 +150,10 @@
       let img = 'url(./pc.jpg)';
       if (isMobile) {
         img = 'url(./mobile.jpg)';
-        minSize = 2;
-        maxSize = 8;
+        snowSize = [2, 8]
         threshold = 5;
       }
       document.body.style.backgroundImage = img;
-    }
-
-    function initEvents() {
-      const range = document.getElementById('range');
-      range.onchange = function () {
-        timeouts.forEach(t => clearTimeout(t));
-        snowCount = this.value;
-        space = ~~(_HEIGHT / 4 * 16.6 / snowCount)
-        drawSnows();
-      }
-      const showSun = document.getElementById('showSun');
-      let bool = true;
-      showSun.onclick = function () {
-        const sun = document.getElementById('sun');
-        if (bool) {
-          sun.style.display = "inline-block";
-          this.innerText = "点击没太阳";
-        } else {
-          sun.style.display = "none";
-          this.innerText = "点击出太阳";
-        }
-        bool = !bool;
-      }
     }
 
     function initCanvas() {
@@ -183,8 +200,8 @@
     function drawSnow(ctxSnow, coord, size) {
       const coords = [];
       for (let i = 0, length = coord.length; i < length; i += 1) {
-        for (let j = 0; j < SIDE_NUM; j += 1) {
-          const { x2, y2 } = drawSide(ctxSnow, coord[i][0], coord[i][1], size, 2 * PI * (j / SIDE_NUM));
+        for (let j = 0; j < sideNum; j += 1) {
+          const { x2, y2 } = drawSide(ctxSnow, coord[i][0], coord[i][1], size, 2 * PI * (j / sideNum));
           coords.push([x2, y2]);
         }
       }
@@ -212,6 +229,66 @@
         snows[i].draw();
       }
       requestAnimationFrame(move);
+    }
+
+    function initEvents() {
+      const range = document.getElementById('range');
+      range.onchange = function () {
+        timeouts.forEach(t => clearTimeout(t));
+        snowCount = this.value;
+        space = ~~(_HEIGHT / ((speed[0] + speed[1]) / 2) * 16.6 / snowCount)
+        drawSnows();
+      }
+
+      const showSun = document.getElementById('showSun');
+      let bool = true;
+      showSun.onclick = function () {
+        const sun = document.getElementById('sun');
+        if (bool) {
+          sun.style.display = "inline-block";
+        } else {
+          sun.style.display = "none";
+        }
+        bool = !bool;
+      }
+
+      const addSideNum = document.getElementById('addSideNum');
+      addSideNum.onclick = function () {
+        timeouts.forEach(t => clearTimeout(t));
+        sideNum += 1;
+        snows.forEach(snow => snow.snowCanvas = drawCanvas(snow.r));
+        drawSnows();
+      }
+
+      const reduceSideNum = document.getElementById('reduceSideNum');
+      reduceSideNum.onclick = function () {
+        timeouts.forEach(t => clearTimeout(t));
+        sideNum -= 1;
+        snows.forEach(snow => snow.snowCanvas = drawCanvas(snow.r));
+        drawSnows();
+      }
+
+      const addSnowSize = document.getElementById('addSnowSize');
+      addSnowSize.onclick = function () {
+        timeouts.forEach(t => clearTimeout(t));
+        snowSize = snowSize.map(e => e + 1);
+        snows.forEach(snow => {
+          snow.r += 1;
+          snow.snowCanvas = drawCanvas(snow.r)
+        });
+        drawSnows();
+      }
+
+      const reduceSnowSize = document.getElementById('reduceSnowSize');
+      reduceSnowSize.onclick = function () {
+        timeouts.forEach(t => clearTimeout(t));
+        snowSize = snowSize.map(e => e - 1);
+        snows.forEach(snow => {
+          snow.r -= 1;
+          snow.snowCanvas = drawCanvas(snow.r)
+        });
+        drawSnows();
+      }
     }
 
     function random(min, max) {
