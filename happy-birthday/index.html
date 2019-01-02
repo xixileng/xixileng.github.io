@@ -387,11 +387,11 @@
     //初始化祝福语
     function initWord() {
       var word = document.getElementById("word");
-      word.innerHTML = `<span class="suger"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span>
+      word.innerHTML = `<span class="sugar"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span>
         <span class="pastry"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cake-tall"></use></svg></span><span class="word">Happy</span>
-        <span class="suger"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span><span class="word">Birthday</span>
+        <span class="sugar"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span><span class="word">Birthday</span>
         <span class="cake"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cake-tall"></use></svg></span>
-        <span class="suger"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span>`;
+        <span class="sugar"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-flower"></use></svg></span>`;
     }
 
     //初始化桃心
@@ -400,16 +400,16 @@
       var length = hearts.length;
       var heartDiv = document.getElementById("heartDiv");
       for (var i = 0; i < 20; i++) {
-        creatHeart(heartDiv, hearts[Math.floor(Math.random() * length)]);
+        createHeart(heartDiv, hearts[Math.floor(Math.random() * length)]);
       }
       setInterval(function () {
         heartDiv.innerHTML = "";
         for (var i = 0; i < 25 * Math.random() + 15; i++) {
-          creatHeart(heartDiv, hearts[~~(Math.random() * length)]);
+          createHeart(heartDiv, hearts[~~(Math.random() * length)]);
         }
       }, 1500);
     }
-    function creatHeart(div, icon) {
+    function createHeart(div, icon) {
       var canvas = document.getElementsByTagName('canvas')[0];
       var left = ~~(Math.random() * canvas.width);
       var right = ~~(Math.random() * canvas.height);
