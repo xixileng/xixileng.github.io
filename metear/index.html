@@ -40,6 +40,7 @@
     let height;
     let speed = [6,7];
     let size = [1,2];
+    let colors = ['255,255,255', '255,255,0', '0,0,255', '255,0,0', '0,255,0', '255,0,255'];
     let metears = [];
     let count = 40;
 
@@ -128,7 +129,7 @@
       timeouts = [];
       for (let i = metears.length; i < count; i++) {
         let timeout = setTimeout(function () {
-          let color = `${~~random(0, 255)},${~~random(0, 255)},${~~random(0, 255)}`;
+          let color = colors[~~random(0, colors.length)] || colors[0];
           const metear = new Metear({
             x: random(0, width),
             size: random(...size),
