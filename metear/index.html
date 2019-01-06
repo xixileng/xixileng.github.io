@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Meteor shower</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      background-color: #000000;
+    }
+
+    /* #main {
+      width: 100%;
+      height: 100%;
+    } */
+    #main {
+      position: absolute;
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="wake"></canvas>
+  <canvas id="main"></canvas>
+  <script>
+    let canvas;
+    let ctx;
+    let width;
+    let height;
+    let speed = [6,7];
+    let size = [3,4];
+    let metears = [];
+    let count = 20;
+
+    const PI = Math.PI;
+
+    const defaultOptions = {
+      x: 0, // 起始横坐标
+      y: 0, // 起始纵坐标
+      size: 5, // 流星大小
+      wake: 10, // 尾迹长度
+      speed: 10, // 飞行速度
+      offset: 3, // 偏移速度
+      color: '#ffffff', // 流星的颜色
+      wakeColor: '#ffffff', // 尾焰的颜色
+    }
+    class Metear {
+      constructor (options) {
+        this.options = Object.assign({}, defaultOptions, options);
+        Object.keys(this.options).forEach(key => this[key] = this.options[key])
+      }
+      init (x = random(0, width), y = this.options.y) {
+        this.x = this.options.x = x;
+        this.y = y;
+      }
+      draw () {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size + 1, 0, 2 * PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
+
+        wakeCtx.save();
+        wakeCtx.beginPath();
+        wakeCtx.arc(this.x, this.y, this.size, 0, 2 * PI);
+        wakeCtx.fillStyle = this.wakeColor;
+        wakeCtx.fill();
+        wakeCtx.restore();
+        this.update();
+      }
+      update () {
+        if (this.y < height - this.size) {
+          this.y += this.speed;
+          if (this.x > this.size) {
+            this.x -= this.offset;
+          } else {
+            this.init(width, this.y);
+          }
+        } else {
+          this.init();
+        }
+      }
+    }
+
+    window.onload = function () {
+      initContext();
+      initSize();
+      bindEvents();
+      drawMetear();
+      run();
+    }
+
+    function initContext () {
+      canvas = document.getElementById('main');
+      ctx = canvas.getContext('2d');
+
+      wake = document.getElementById('wake');
+      wakeCtx = wake.getContext('2d');
+    }
+
+    function initSize() {
+      let bodySize = document.body.getClientRects()[0];
+      wake.width = canvas.width = width = bodySize.width;
+      wake.height = canvas.height = height = bodySize.height;
+    }
+
+    function bindEvents() {
+      window.onresize = function () {
+        initSize();
+        drawMetear();
+      }
+    }
+
+    function drawMetear() {
+      let interval = ~~(height / ((2 + 5) / 2) * 16.6 / count);
+      metears = metears.slice(0, count);
+      timeouts = [];
+      for (let i = metears.length; i < count; i++) {
+        let timeout = setTimeout(function () {
+          let color = `${random(0, 255)},${random(0, 255)},${random(0, 255)}`;
+          const metear = new Metear({
+            x: random(0, width),
+            size: random(...size),
+            speed: random(...speed),
+            color: `rgb(${color})`,
+            wakeColor: `rgba(${color}, 0.8)`
+          });
+          metears.push(metear);
+        }, interval * i);
+        timeouts.push(timeout);
+      }
+    }
+
+    function run() {
+      ctx.clearRect(0, 0, width, height);
+      wakeCtx.rect(0, 0, width, height);
+      wakeCtx.fillStyle = 'rgba(0,0,0,0.1)';
+      wakeCtx.fill();
+      let length = metears.length;
+      for (let i = 0; i < length; i++) {
+        metears[i].draw();
+      }
+      requestAnimationFrame(run);
+    }
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+  </script>
+</body>
+
+</html>

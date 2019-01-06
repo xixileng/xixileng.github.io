@@ -11,12 +11,11 @@
 </div>
 <!--Step:2 Import echarts.js-->
 <!--Step:2 引入echarts.js-->
-<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="./build/dist/echarts.js" charset="UTF-8"></script>
 <script type="text/javascript">
-	$('#document').ready(function(){
+  window.onload = function () {
 		 getEcharts();
-	 });
+  }
 
 var geoCoord1={};
 for(var i=0;i<200;i++){
