@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>~~ 流星 ~~</title>
+  <title>*~~ 流星 ~~*</title>
   <style>
     html,
     body {
@@ -15,10 +15,6 @@
       background-color: #000000;
     }
 
-    /* #main {
-      width: 100%;
-      height: 100%;
-    } */
     #main {
       position: absolute;
       top: 0;
@@ -107,16 +103,15 @@
     }
 
     function initSize() {
-      let bodySize = document.body.getClientRects()[0];
-      wake.width = canvas.width = width = bodySize.width;
-      wake.height = canvas.height = height = bodySize.height;
+      wake.width = canvas.width = width = window.innerWidth;
+      wake.height = canvas.height = height = window.innerHeight;
     }
 
     function bindEvents() {
-      // window.onresize = function () {
-      //   initSize();
-      //   drawMetear();
-      // }
+      window.onresize = function () {
+        initSize();
+        drawMetear();
+      }
     }
 
     function drawMetear() {
@@ -154,8 +149,6 @@
     function random(min, max) {
       return Math.random() * (max - min) + min;
     }
-
   </script>
 </body>
-
 </html>
