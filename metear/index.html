@@ -51,15 +51,15 @@
       color: '#ffffff', // 流星的颜色
       wakeColor: '#ffffff', // 尾焰的颜色
     }
-    class Metear {
-      constructor (options) {
-        this.options = Object.assign({}, defaultOptions, options);
-        Object.keys(this.options).forEach(key => this[key] = this.options[key])
-      }
+    const Metear = function (options) {
+      this.options = Object.assign({}, defaultOptions, options);
+      Object.keys(this.options).forEach(key => this[key] = this.options[key])
+    }
+    Metear.prototype = {
       init (x = random(0, width), y = this.options.y) {
         this.x = this.options.x = x;
         this.y = y;
-      }
+      },
       draw () {
         ctx.save();
         ctx.beginPath();
@@ -75,7 +75,7 @@
         wakeCtx.fill();
         wakeCtx.restore();
         this.update();
-      }
+      },
       update () {
         if (this.y < height - this.size) {
           this.y += this.speed;
