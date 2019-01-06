@@ -15,7 +15,14 @@
       background-color: #000000;
     }
 
-    #main {
+    .moon {
+      width: 100px;
+      height: 100px;
+      background-image: url(./weather-color_moon-stars.png);
+      background-size: 100px 100px;
+    }
+
+    .moon, #wake, #main {
       position: absolute;
       top: 0;
     }
@@ -25,13 +32,14 @@
 <body>
   <canvas id="wake"></canvas>
   <canvas id="main"></canvas>
+  <div class="moon"></div>
   <script>
     let canvas;
     let ctx;
     let width;
     let height;
     let speed = [6,7];
-    let size = [3,4];
+    let size = [1,2];
     let metears = [];
     let count = 40;
 
