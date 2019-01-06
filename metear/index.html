@@ -33,7 +33,7 @@
     let speed = [6,7];
     let size = [3,4];
     let metears = [];
-    let count = 20;
+    let count = 40;
 
     const PI = Math.PI;
 
@@ -47,15 +47,15 @@
       color: '#ffffff', // 流星的颜色
       wakeColor: '#ffffff', // 尾焰的颜色
     }
-    const Metear = function (options) {
-      this.options = Object.assign({}, defaultOptions, options);
-      Object.keys(this.options).forEach(key => this[key] = this.options[key])
-    }
-    Metear.prototype = {
+    class Metear {
+      constructor (options) {
+        this.options = Object.assign({}, defaultOptions, options);
+        Object.keys(this.options).forEach(key => this[key] = this.options[key])
+      }
       init (x = random(0, width), y = this.options.y) {
         this.x = this.options.x = x;
         this.y = y;
-      },
+      }
       draw () {
         ctx.save();
         ctx.beginPath();
@@ -71,7 +71,7 @@
         wakeCtx.fill();
         wakeCtx.restore();
         this.update();
-      },
+      }
       update () {
         if (this.y < height - this.size) {
           this.y += this.speed;
@@ -120,7 +120,7 @@
       timeouts = [];
       for (let i = metears.length; i < count; i++) {
         let timeout = setTimeout(function () {
-          let color = `${random(0, 255)},${random(0, 255)},${random(0, 255)}`;
+          let color = `${~~random(0, 255)},${~~random(0, 255)},${~~random(0, 255)}`;
           const metear = new Metear({
             x: random(0, width),
             size: random(...size),
