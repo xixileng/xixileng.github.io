@@ -15,6 +15,14 @@
       background-color: #000000;
     }
 
+    .background {
+      background: url(./timg.jpg) no-repeat top;
+      background-size: 100%;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+    }
+
     .moon {
       width: 100px;
       height: 100px;
@@ -32,9 +40,11 @@
 </head>
 
 <body>
-  <canvas id="wake"></canvas>
-  <canvas id="main"></canvas>
-  <div class="moon"></div>
+  <div class="background">
+    <canvas id="wake"></canvas>
+    <canvas id="main"></canvas>
+  </div>
+  <div id="moon" class="moon"></div>
   <script>
     let canvas;
     let ctx;
@@ -135,6 +145,15 @@
         initSize();
         drawMetear();
       }
+      document.getElementById('moon').addEventListener('click', function () {
+        timeouts.forEach(t => clearTimeout(t));
+        metears.forEach(metear => {
+          let color = colors[~~random(0, colors.length)] || colors[0];
+          metear.color = metear.color === '#fff' ? `rgb(${color})` : '#fff'
+          metear.wakeColor = metear.wakeColor === '#fff' ? `rgb(${color})` : '#fff'
+        });
+        drawMetear();
+      })
     }
 
     function drawMetear() {
@@ -149,7 +168,7 @@
             size: random(...size),
             speed: random(...speed),
             color: `rgb(${color})`,
-            wakeColor: `rgba(${color}, 0.8)`
+            wakeColor: `rgba(${color}, 0.9)`
           });
           metear.star = drawStar(metear);
           metears.push(metear);
@@ -179,9 +198,11 @@
 
     function run() {
       ctx.clearRect(0, 0, width, height);
-      wakeCtx.rect(0, 0, width, height);
-      wakeCtx.fillStyle = 'rgba(0,0,0,0.1)';
-      wakeCtx.fill();
+      wakeCtx.save();
+      wakeCtx.globalCompositeOperation = 'destination-in';
+      wakeCtx.fillStyle = 'rgba(0,0,0,0.9)';
+      wakeCtx.fillRect(0, 0, width, height);
+      wakeCtx.restore();
       let length = metears.length;
       for (let i = 0; i < length; i++) {
         metears[i].draw();
