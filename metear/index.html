@@ -22,7 +22,9 @@
       background-size: 100px 100px;
     }
 
-    .moon, #wake, #main {
+    .moon,
+    #wake,
+    #main {
       position: absolute;
       top: 0;
     }
@@ -38,8 +40,8 @@
     let ctx;
     let width;
     let height;
-    let speed = [6,7];
-    let size = [1,2];
+    let speed = [6, 7];
+    let size = [1, 2];
     let colors = ['255,255,255', '255,255,0', '0,0,255', '255,0,0', '0,255,0', '255,0,255'];
     let metears = [];
     let count = 40;
@@ -49,7 +51,11 @@
     const defaultOptions = {
       x: 0, // 起始横坐标
       y: 0, // 起始纵坐标
-      size: 5, // 流星大小
+      size: 2, // 流星大小
+      scatterSize: 2,
+      maxSize: 8,
+      scatter: 0.3,
+      star: null,
       wake: 10, // 尾迹长度
       speed: 10, // 飞行速度
       offset: 3, // 偏移速度
@@ -57,20 +63,20 @@
       wakeColor: '#ffffff', // 尾焰的颜色
     }
     class Metear {
-      constructor (options) {
+      constructor(options) {
         this.options = Object.assign({}, defaultOptions, options);
         Object.keys(this.options).forEach(key => this[key] = this.options[key])
       }
-      init (x = random(0, width), y = this.options.y) {
+      init(x = random(0, width), y = this.options.y) {
         this.x = this.options.x = x;
         this.y = y;
+        this.scatterSize = this.size;
+        this.maxSize = random(8, 10);
       }
-      draw () {
+      draw() {
         ctx.save();
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size + 1, 0, 2 * PI);
-        ctx.fillStyle = this.color;
-        ctx.fill();
+        ctx.translate(this.x, this.y)
+        ctx.drawImage(this.star, -this.star.width / 2, -this.star.height / 2);
         ctx.restore();
 
         wakeCtx.save();
@@ -81,7 +87,15 @@
         wakeCtx.restore();
         this.update();
       }
-      update () {
+      update() {
+        this.scatterSize += this.scatter;
+        if (this.scatterSize < 1) {
+          this.scatter = -this.scatter;
+        }
+        if (this.scatterSize > this.maxSize) {
+          this.scatter = -this.scatter;
+        }
+        this.star = drawStar(this);
         if (this.y < height - this.size) {
           this.y += this.speed;
           if (this.x > this.size) {
@@ -103,7 +117,7 @@
       run();
     }
 
-    function initContext () {
+    function initContext() {
       canvas = document.getElementById('main');
       ctx = canvas.getContext('2d');
 
@@ -137,10 +151,30 @@
             color: `rgb(${color})`,
             wakeColor: `rgba(${color}, 0.8)`
           });
+          metear.star = drawStar(metear);
           metears.push(metear);
         }, interval * i);
         timeouts.push(timeout);
       }
+    }
+
+    function drawStar (metear) {
+      let R = ~~metear.scatterSize + 1;
+      let _canvas = document.createElement('canvas');
+      _canvas.setAttribute('width', 2 * R);
+      _canvas.setAttribute('height', 2 * R);
+      let _ctx = _canvas.getContext('2d');
+      _ctx.beginPath();
+      let dig = PI / 5 * 4;
+      for (let i = 0; i < 5; i++) {
+        let x = Math.sin(i * dig);
+        let y = Math.cos(i * dig);
+        _ctx.lineTo(R + x * R, R + y * R);
+      }
+      _ctx.closePath();
+      _ctx.fillStyle = metear.color;
+      _ctx.fill();
+      return _canvas;
     }
 
     function run() {
@@ -160,4 +194,5 @@
     }
   </script>
 </body>
+
 </html>
