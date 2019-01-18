@@ -10,3 +10,4 @@
   * 原生js翻页小组件：https://xiaoleng123.github.io/pagination/
   * React类目管理系统：https://xiaoleng123.github.io/category-manage/
   * Element投稿系统：https://xiaoleng123.github.io/message/
+  * 流星雨：https://xiaoleng123.github.io/metear/
