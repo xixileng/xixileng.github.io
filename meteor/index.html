@@ -53,7 +53,7 @@
     let speed = [6, 7];
     let size = [1, 2];
     let colors = ['255,255,255', '255,255,0', '0,0,255', '255,0,0', '0,255,0', '255,0,255'];
-    let metears = [];
+    let meteors = [];
     let count = 40;
 
     const PI = Math.PI;
@@ -72,7 +72,7 @@
       color: '#ffffff', // 流星的颜色
       wakeColor: '#ffffff', // 尾焰的颜色
     }
-    class Metear {
+    class Meteor {
       constructor(options) {
         this.options = Object.assign({}, defaultOptions, options);
         Object.keys(this.options).forEach(key => this[key] = this.options[key])
@@ -105,7 +105,9 @@
         if (this.scatterSize > this.maxSize) {
           this.scatter = -this.scatter;
         }
-        this.star = drawStar(this);
+        if (~~this.x % 5 === 0) {
+          this.star = drawStar(this);
+        }
         if (this.y < height - this.size) {
           this.y += this.speed;
           if (this.x > this.size) {
@@ -123,7 +125,7 @@
       initContext();
       initSize();
       bindEvents();
-      drawMetear();
+      drawMeteor();
       run();
     }
 
@@ -143,42 +145,42 @@
     function bindEvents() {
       window.onresize = function () {
         initSize();
-        drawMetear();
+        drawMeteor();
       }
       document.getElementById('moon').addEventListener('click', function () {
         timeouts.forEach(t => clearTimeout(t));
-        metears.forEach(metear => {
+        meteors.forEach(meteor => {
           let color = colors[~~random(0, colors.length)] || colors[0];
-          metear.color = metear.color === '#fff' ? `rgb(${color})` : '#fff'
-          metear.wakeColor = metear.wakeColor === '#fff' ? `rgb(${color})` : '#fff'
+          meteor.color = meteor.color === '#fff' ? `rgb(${color})` : '#fff'
+          meteor.wakeColor = meteor.wakeColor === '#fff' ? `rgb(${color})` : '#fff'
         });
-        drawMetear();
+        drawMeteor();
       })
     }
 
-    function drawMetear() {
+    function drawMeteor() {
       let interval = ~~(height / ((2 + 5) / 2) * 16.6 / count);
-      metears = metears.slice(0, count);
+      meteors = meteors.slice(0, count);
       timeouts = [];
-      for (let i = metears.length; i < count; i++) {
+      for (let i = meteors.length; i < count; i++) {
         let timeout = setTimeout(function () {
           let color = colors[~~random(0, colors.length)] || colors[0];
-          const metear = new Metear({
+          const meteor = new Meteor({
             x: random(0, width),
             size: random(...size),
             speed: random(...speed),
             color: `rgb(${color})`,
             wakeColor: `rgba(${color}, 0.9)`
           });
-          metear.star = drawStar(metear);
-          metears.push(metear);
+          meteor.star = drawStar(meteor);
+          meteors.push(meteor);
         }, interval * i);
         timeouts.push(timeout);
       }
     }
 
-    function drawStar (metear) {
-      let R = ~~metear.scatterSize + 1;
+    function drawStar (meteor) {
+      let R = ~~meteor.scatterSize + 1;
       let _canvas = document.createElement('canvas');
       _canvas.setAttribute('width', 2 * R);
       _canvas.setAttribute('height', 2 * R);
@@ -191,7 +193,7 @@
         _ctx.lineTo(R + x * R, R + y * R);
       }
       _ctx.closePath();
-      _ctx.fillStyle = metear.color;
+      _ctx.fillStyle = meteor.color;
       _ctx.fill();
       return _canvas;
     }
@@ -203,9 +205,9 @@
       wakeCtx.fillStyle = 'rgba(0,0,0,0.9)';
       wakeCtx.fillRect(0, 0, width, height);
       wakeCtx.restore();
-      let length = metears.length;
+      let length = meteors.length;
       for (let i = 0; i < length; i++) {
-        metears[i].draw();
+        meteors[i].draw();
       }
       requestAnimationFrame(run);
     }
