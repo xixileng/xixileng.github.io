@@ -151,8 +151,8 @@
         timeouts.forEach(t => clearTimeout(t));
         meteors.forEach(meteor => {
           let color = colors[~~random(0, colors.length)] || colors[0];
-          meteor.color = meteor.color === '#fff' ? `rgb(${color})` : '#fff'
-          meteor.wakeColor = meteor.wakeColor === '#fff' ? `rgb(${color})` : '#fff'
+          meteor.color = meteor.color === '#ffffff' ? `rgb(${color})` : '#ffffff'
+          meteor.wakeColor = meteor.wakeColor === '#ffffff' ? `rgb(${color})` : '#ffffff'
         });
         drawMeteor();
       })
