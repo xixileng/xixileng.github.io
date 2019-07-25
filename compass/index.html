@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>arc-by-svg</title>
+  <title>compass</title>
   <style>
     html,
     body {
@@ -18,15 +18,15 @@
     }
   </style>
   <script src="./svg.min.js"></script>
+  <script src="./data.js"></script>
 </head>
 
 <body>
   <div id="drawing"></div>
   <script>
-    const ARC_WIDTH = 20 // 圆弧宽度
-    const GUTTER = 25 // 圆弧间间距
-    const FIRST_RADIUS = 55 // 最内圈圆弧半径（外环）
-    const COUNT = 7 // 绘制圆弧的数量
+    const ARC_WIDTH = 30 // 圆弧宽度
+    const GUTTER = 5 // 圆弧间间距
+    const FIRST_RADIUS = 60 // 最内圈圆弧半径（外环）
 
     const DEFAULT_FILL_COLOR = 'rgba(255, 255, 255, 0.3)'
     const ACTIVE_FILL_COLOR = 'rgba(55, 213, 238, 0.7)'
@@ -51,17 +51,10 @@
       group = draw.group().attr({ transform: `translate(${ width / 2 }, ${ height / 2 })` })
 
       // 绘制中间的圆弧
-      let index = 0
-      while (index < COUNT) {
-        const _data = new Array(index + 2).fill(0).map(item => {
-          return {
-            label: '天干地支',
-            value: Math.random() * 100 + 10
-          }
-        })
-        const data = formatData(_data)
+      for (let index = 0; index < compass.length; index++) {
+        const data = compass[index]
         const radius = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER)
-        const arcs = drawArcs(data, radius, index)
+        const arcs = drawArcs(data, radius)
         const arcsGroup = draw.group()
         arcs.forEach(arc => arcsGroup.add(arc))
 
@@ -70,12 +63,11 @@
         isClockwise = !isClockwise
 
         group.add(arcsGroup)
-        index++
       }
 
-      // 绘制IP
-      const ipDatas = new Array(parseInt(Math.random() * 20 + 5)).fill(0).map(item => Math.random().toFixed(10))
-      const ipRadius = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER) - ARC_WIDTH
+      // 绘制刻度
+      const ipDatas = new Array(36).fill(0).map((item, i) => 10 * i + '°')
+      const ipRadius = FIRST_RADIUS + (compass.length) * (ARC_WIDTH + GUTTER) - ARC_WIDTH
       const ips = drawIps(ipDatas, ipRadius)
       const ipsGroup = draw.group()
       const circle = draw.circle(ipRadius * 2).fill('transparent').stroke(DEFAULT_STROKE_COLOR).move(-ipRadius, -ipRadius).attr('pointer-events', 'none')
@@ -102,12 +94,11 @@
     function drawArcs(data, radiusOut) {
       const radiusIn = radiusOut - ARC_WIDTH
       // 起点（x设置值以出现间隔）
-      const startOut = { x: 5, y: radiusOut }
-      const startIn = { x: 4, y: radiusIn }
+      const startOut = { x: 0, y: radiusOut }
+      const startIn = { x: 0, y: radiusIn }
       let angleSum = 0
-      const arcs = data.map(item => {
-        const angle = item.ratio * Math.PI * 2
-
+      const angle = Math.PI * 2 / data.length
+      const arcs = data.map((item, index) => {
         const rotateAngle = -angleSum * 180 / Math.PI
         const arcGroup = draw.group().style('cursor', 'pointer').rotate(rotateAngle, 0, 0)
         angleSum += angle
@@ -116,20 +107,20 @@
         const endIn = { x: Math.sin(angle) * radiusIn, y: Math.cos(angle) * radiusIn }
 
         const path = `M${ startIn.x } ${ startIn.y } L${ startOut.x } ${ startOut.y }
-          A${radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x } ${ endOut.y }
-          L${endIn.x } ${ endIn.y }
-          A${radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 1 ${ startIn.x } ${ startIn.y }`
+          A${ radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x - 0.01 } ${ endOut.y }
+          L${ endIn.x - 0.01 } ${ endIn.y }
+          A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 1 ${ startIn.x } ${ startIn.y }`
 
         const fillColor = DEFAULT_FILL_COLOR // @TODO 根据数据决定颜色
         const strokeColor = DEFAULT_STROKE_COLOR // @TODO 根据数据决定颜色
         const arc = draw.path(path).fill(fillColor).stroke(strokeColor)
         arcGroup.add(arc)
 
-        const text = draw.plain(item.label)
-        const textPath = `M${ startOut.x } ${ startOut.y - 5 }
-          A${ radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x } ${ endOut.y - 5 }`
+        const text = draw.text(item)
+        const textPath = `M${ startIn.x } ${ startIn.y }
+          A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 0 ${ endIn.x } ${ endIn.y }`
 
-        const length = text.length()
+        const length = text.length() < 16 ? 25 : text.length() // 处理八卦符号的偏移量
         const halfRatio = length / (radiusOut * Math.PI * 2) * 180 // 计算label长度一半所占的角度（已化简）
         text.path(textPath).fill(DEFAULT_FONT_COLOR).rotate(-angle * 180 / Math.PI / 2 + halfRatio, 0, 0)
         arcGroup.add(text)
