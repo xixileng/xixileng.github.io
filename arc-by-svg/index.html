@@ -83,11 +83,7 @@
       ips.forEach(ip => ipsGroup.add(ip))
 
       const animate = ipsGroup.animate(72000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
-      ipsGroup.mouseover(function () {
-        animate.pause()
-      }).mouseout(function () {
-        animate.play()
-      })
+      ipsGroup.mouseover(animate.pause.bind(animate)).mouseout(animate.play.bind(animate))
       isClockwise = !isClockwise
 
       group.add(ipsGroup)
@@ -135,9 +131,7 @@
         arcGroup.add(text)
 
         // 给每个arc绑定事件，因为元素较多，再上层事件代理会比较麻烦
-        arcGroup.click(function () {
-          handleArcClick(this)
-        })
+        arcGroup.click(handleArcClick)
         // 避免快速点击时选中label
         arcGroup.mousedown(e => e.preventDefault())
         return arcGroup
@@ -159,8 +153,8 @@
       return ips
     }
 
-    function handleArcClick(arcGroup) {
-      const [arc, text] = Array.from(arcGroup.node.childNodes).map(node => node.instance)
+    function handleArcClick() {
+      const [arc, text] = Array.from(this.node.childNodes).map(node => node.instance)
       const arcFillColor = arc.attr('fill')
       const strokeColor = arc.attr('stroke')
       arc.fill(arcFillColor === ACTIVE_FILL_COLOR ? DEFAULT_FILL_COLOR : ACTIVE_FILL_COLOR)
