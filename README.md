@@ -12,3 +12,4 @@
   * Element投稿系统：https://xiaoleng123.github.io/message/
   * 流星雨：https://xiaoleng123.github.io/meteor/
   * svg绘制圆弧: https://xiaoleng123.github.io/arc-by-svg/
+  * svg绘制罗盘(圆弧*改): https://xiaoleng123.github.io/compass/
