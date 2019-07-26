@@ -14,7 +14,7 @@
     }
 
     #drawing {
-      background-color: rgba(0, 0, 0, 0.8)
+      background-color: rgba(0, 0, 0, 0.3)
     }
   </style>
   <script src="./svg.min.js"></script>
@@ -25,18 +25,18 @@
   <div id="drawing"></div>
   <script>
     const ARC_WIDTH = 40 // 圆弧宽度
-    const GUTTER = 7 // 圆弧间间距
+    const GUTTER = 0 // 圆弧间间距
     const FIRST_RADIUS = 100 // 最内圈圆弧半径（外环）
 
-    const DEFAULT_FILL_COLOR = 'rgba(255, 255, 255, 0.3)'
-    const ACTIVE_FILL_COLOR = 'rgba(55, 213, 238, 0.7)'
+    const DEFAULT_FILL_COLOR = 'rgba(247, 235, 142, 1)'
+    const ACTIVE_FILL_COLOR = 'rgba(255, 0, 0, 0.7)'
     const DISABLED_FILL_COLOR = 'rgba(255, 255, 255, 0.1)'
 
-    const DEFAULT_STROKE_COLOR = 'rgba(255, 255, 255, 0.6)'
+    const DEFAULT_STROKE_COLOR = 'rgba(0, 0, 0, 0.6)'
     const ACTIVE_STROKE_COLOR = 'rgba(55, 213, 238, 1)'
     const DISABLED_STROKE_COLOR = 'rgba(255, 255, 255, 0.4)'
 
-    const DEFAULT_FONT_COLOR = 'rgba(255, 255, 255, 0.6)'
+    const DEFAULT_FONT_COLOR = 'rgba(0, 0, 0, 0.6)'
     const ACTIVE_FONT_COLOR = 'rgba(255, 255, 255, 1)'
 
     let draw = null
@@ -49,6 +49,11 @@
       const height = document.body.clientHeight
       draw = SVG('drawing').size(width, height)
       group = draw.group().attr({ transform: `translate(${ width / 2 }, ${ height / 2 })` })
+      // 绘制中心太极
+      const taiJi = drawTaiJi()
+      taiJi.animate(36000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
+      isClockwise = !isClockwise
+      group.add(taiJi)
 
       // 绘制中间的圆弧
       for (let index = 0; index < compass.length; index++) {
@@ -91,6 +96,19 @@
       return data
     }
 
+    function drawTaiJi() {
+      const taiJiGroup = draw.group()
+      const firstArcInRadius = FIRST_RADIUS - ARC_WIDTH
+      const background = draw.circle(firstArcInRadius * 2).fill('#000').move(-firstArcInRadius, -firstArcInRadius)
+      const white = draw.rect(firstArcInRadius, firstArcInRadius * 2).fill('#fff').move(0, -firstArcInRadius)
+      const topWhiteCircle = draw.circle(firstArcInRadius).fill('#fff').move(-firstArcInRadius / 2, -firstArcInRadius)
+      const bottomBlackCircle = draw.circle(firstArcInRadius).fill('#000').move(-firstArcInRadius / 2, 0)
+      const topBlackCircle = draw.circle(firstArcInRadius / 2.5).fill('#000').move(-firstArcInRadius / 4, -firstArcInRadius / 1.5)
+      const bottomWhiteCircle = draw.circle(firstArcInRadius / 2.5).fill('#fff').move(-firstArcInRadius / 4, firstArcInRadius / 4)
+      taiJiGroup.add(background).add(white).add(topWhiteCircle).add(bottomBlackCircle).add(topBlackCircle).add(bottomWhiteCircle)
+      return taiJiGroup
+    }
+
     function drawArcs(data, radiusOut) {
       const radiusIn = radiusOut - ARC_WIDTH
       // 起点（x设置值以出现间隔）
@@ -116,7 +134,7 @@
         const arc = draw.path(path).fill(fillColor).stroke(strokeColor)
         arcGroup.add(arc)
 
-        const text = draw.text(item)
+        const text = draw.text(item).font({ weight: 'bold' })
         const textPath = `M${ startIn.x } ${ startIn.y }
           A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 0 ${ endIn.x } ${ endIn.y }`
 
