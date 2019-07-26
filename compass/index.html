@@ -29,11 +29,11 @@
     const FIRST_RADIUS = 100 // 最内圈圆弧半径（外环）
 
     const DEFAULT_FILL_COLOR = 'rgba(247, 235, 142, 1)'
-    const ACTIVE_FILL_COLOR = 'rgba(255, 0, 0, 0.7)'
+    const ACTIVE_FILL_COLOR = 'rgba(255, 0, 0, 0.6)'
     const DISABLED_FILL_COLOR = 'rgba(255, 255, 255, 0.1)'
 
-    const DEFAULT_STROKE_COLOR = 'rgba(0, 0, 0, 0.6)'
-    const ACTIVE_STROKE_COLOR = 'rgba(55, 213, 238, 1)'
+    const DEFAULT_STROKE_COLOR = 'rgba(0, 0, 0, 0.5)'
+    const ACTIVE_STROKE_COLOR = 'rgba(0, 0, 0, 0.8)'
     const DISABLED_STROKE_COLOR = 'rgba(255, 255, 255, 0.4)'
 
     const DEFAULT_FONT_COLOR = 'rgba(0, 0, 0, 0.6)'
@@ -52,6 +52,9 @@
       // 绘制中心太极
       const taiJi = drawTaiJi()
       taiJi.animate(36000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
+      taiJi.click(function () {
+        alert('Hello World！')
+      })
       isClockwise = !isClockwise
       group.add(taiJi)
 
@@ -63,7 +66,7 @@
         const arcsGroup = draw.group()
         arcs.forEach(arc => arcsGroup.add(arc))
 
-        const animate = arcsGroup.animate(72000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
+        const animate = arcsGroup.animate(54000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
         arcsGroup.mouseover(animate.pause.bind(animate)).mouseout(animate.play.bind(animate))
         isClockwise = !isClockwise
 
@@ -97,10 +100,10 @@
     }
 
     function drawTaiJi() {
-      const taiJiGroup = draw.group()
+      const taiJiGroup = draw.group().style('cursor', 'pointer')
       const firstArcInRadius = FIRST_RADIUS - ARC_WIDTH
       const background = draw.circle(firstArcInRadius * 2).fill('#000').move(-firstArcInRadius, -firstArcInRadius)
-      const white = draw.rect(firstArcInRadius, firstArcInRadius * 2).fill('#fff').move(0, -firstArcInRadius)
+      const white = draw.path(`M0 ${ firstArcInRadius } A${ firstArcInRadius } ${ firstArcInRadius } 0 0 0 0 ${ -firstArcInRadius }Z`).fill('#fff')
       const topWhiteCircle = draw.circle(firstArcInRadius).fill('#fff').move(-firstArcInRadius / 2, -firstArcInRadius)
       const bottomBlackCircle = draw.circle(firstArcInRadius).fill('#000').move(-firstArcInRadius / 2, 0)
       const topBlackCircle = draw.circle(firstArcInRadius / 2.5).fill('#000').move(-firstArcInRadius / 4, -firstArcInRadius / 1.5)
@@ -144,9 +147,7 @@
         arcGroup.add(text)
 
         // 给每个arc绑定事件，因为元素较多，再上层事件代理会比较麻烦
-        arcGroup.click(function () {
-          handleArcClick(this)
-        })
+        arcGroup.click(handleArcClick)
         // 避免快速点击时选中label
         arcGroup.mousedown(e => e.preventDefault())
         return arcGroup
@@ -168,14 +169,18 @@
       return ips
     }
 
-    function handleArcClick(arcGroup) {
-      const [arc, text] = Array.from(arcGroup.node.childNodes).map(node => node.instance)
+    function handleArcClick() {
+      const [arc, text] = Array.from(this.node.childNodes).map(node => node.instance)
       const arcFillColor = arc.attr('fill')
       const strokeColor = arc.attr('stroke')
       arc.fill(arcFillColor === ACTIVE_FILL_COLOR ? DEFAULT_FILL_COLOR : ACTIVE_FILL_COLOR)
         .stroke(strokeColor === ACTIVE_STROKE_COLOR ? DEFAULT_STROKE_COLOR : ACTIVE_STROKE_COLOR)
       const textFillColor = text.attr('fill')
       text.fill(textFillColor === ACTIVE_FONT_COLOR ? DEFAULT_FONT_COLOR : ACTIVE_FONT_COLOR)
+
+      if (Math.random() > 0.8) {
+        alert('❤️命运的指示，你命中缺我❤️')
+      }
     }
 
   </script>
