@@ -60,8 +60,9 @@
           }
         })
         const data = formatData(_data)
-        const radius = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER)
-        const arcs = drawArcs(data, radius, index)
+        const radiusOut = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER)
+        const radiusIn = radiusOut - ARC_WIDTH
+        const arcs = drawArcs(data, radiusIn, radiusOut)
         const arcsGroup = draw.group()
         arcs.forEach(arc => arcsGroup.add(arc))
 
@@ -95,22 +96,20 @@
       return data
     }
 
-    function drawArcs(data, radiusOut) {
-      const radiusIn = radiusOut - ARC_WIDTH
+    function drawArcs(data, radiusIn, radiusOut) {
       // 起点（x设置值以出现间隔）
       const startOut = { x: 5, y: radiusOut }
       const startIn = { x: 4, y: radiusIn }
+
       let angleSum = 0
       const arcs = data.map(item => {
         const angle = item.ratio * Math.PI * 2
-
         const rotateAngle = -angleSum * 180 / Math.PI
         const arcGroup = draw.group().style('cursor', 'pointer').rotate(rotateAngle, 0, 0)
         angleSum += angle
 
         const endOut = { x: Math.sin(angle) * radiusOut, y: Math.cos(angle) * radiusOut }
         const endIn = { x: Math.sin(angle) * radiusIn, y: Math.cos(angle) * radiusIn }
-
         const path = `M${ startIn.x } ${ startIn.y } L${ startOut.x } ${ startOut.y }
           A${radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x } ${ endOut.y }
           L${endIn.x } ${ endIn.y }
@@ -124,7 +123,6 @@
         const text = draw.plain(item.label)
         const textPath = `M${ startOut.x } ${ startOut.y - 5 }
           A${ radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x } ${ endOut.y - 5 }`
-
         const length = text.length()
         const halfRatio = length / (radiusOut * Math.PI * 2) * 180 // 计算label长度一半所占的角度（已化简）
         text.path(textPath).fill(DEFAULT_FONT_COLOR).rotate(-angle * 180 / Math.PI / 2 + halfRatio, 0, 0)

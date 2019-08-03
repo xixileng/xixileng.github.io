@@ -61,8 +61,9 @@
       // 绘制中间的圆弧
       for (let index = 0; index < compass.length; index++) {
         const data = compass[index]
-        const radius = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER)
-        const arcs = drawArcs(data, radius)
+        const radiusOut = FIRST_RADIUS + index * (ARC_WIDTH + GUTTER)
+        const radiusIn = radiusOut - ARC_WIDTH
+        const arcs = drawArcs(data, radiusIn, radiusOut)
         const arcsGroup = draw.group()
         arcs.forEach(arc => arcsGroup.add(arc))
 
@@ -74,20 +75,20 @@
       }
 
       // 绘制刻度
-      const ipDatas = new Array(36).fill(0).map((item, i) => 10 * i + '°')
-      const ipRadius = FIRST_RADIUS + (compass.length) * (ARC_WIDTH + GUTTER) - ARC_WIDTH
-      const ips = drawIps(ipDatas, ipRadius)
-      const ipsGroup = draw.group()
-      const circle = draw.circle(ipRadius * 2).fill('transparent').stroke(DEFAULT_STROKE_COLOR).move(-ipRadius, -ipRadius).attr('pointer-events', 'none')
-      ipsGroup.add(circle)
-      ips.forEach(ip => ipsGroup.add(ip))
+      const scaleDatas = new Array(36).fill(0).map((item, i) => 10 * i + '°')
+      const scaleRadius = FIRST_RADIUS + (compass.length) * (ARC_WIDTH + GUTTER) - ARC_WIDTH
+      const scales = drawScales(scaleDatas, scaleRadius)
+      const scalesGroup = draw.group()
+      scales.forEach(scale => scalesGroup.add(scale))
+      const circle = draw.circle(scaleRadius * 2).fill('transparent').stroke(DEFAULT_STROKE_COLOR).move(-scaleRadius, -scaleRadius).attr('pointer-events', 'none')
+      scalesGroup.add(circle)
 
-      const animate = ipsGroup.animate(72000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
-      ipsGroup.mouseover(animate.pause.bind(animate)).mouseout(animate.play.bind(animate))
+      const animate = scalesGroup.animate(72000).rotate(isClockwise ? 360 : -360, 0, 0).loop()
+      scalesGroup.mouseover(animate.pause.bind(animate)).mouseout(animate.play.bind(animate))
 
       isClockwise = !isClockwise
 
-      group.add(ipsGroup)
+      group.add(scalesGroup)
     }
 
     function formatData(data) {
@@ -109,25 +110,25 @@
       return taiJiGroup
     }
 
-    function drawArcs(data, radiusOut) {
-      const radiusIn = radiusOut - ARC_WIDTH
+    function drawArcs(data, radiusIn, radiusOut) {
       // 起点（x设置值以出现间隔）
-      const startOut = { x: 0, y: radiusOut }
-      const startIn = { x: 0, y: radiusIn }
-      let angleSum = 0
       const angle = Math.PI * 2 / data.length
+      const startIn = { x: 0, y: radiusIn }
+      const startOut = { x: 0, y: radiusOut }
+      const endIn = { x: Math.sin(angle) * radiusIn, y: Math.cos(angle) * radiusIn }
+      const endOut = { x: Math.sin(angle) * radiusOut, y: Math.cos(angle) * radiusOut }
+
+      const path = `M${ startIn.x } ${ startIn.y } L${ startOut.x } ${ startOut.y }
+        A${ radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x - 0.01 } ${ endOut.y }
+        L${ endIn.x - 0.01 } ${ endIn.y }
+        A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 1 ${ startIn.x } ${ startIn.y }`
+
+      const textPath = `M${ startIn.x } ${ startIn.y }
+        A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 0 ${ endIn.x } ${ endIn.y }`
+
       const arcs = data.map((item, index) => {
-        const rotateAngle = -angleSum * 180 / Math.PI
+        const rotateAngle = -(angle * index) * 180 / Math.PI
         const arcGroup = draw.group().style('cursor', 'pointer').rotate(rotateAngle, 0, 0)
-        angleSum += angle
-
-        const endOut = { x: Math.sin(angle) * radiusOut, y: Math.cos(angle) * radiusOut }
-        const endIn = { x: Math.sin(angle) * radiusIn, y: Math.cos(angle) * radiusIn }
-
-        const path = `M${ startIn.x } ${ startIn.y } L${ startOut.x } ${ startOut.y }
-          A${ radiusOut } ${ radiusOut } 0 ${ Number(angle > Math.PI) } 0 ${ endOut.x - 0.01 } ${ endOut.y }
-          L${ endIn.x - 0.01 } ${ endIn.y }
-          A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 1 ${ startIn.x } ${ startIn.y }`
 
         const fillColor = DEFAULT_FILL_COLOR // @TODO 根据数据决定颜色
         const strokeColor = DEFAULT_STROKE_COLOR // @TODO 根据数据决定颜色
@@ -135,8 +136,6 @@
         arcGroup.add(arc)
 
         const text = draw.text(item).font({ weight: 'bold' })
-        const textPath = `M${ startIn.x } ${ startIn.y }
-          A${ radiusIn } ${ radiusIn } 0 ${ Number(angle > Math.PI) } 0 ${ endIn.x } ${ endIn.y }`
 
         const length = text.length() < 16 ? 25 : text.length() // 处理八卦符号的偏移量
         const halfRatio = length / (radiusOut * Math.PI * 2) * 180 // 计算label长度一半所占的角度（已化简）
@@ -152,18 +151,18 @@
       return arcs
     }
 
-    function drawIps(data, radius) {
+    function drawScales(data, radius) {
       const anglePer = Math.PI * 2 / data.length
-      const ips = data.map((item, index) => {
+      const scales = data.map((item, index) => {
         const angle = index * anglePer
-        const ip = draw.plain('· ' + item).fill(DEFAULT_FONT_COLOR)
+        const scale = draw.plain('· ' + item).fill(DEFAULT_FONT_COLOR)
         const x = Math.sin(angle) * radius
         const y = Math.cos(angle) * radius
         const rotateAngle = 90 - angle * 180 / Math.PI
-        ip.move(x, y).rotate(rotateAngle, x, y)
-        return ip
+        scale.move(x, y).rotate(rotateAngle, x, y)
+        return scale
       })
-      return ips
+      return scales
     }
 
     function handleArcClick() {
