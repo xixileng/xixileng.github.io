@@ -17,7 +17,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     total:100,  //*必填，数据总量
     callback:function(index,size){    //选填，分页回调函数,返回index：当前页页码，size：每页显示条数，建议填写
         console.log("当前页页码："+index,"每页显示条数："+size)
-    },  
+    },
     countList:[5,10,15,20],  //选填，列表查询参数
     defaultCount:10,  //选填，每页显示数据量，默认5
     openCountSelect:true,    //选填，开启每页显示下拉选择，默认开启
@@ -28,7 +28,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
 );
  */
 
-!(function () {
+!(function() {
   var option;
   var pagination = {};
   if (typeof exports !== 'undefined') {
@@ -39,27 +39,27 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
   } else {
     window.pagination = pagination;
   }
-	pagination.VERSION = '1.0.0';
-  pagination.bindPageEvent = function (page, userOption) {
+  pagination.VERSION = '1.0.0';
+  pagination.bindPageEvent = function(page, userOption) {
     if (typeof userOption !== "object") {
       console.error("*--请正确填写配置--*")
     }
     option = userOption || {};
-    option.param = option.param || {},    //列表查询参数
-      option.param.pageIndex = option.param.pageIndex || 0,    //列表查询参数
-      option.param.pageSize = option.param.pageSize || 1,    //列表查询参数
-      option.total = option.total || 0,     //数据总量
-      option.callback = option.callback || defaultEvent,    //分页回调函数
-      option.countList = option.countList || [],    //列表查询参数
-      option.defaultCount = option.defaultCount || 5,    //每页显示数据量
-      option.openCountSelect = option.openCountSelect || true,    //开启下拉选择
-      option.openSkip = option.openSkip || true;    //开启跳转
+    option.param = option.param || {};    //列表查询参数
+    option.param.pageIndex = option.param.pageIndex || 0;    //列表查询参数
+    option.param.pageSize = option.param.pageSize || 1;    //列表查询参数
+    option.total = option.total || 0;     //数据总量
+    option.callback = option.callback || defaultEvent;    //分页回调函数
+    option.countList = option.countList || [];    //列表查询参数
+    option.defaultCount = option.defaultCount || 5;    //每页显示数据量
+    option.openCountSelect = option.openCountSelect || true;    //开启下拉选择
+    option.openSkip = option.openSkip || true;    //开启跳转
     option.pageCount = Math.ceil(option.total / option.param.pageSize);
     initPageDom(page);   //根据配置初始化DOM
-    initPageStyle(page);    //初始化样式，可自行覆盖   
+    initPageStyle(page);    //初始化样式，可自行覆盖
   }
 
-  function initPageDom(page) {
+  function initPageDom (page) {
     if (option.openCountSelect) {
       initCountSelect(page);
     }
@@ -70,7 +70,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function initCountSelect(page) {
+  function initCountSelect (page) {
     var countList = option.countList;
     var select = document.createElement("select");
     select.id = "pageSelect";
@@ -86,8 +86,8 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     page.appendChild(select);
   }
 
-  function bindSelectEvent(select) {
-    select.onchange = function () {
+  function bindSelectEvent (select) {
+    select.onchange = function() {
       option.param.pageSize = parseInt(this.options[this.selectedIndex].value);
       option.pageCount = Math.ceil(option.total / option.param.pageSize);
       var ul = document.getElementById("pageUl");
@@ -98,7 +98,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function initPageUl(page) {
+  function initPageUl (page) {
     var ul = createPageUl();
     createPageButton(ul);
     page.appendChild(ul);
@@ -106,14 +106,14 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     ul.querySelector(".num").click();
   }
 
-  function createPageUl() {
+  function createPageUl () {
     var ul = document.createElement("ul");
     ul.id = "pageUl";
     ul.style.cssText = "display:inline-block;list-style:none;margin:0 5px;padding:0;";
     return ul;
   }
 
-  function createPageButton(ul) {
+  function createPageButton (ul) {
     ul.innerHTML = "";
     var pageNum, pageCount = option.pageCount;
     for (var i = 0; i < Math.min(option.defaultCount, pageCount); i++) {
@@ -156,22 +156,22 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
       lastChild.borderTopRightRadius = lastChild.borderBottomRightRadius = "5px";
   }
 
-  function bindUlEvent(ul) {
-    ul.onmouseover = function (e) {
+  function bindUlEvent (ul) {
+    ul.onmouseover = function(e) {
       var target = e.target;
       if (!hasClass(target, "disable") && !hasClass(target, "active")) {
         target.style.backgroundColor = "#d4f1ff";
         target.style.color = "#FFF";
       }
     }
-    ul.onmouseout = function (e) {
+    ul.onmouseout = function(e) {
       var target = e.target;
       if (!hasClass(target, "disable") && !hasClass(target, "active")) {
         target.style.backgroundColor = "";
         target.style.color = "#000";
       }
     }
-    ul.onclick = function (e) {
+    ul.onclick = function(e) {
       var index = option.param.pageIndex,
         size = option.param.pageSize;
       var target = e.target;
@@ -199,7 +199,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function clearUlStyle(ul) {
+  function clearUlStyle (ul) {
     var num = ul.querySelectorAll("a");
     for (var n = 0; n < num.length; n++) {
       num[n].style.backgroundColor = "";
@@ -220,14 +220,14 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function toFirst(ul) {
+  function toFirst (ul) {
     var num = ul.querySelectorAll(".num");
     for (var i = 0; i < num.length; i++) {
       num[i].innerText = i + 1;
     }
     num[0].click();
   }
-  function toLast(ul) {
+  function toLast (ul) {
     var num = ul.querySelectorAll(".num");
     var pageCount = option.pageCount;
     for (var i = num.length - 1; i >= 0; i--) {
@@ -235,17 +235,17 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
     num[num.length - 1].click();
   }
-  function toPre(ul) {
+  function toPre (ul) {
     var active = getDom(ul, ".active");
     active ? removeClass(active, "active") : "";
     active ? active.parentNode.previousSibling.firstChild.click() : "";
   }
-  function toNext(ul) {
+  function toNext (ul) {
     var active = getDom(ul, ".active");
     active ? removeClass(active, "active") : "";
     active ? active.parentNode.nextSibling.firstChild.click() : "";
   }
-  function toNum(target, index) {
+  function toNum (target, index) {
     index = parseInt(target.innerText);
     addClass(target, "active");
     var style = target.style;
@@ -255,7 +255,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     return index;
   }
 
-  function changeNum(ul, index) {
+  function changeNum (ul, index) {
     var num = ul.querySelectorAll(".num"),
       length = num.length,
       count = length % 2 === 0 ? length / 2 + 1 : Math.ceil(length / 2),
@@ -288,7 +288,7 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function disable(nodes) {
+  function disable (nodes) {
     for (var i in nodes) {
       addClass(nodes[i], "disable");
       var style = nodes[i].style;
@@ -297,19 +297,19 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function initTotalSpan(page) {
+  function initTotalSpan (page) {
     var total = document.createElement("span");
     total.id = "total";
     page.appendChild(total);
     initTotal();
   }
 
-  function initTotal() {
+  function initTotal () {
     var total = document.getElementById("total");
     total.innerHTML = "&nbsp;共" + option.pageCount + "页&nbsp;&nbsp;";
   }
 
-  function initSkip(page) {
+  function initSkip (page) {
     var skip = document.createElement("input");
     skip.type = "number";
     skip.style.cssText = "height:23px;width:40px;border-width:1px;border-radius:5px;margin:0 3px;";
@@ -320,8 +320,8 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     page.appendChild(skip);
     page.appendChild(btn);
   }
-  function bindSkipEvent(skip, btn) {
-    btn.onclick = function () {
+  function bindSkipEvent (skip, btn) {
+    btn.onclick = function() {
       var index = skip.value;
       if (!/^\d+$/.test(index)) {
         alert("请输入正确数字！");
@@ -354,15 +354,15 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
     }
   }
 
-  function initPageStyle(page) {
+  function initPageStyle (page) {
     page.style.cssText = "display:inline-block;font-size:14px;margin:0 auto;";
   }
 
-  function getDom(ele, selector) {
+  function getDom (ele, selector) {
     return ele.querySelector(selector);
   }
 
-  function defaultEvent() {
+  function defaultEvent () {
     console.warn("!--推荐绑定自定义事件--!")
   }
 
@@ -371,25 +371,25 @@ pagination.bindPageEvent(pageDom, {   //通常都是ajax读取到数据后进行
   *这段是原生js实现的addClass, removeClass, hasClass函数功能
   *参考来源：http://www.jb51.net/article/83101.htm
   */
-  function addClass(obj, cls) {
+  function addClass (obj, cls) {
     var obj_class = obj.className,//获取 class 内容.
       blank = (obj_class != '') ? ' ' : '';//判断获取到的 class 是否为空, 如果不为空在前面加个'空格'.
-    added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
+    var added = obj_class + blank + cls;//组合原来的 class 和需要添加的 class.
     obj.className = added;//替换原来的 class.
   }
 
-  function removeClass(obj, cls) {
+  function removeClass (obj, cls) {
     var obj_class = ' ' + obj.className + ' ';//获取 class 内容, 并在首尾各加一个空格. ex) 'abc    bcd' -> ' abc    bcd '
-    obj_class = obj_class.replace(/(\s+)/gi, ' '),//将多余的空字符替换成一个空格. ex) ' abc    bcd ' -> ' abc bcd '
-      removed = obj_class.replace(' ' + cls + ' ', ' ');//在原来的 class 替换掉首尾加了空格的 class. ex) ' abc bcd ' -> 'bcd '
+    obj_class = obj_class.replace(/(\s+)/gi, ' ');//将多余的空字符替换成一个空格. ex) ' abc    bcd ' -> ' abc bcd '
+    var removed = obj_class.replace(' ' + cls + ' ', ' ');//在原来的 class 替换掉首尾加了空格的 class. ex) ' abc bcd ' -> 'bcd '
     removed = removed.replace(/(^\s+)|(\s+$)/g, '');//去掉首尾空格. ex) 'bcd ' -> 'bcd'
     obj.className = removed;//替换原来的 class.
   }
 
-  function hasClass(obj, cls) {
+  function hasClass (obj, cls) {
     var obj_class = obj.className,//获取 class 内容.
       obj_class_lst = obj_class.split(/\s+/);//通过split空字符将cls转换成数组.
-    x = 0;
+    var x = 0;
     for (x in obj_class_lst) {
       if (obj_class_lst[x] == cls) {//循环数组, 判断是否包含cls
         return true;
