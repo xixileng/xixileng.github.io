@@ -26,10 +26,10 @@
     }
 
     .operation {
-      position: absolute;
+      position: fixed;
       right: 0;
       width: 50px;
-      display: inline-flex;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -158,8 +158,8 @@
     }
 
     function initCanvas() {
-      _WIDTH = window.innerWidth;
-      _HEIGHT = window.innerHeight;
+      _WIDTH = document.documentElement.clientWidth;
+      _HEIGHT = document.documentElement.clientHeight;
       canvas = document.getElementById('canvas');
       canvas.setAttribute('width', _WIDTH);
       canvas.setAttribute('height', _HEIGHT);
