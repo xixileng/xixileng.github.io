@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./font/iconfont.js"></script>
+  <script src="./echarts.min.js"></script>
+</head>
+
+<body>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background-color: #EEEED1;
+    }
+
+    .icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.15em;
+      fill: currentColor;
+      overflow: hidden;
+    }
+
+    #main {
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+      transform: rotateZ(0deg);
+      -webkit-transform: rotateZ(0deg);
+      transition: width 2s linear;
+      -webkit-transition: width 2s linear;
+    }
+
+    #word {
+      position: absolute;
+      bottom: 4%;
+      width: 100%;
+      height: 150px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 4em;
+    }
+
+    .word {
+      letter-spacing: 5px;
+      animation: changeColor 4s linear 0s infinite alternate;
+      -webkit-animation: changeColor 4s linear 0s infinite alternate;
+      background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(255, 255, 0, 1)), to(rgba(255, 255, 255, 1)));
+      background-clip: text;
+      -webkit-background-clip: text;
+      /* -webkit-text-fill-color: transparent; */
+    }
+
+    #heartDiv {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      font-size: 3em;
+      opacity: 0.8;
+    }
+
+    /* 动画区域 */
+
+    @keyframes changeColor {
+      0% {
+        color: #f1ad32;
+      }
+
+      20% {
+        color: #fa71b5;
+      }
+
+      50% {
+        color: #fcaa02;
+      }
+
+      75% {
+        color: #adbdf7;
+      }
+
+      100% {
+        color: #c2cd07;
+      }
+    }
+
+  </style>
+  <div id="main"></div>
+  <div id="word"></div>
+
+  <div id="heartDiv"></div>
+  <script>
+    const isMobile = /Mobile/gi.test(navigator.userAgent);
+    window.onload = function () {
+      initChart();
+      initWord();
+      initHeart();
+    }
+
+    //初始化图表
+    function initChart() {
+      const chart = echarts.init(document.getElementById('main'));
+      const scatterName = '♥教师节快乐♥',
+        effectName = '💐🌹教师节快乐🌹💐',
+        // 心形的svg路径
+        heart = 'path://m314.347483,160.37842c8.062623,-21.656503 39.652243,0 0,27.844075c-39.652243,-27.844075 -8.062623,-49.500578 0,-27.844075z',
+        // 正能量词汇
+        words = ['善良', '正义', '理想', '快乐', '健康', '喜悦', '仁义', '美丽', '可爱', '天真', '童趣', '进步', '成功', '爱情', '事业', '学习', '友谊',
+          '乐观', '坚强', '细心', '勤劳', '智慧', '聪明', '耐心', '毅力', '正直', '理智', '踏实', '豁达', '无私', '希望', '坦然', '无畏', '光明',
+          '未来', '好运', '青春', '励志', '向往', '幸福'];
+
+      const color = [], data = [], dataEffect = [];
+      // 随机颜色范围
+      color.push('#6ce6c6', '#f4a3a3', '#e0e0f4', '#04ccc3', '#adbdf7', '#f1ad30', '#c2cd07', '#fc6472');
+      let random = 0.0;
+
+      // 桃心方程
+      for (let y = 20; y < 100; y += 3) {
+        for (let x = 15; x < 85; x += 2) {
+          if ((Math.pow(x - 50, 2) + Math.pow((y - 50) - Math.sqrt(Math.pow(x - 50, 2), 3), 2)) < 1000) {
+            random = Math.random();
+            data.push({ name: words[Math.floor(random * words.length)], value: [x, y, Math.ceil(random * 6)] });
+          }
+        }
+      }
+      //人工补齐桃心顶部
+      const dataY = [27, 29, 31, 67, 69, 71];
+      for (let i = 0; i < dataY.length; i++) {
+        data.push({ name: words[Math.floor(random * words.length)], value: [dataY[i], 95, Math.ceil(random * 6)] });
+      }
+
+      // 补充数字的 y
+      const dataX = [41, 51, 61, 69];
+      for (let i = 47; i <= 77; i += 3) {
+        for (let j = 0; j < dataX.length; j++) {
+          dataEffect.push({ name: effectName, value: [dataX[j], i] });
+        }
+      }
+      0
+      // for (let i = 31; i <= 33; i += 2) {
+      //   dataEffect.push({ name: effectName, value: [i, 77] });
+      //   dataEffect.push({ name: effectName, value: [i, 47] });
+      // }
+      // // 9
+      for (let i = 33; i <= 39; i += 2) {
+        dataEffect.push({ name: effectName, value: [i, 77] });
+        dataEffect.push({ name: effectName, value: [i, 62] });
+        dataEffect.push({ name: effectName, value: [i, 47] });
+      }
+      for (let i = 65; i <= 74; i += 3) {
+        dataEffect.push({ name: effectName, value: [33, i] });
+      }
+      // // 0
+      for (let i = 63; i <= 67; i += 2) {
+        dataEffect.push({ name: effectName, value: [i, 77] });
+        dataEffect.push({ name: effectName, value: [i, 47] });
+      }
+
+      const option = {
+        tooltip: {},
+        xAxis: { show: false, min: 0, max: 100 },
+        yAxis: { show: false, min: 0, max: 100 },
+        series: [{
+          type: 'scatter',
+          name: scatterName,
+          coordinateSystem: 'cartesian2d',
+          symbol: heart,
+          symbolSize: function (value) {
+            return value[2] + 5
+          },
+          rippleEffect: {
+            period: 5,
+            brushType: 'stroke',
+            scale: 4
+          },
+          label: {
+            emphasis: {
+              show: true,
+              formatter: '{b}',
+              position: 'top',
+              fontSize: 30,
+              fontWeight: 'bold'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: function () {
+                return color[Math.floor(Math.random() * color.length)]
+              },
+            }
+          },
+          tooltip: {
+            // show: false
+          },
+          zlevel: 1,
+          data: data
+        },
+        {
+          type: 'effectScatter',
+          name: effectName,
+          coordinateSystem: 'cartesian2d',
+          rippleEffect: {
+            period: 8,
+            brushType: 'stroke',
+            scale: 2
+          },
+          symbol: heart,
+          symbolSize: 12,
+          label: {
+            emphasis: {
+              show: true,
+              formatter: '{b}',
+              position: 'top',
+              fontSize: 30,
+              fontWeight: 'bold'
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#fa8185'
+            }
+          },
+          tooltip: {
+            // show: false
+          },
+          zlevel: 2,
+          data: dataEffect
+        },
+        ]
+      };
+
+      chart.setOption(option);
+      window.onresize = chart.resize;
+    }
+
+    //初始化祝福语
+    function initWord() {
+      const word = document.getElementById('word');
+      word.innerHTML = `
+        <span class="pastry">👩‍🏫</span><span class="word">教师节快乐</span>
+        <span class="cake">👨‍🏫</span>`;
+    }
+
+    //初始化桃心
+    function initHeart() {
+      const hearts = ['Books', 'icon-test', 'book', 'book1', 'shu-BOOK-shuji-yuedu', 'shujitubiao'];
+      const length = hearts.length;
+      const heartDiv = document.getElementById('heartDiv');
+      for (var i = 0; i < 20; i++) {
+        createHeart(heartDiv, hearts[Math.floor(Math.random() * length)]);
+      }
+      setInterval(function () {
+        heartDiv.innerHTML = '';
+        for (var i = 0; i < 25 * Math.random() + 15; i++) {
+          createHeart(heartDiv, hearts[~~(Math.random() * length)]);
+        }
+      }, 1500);
+    }
+    function createHeart(div, icon) {
+      const canvas = document.getElementsByTagName('canvas')[0];
+      let left = ~~(Math.random() * canvas.width);
+      let right = ~~(Math.random() * canvas.height);
+      if (isMobile) {
+        left = left * 0.3;
+        right = right * 0.3;
+      } else {
+        left > (canvas.width - 80) ? left -= 80 : '';
+        right > (canvas.height - 80) ? right -= 80 : '';
+      }
+      const heartSpan = document.createElement('span');
+      heartSpan.style.cssText = 'position:absolute;left:' + left + 'px;top:' + right + 'px;';
+      heartSpan.innerHTML = `<svg class="icon" aria-hidden="true"><use xlink:href="#icon-${icon}"></use></svg>`;
+      div.appendChild(heartSpan);
+    }
+  </script>
+</body>
+
+</html>
