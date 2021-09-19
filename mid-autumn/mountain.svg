@@ -1,0 +1,17 @@
+
+<svg width="2560px" height="501px" viewBox="0 0 2560 501" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+    <linearGradient id="gradient" x1="0%" y1="6%" x2="100%" y2="20%">
+      <stop offset="0%" style="stop-color:#381741;" />
+      <stop offset="100%" style="stop-color:#111;" />
+    </linearGradient>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.2" />
+    </filter>
+  </defs>
+    <g id="123" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard">
+            <path d="M0,273.594615 C181.645584,331.66058 319.151798,343.106443 412.518643,307.932205 C552.568911,255.170849 764.020725,-0.244338254 917.88601,-0.244338254 C1071.7513,-0.244338254 1291.93782,139.270105 1509.4715,139.270105 C1727.00518,139.270105 1814.54922,-0.244338254 2032.35432,-0.244338254 C2177.55771,-0.244338254 2353.43961,27.8880585 2560,84.1528519 L2560,499.755662 L0,499.755662 L0,273.594615 Z" id="Path"  fill="url(#gradient)" filter="url(#blur)"></path>
+        </g>
+    </g>
+</svg>

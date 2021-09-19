@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Mid-Autumn Festival</title>
+  <style type="text/css">
+    :root {
+      --purple: #381130;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #111;
+    }
+    .moon {
+      position: absolute;
+      z-index: 1;
+      width: 120px;
+      height: 120px;
+      background-image: linear-gradient(to right,#e4e0b7 10%,#fff 90%);
+      box-shadow: 0 0 60px 40px rgb(0, 0, 255, 0.2), inset 0 0 20px 5px rgba(0, 0, 255, 0.1);
+      border-radius: 50%;
+      filter: blur(2px); /** 朦胧美 */
+      animation: moon-move 300s linear infinite alternate;
+    }
+    .star {
+      position: absolute;
+      background-color: #fff;
+      border-radius: 50%;
+      opacity: 0.1;
+      box-shadow: 0 0 5px 2px rgb(255, 255, 255, 0.2);
+      animation: star-twinkle 1s linear infinite alternate;
+    }
+    .cloud {
+      position: absolute;
+      z-index: 2;
+      top: 35%;
+      width: 300px;
+      height: 10px;
+      background-color: #fff;
+      border-radius: 50px;
+      opacity: 0.8;
+      box-shadow: 0 0 60px 60px #eee;
+      filter: blur(8px);
+      animation: cloud-move 80s linear infinite;
+    }
+    .cloud-item {
+      position: absolute;
+      width: 100px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50px;
+      filter: blur(8px);
+      box-shadow: 0 0 50px 60px #eee;
+    }
+    .cloud-item:nth-child(1) {
+      transform: translate(-30%, -50%);
+      box-shadow: 0 0 30px 50px #eee;
+    }
+    .cloud-item:nth-child(2) {
+      width: 80px;
+      height: 30px;
+      transform: translate(70%, -200%);
+    }
+    .mountain {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      filter: drop-shadow(0 -20px 60px #cfa988);
+    }
+    .flowers {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 350px;
+      overflow: hidden;
+    }
+    .flower {
+      position: absolute;
+      z-index: 1;
+      width: 80px;
+      height: 80px;
+      transform-origin: 100% 100%;
+    }
+    #base-flower {
+      display: none;
+    }
+    .petals {
+      height: 100%;
+      transform-origin: 100% 100%;
+      transform: rotate(40deg);
+    }
+    .petal {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-image: linear-gradient(to bottom right,var(--purple) 20%,#989d6b 80%);
+      border-radius: 0 70px;
+      transform-origin: 100% 100%;
+      transform: rotate(calc(var(--index) * 72deg));
+    }
+    .center {
+      position: absolute;
+      left: 100%;
+      top: 100%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--purple);
+      box-shadow: 0 0 20px 5px #d8e35c;
+      filter: blur(3px);
+    }
+    .center-dots {
+      --opacity-white: rgba(255, 255, 255, 0.7);
+      position: absolute;
+      left: 100%;
+      top: 100%;
+      transform: translate(-50%, -50%);
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background-image: linear-gradient(45deg,var(--opacity-white) 25%,transparent 0,transparent 75%,var(--opacity-white) 0,var(--opacity-white)),
+        linear-gradient(45deg,var(--opacity-white) 25%,transparent 0,transparent 75%,var(--opacity-white) 0,var(--opacity-white));
+      background-size: 20px 20px;
+      background-position: 0 0,10px 10px;
+      filter: blur(2px);
+    }
+    .stem {
+      position: absolute;
+      z-index: -1;
+      left: 100%;
+      top: 100%;
+      width: 5px;
+      height: 700px;
+      transform-origin: 0 0;
+      background-color: #000;
+      filter: blur(1px);
+    }
+    @keyframes moon-move {
+      0% {
+        left: 10%;
+        top: 20%;
+      }
+      25% {
+        left: 30%;
+        top: 18%;
+      }
+      50% {
+        left: 48%;
+        top: 15%;
+      }
+      75% {
+        left: 68%;
+        top: 18%;
+      }
+      100% {
+        left: 85%;
+        top: 20%;
+      }
+    }
+    @keyframes star-twinkle {
+      from {
+        opacity: 0.2;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    @keyframes cloud-move {
+      from {
+        left: -360px; /** 宽 300px 阴影 60px */
+      }
+      to {
+        left: calc(100% + 60px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sky">
+    <div class="moon"></div>
+    <div id="stars" class="stars"></div>
+    <div class="cloud">
+      <div class="cloud-item"></div>
+      <div class="cloud-item"></div>
+    </div>
+  </div>
+  <div class="ground">
+    <img class="mountain" src="./mountain.svg" alt="">
+    </div>
+    <div id="flowers" class="flowers">
+      <div id="base-flower" class="flower">
+        <div class="petals">
+          <div class="petal" style="--index:0"></div>
+          <div class="petal" style="--index:1"></div>
+          <div class="petal" style="--index:2"></div>
+          <div class="petal" style="--index:3"></div>
+          <div class="petal" style="--index:4"></div>
+        </div>
+        <div class="center"></div>
+        <div class="center-dots"></div>
+        <div class="stem"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function random(min, max, precision = 2) {
+      const value = Math.random() * (max - min) + min
+      return Math.round(value * (10 ** precision)) / 10 ** precision
+    }
+
+    function addStars() {
+      const STAR_COUNT = 300 // 星星的数量
+      const MIN_STAR_SIZE = 2 // 星星的最小尺寸
+      const MAX_STAR_SIZE = 8 // 星星的最大尺寸
+
+      const container = document.querySelector('#stars')
+      const collection = document.createDocumentFragment()
+      for (let index = 0; index < STAR_COUNT; index++) {
+        const star = document.createElement('span')
+        star.setAttribute('class', 'star')
+        const width = random(MIN_STAR_SIZE, MAX_STAR_SIZE)
+        const height = width
+        const top = random(0, 75)
+        const left = random(0, 100)
+        const duration = random(0.5, 1)
+        const delay = random(0, 0.75)
+        star.style.cssText = `width: ${width}px; height: ${height}px;
+        left: ${left}%; top: ${top}%; 
+        animation-duration: ${duration}s; animation-delay: ${delay}s`
+        collection.appendChild(star)
+      }
+      container.appendChild(collection)
+    }
+
+    function addFlowers() {
+      const FLOWER_COUNT = 10 // 花朵的数量
+
+      const container = document.querySelector('#flowers')
+      const baseFlower = document.querySelector('#base-flower')
+      const collection = document.createDocumentFragment()
+
+      const spacing = container.clientWidth / FLOWER_COUNT
+      for (let index = 0; index < FLOWER_COUNT; index++) {
+        const flower = baseFlower.cloneNode(true)
+        flower.setAttribute('id', '')
+        const left = random(-30, 30) + (spacing * index)
+        const top = random(0, 150)
+        const scale = random(0.5, 0.9)
+        const petalRotate = random(0, 72, 0)
+        const stemRotate = random(0, 5, 0)
+        flower.style.cssText = `left: ${left}px; top: ${top}px;
+          transform: scale(${scale})`
+        flower.querySelector('.petals').style.cssText = `transform: rotate(${petalRotate}deg)`
+        flower.querySelector('.stem').style.cssText = `transform: rotate(${stemRotate}deg)`
+        collection.appendChild(flower)
+      }
+      container.appendChild(collection)
+    }
+
+    addStars()
+    addFlowers()
+  </script>
+</body>
+</html>
