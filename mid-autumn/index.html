@@ -90,6 +90,10 @@
     #base-flower {
       display: none;
     }
+    .flower-main {
+      height: 100%;
+      animation: flower-move 3s linear infinite;
+    }
     .petals {
       height: 100%;
       transform-origin: 100% 100%;
@@ -137,10 +141,11 @@
       left: 100%;
       top: 100%;
       width: 5px;
-      height: 700px;
-      transform-origin: 0 0;
+      height: 600px;
+      transform-origin: 100% 100%;
       background-color: #000;
       filter: blur(1px);
+      animation: stem-rotate 3s linear infinite;
     }
     @keyframes moon-move {
       0% {
@@ -182,6 +187,34 @@
         left: calc(100% + 60px);
       }
     }
+    @keyframes flower-move {
+      0% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(20px);
+      }
+      75% {
+        transform: translateX(-20px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    @keyframes stem-rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(2deg);
+      }
+      75% {
+        transform: rotate(-2deg);
+      }
+      100% {
+        transform: rotate(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -198,15 +231,17 @@
     </div>
     <div id="flowers" class="flowers">
       <div id="base-flower" class="flower">
-        <div class="petals">
-          <div class="petal" style="--index:0"></div>
-          <div class="petal" style="--index:1"></div>
-          <div class="petal" style="--index:2"></div>
-          <div class="petal" style="--index:3"></div>
-          <div class="petal" style="--index:4"></div>
+        <div class="flower-main">
+          <div class="petals">
+            <div class="petal" style="--index:0"></div>
+            <div class="petal" style="--index:1"></div>
+            <div class="petal" style="--index:2"></div>
+            <div class="petal" style="--index:3"></div>
+            <div class="petal" style="--index:4"></div>
+          </div>
+          <div class="center"></div>
+          <div class="center-dots"></div>
         </div>
-        <div class="center"></div>
-        <div class="center-dots"></div>
         <div class="stem"></div>
       </div>
     </div>
@@ -257,12 +292,14 @@
         const left = random(-30, 30) + (spacing * index)
         const top = random(0, 150)
         const scale = random(0.5, 0.9)
+        const delay = random(0, 3)
         const petalRotate = random(0, 72, 0)
         const stemRotate = random(0, 5, 0)
         flower.style.cssText = `left: ${left}px; top: ${top}px;
           transform: scale(${scale})`
+        flower.querySelector('.flower-main').style.cssText = `animation-delay: ${delay}s`
+        flower.querySelector('.stem').style.cssText = `animation-delay: ${delay}s`
         flower.querySelector('.petals').style.cssText = `transform: rotate(${petalRotate}deg)`
-        flower.querySelector('.stem').style.cssText = `transform: rotate(${stemRotate}deg)`
         collection.appendChild(flower)
       }
       container.appendChild(collection)
