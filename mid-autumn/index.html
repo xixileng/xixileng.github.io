@@ -17,6 +17,8 @@
     body {
       background-color: #111;
     }
+
+    /* 月亮 */
     .moon {
       position: absolute;
       z-index: 1;
@@ -27,7 +29,10 @@
       border-radius: 50%;
       filter: blur(2px); /** 朦胧美 */
       animation: moon-move 300s linear infinite alternate;
+      transform: translate3d(0, 0, 0);
     }
+
+    /* 星星 */
     .star {
       position: absolute;
       background-color: #fff;
@@ -36,48 +41,59 @@
       box-shadow: 0 0 5px 2px rgb(255, 255, 255, 0.2);
       animation: star-twinkle 1s linear infinite alternate;
     }
+
+    /* 云层 */
     .cloud {
-      position: absolute;
+      position: fixed;
       z-index: 2;
-      top: 35%;
-      width: 300px;
-      height: 10px;
-      background-color: #fff;
-      border-radius: 50px;
-      opacity: 0.8;
-      box-shadow: 0 0 60px 60px #eee;
-      filter: blur(8px);
-      animation: cloud-move 80s linear infinite;
+      top: 10%;
+      animation: cloud-move 60s linear infinite;
+      transform: translate3d(0, 0, 0);
     }
     .cloud-item {
       position: absolute;
-      width: 100px;
-      height: 20px;
-      background-color: #fff;
-      border-radius: 50px;
-      filter: blur(8px);
-      box-shadow: 0 0 50px 60px #eee;
+      top: -100px;
+      left: -100px;
+      width: 600px;
+      height: 100px;
+      border-radius: 50%;
     }
-    .cloud-item:nth-child(1) {
-      transform: translate(-30%, -50%);
-      box-shadow: 0 0 30px 50px #eee;
+    .cloud-base {
+      top: 90px;
+      height: 100px;
+      filter: url(#filter-base);
+      box-shadow: 200px 170px 19px 40px rgba(255, 255, 255, 0.9);
     }
-    .cloud-item:nth-child(2) {
-      width: 80px;
-      height: 30px;
-      transform: translate(70%, -200%);
+    .cloud-mid {
+      top: 80px;
+      width: 580px;
+      height: 35px;
+      filter: url(#filter-mid);
+      box-shadow: 210px 250px 28px 30px rgba(66, 105, 146, 0.2);
     }
+    .cloud-front {
+      top: 70px;
+      width: 450px;
+      height: 40px;
+      left: -20px;
+      filter: url(#filter-front);
+      box-shadow: 210px 272px 30px 0px rgba(0, 0, 0, 0.4);
+    }
+
+    /* 山峰 */
     .mountain {
       position: absolute;
       bottom: 0;
       width: 100%;
       filter: drop-shadow(0 -20px 60px #cfa988);
     }
+
+    /* 花朵 */
     .flowers {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 350px;
+      height: 400px;
       overflow: hidden;
     }
     .flower {
@@ -140,13 +156,47 @@
       z-index: -1;
       left: 100%;
       top: 100%;
-      width: 5px;
+      width: 3px;
       height: 600px;
       transform-origin: 100% 100%;
       background-color: #000;
-      filter: blur(1px);
+      filter: blur(2px);
       animation: stem-rotate 3s linear infinite;
     }
+
+    /* 绿叶 */
+    .leafs {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 400px;
+    }
+    #base-leaf {
+      display: none;
+    }
+    .leaf-animation-wrapper {
+      transform-origin: 100% 100%;
+      animation: leaf-rotate 3s linear infinite;
+    }
+    .leaf {
+      position: absolute;
+      bottom: 0;
+    }
+    .leaf-main {
+      --leaf-start: #1d3e1d;
+      --leaf-end: #111;
+      width: 160px;
+      height: 120px;
+      background-image: linear-gradient(to bottom right,var(--leaf-start) 20%,var(--leaf-end) 60%);
+      border-radius: 0 100%;
+      transform: skewX(55deg);
+      overflow: hidden;
+      filter: blur(1px);
+    }
+    .leaf-main > div {
+      filter: url(#surface);
+    }
+
     @keyframes moon-move {
       0% {
         left: 10%;
@@ -181,27 +231,44 @@
     }
     @keyframes cloud-move {
       from {
-        left: -360px; /** 宽 300px 阴影 60px */
+        left: -700px;
       }
       to {
-        left: calc(100% + 60px);
+        left: 100%;
       }
     }
     @keyframes flower-move {
       0% {
-        transform: translateX(0);
+        transform: translate(0, 0);
       }
       25% {
-        transform: translateX(20px);
+        transform: translate(20px, 3px);
+      }
+      50% {
+        transform: translate(0, 0);
       }
       75% {
-        transform: translateX(-20px);
+        transform: translate(-20px, 3px);
       }
       100% {
-        transform: translateX(0);
+        transform: translate(0, 0);
       }
     }
     @keyframes stem-rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(2deg);
+      }
+      75% {
+        transform: rotate(-2deg);
+      }
+      100% {
+        transform: rotate(0);
+      }
+    }
+    @keyframes leaf-rotate {
       0% {
         transform: rotate(0deg);
       }
@@ -222,13 +289,29 @@
     <div class="moon"></div>
     <div id="stars" class="stars"></div>
     <div class="cloud">
-      <div class="cloud-item"></div>
-      <div class="cloud-item"></div>
+      <div class="cloud-item cloud-base"></div>
+      <div class="cloud-item cloud-mid"></div>
+      <div class="cloud-item cloud-front"></div>
+      <svg width="0" height="0"> 
+        <filter id="filter-base">
+          <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="5" 
+    seed="8517" />     
+          <feDisplacementMap  in="SourceGraphic" scale="120" />
+        </filter>
+      <filter id="filter-mid">
+            <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3"
+    seed="8517"/>
+          <feDisplacementMap  in="SourceGraphic" scale="120" />
+        </filter>
+        <filter id="filter-front">
+            <feTurbulence type="fractalNoise" baseFrequency="0.009" numOctaves="4" seed="8517"/>
+          <feDisplacementMap  in="SourceGraphic" scale="50" />
+        </filter>
+      </svg>
     </div>
   </div>
   <div class="ground">
     <img class="mountain" src="./mountain.svg" alt="">
-    </div>
     <div id="flowers" class="flowers">
       <div id="base-flower" class="flower">
         <div class="flower-main">
@@ -243,6 +326,23 @@
           <div class="center-dots"></div>
         </div>
         <div class="stem"></div>
+      </div>
+    </div>
+    <div id="leafs" class="leafs">
+      <svg width="0" height="0">
+        <filter id="surface">
+          <feTurbulence type="fractalNoise" baseFrequency='0.05 0.15' numOctaves="10" />
+          <feDiffuseLighting lighting-color='rgb(53,78,76)' surfaceScale='2'>
+            <fePointLight x="0" y="0" z="50"/>
+          </feDiffuseLighting>
+        </filter>
+      </svg>
+      <div id="base-leaf" class="leaf">
+        <div class="leaf-animation-wrapper">
+          <div class="leaf-main">
+            <div style="height:100%"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -279,23 +379,26 @@
     }
 
     function addFlowers() {
-      const FLOWER_COUNT = 10 // 花朵的数量
+      const BASE_COUNT = 10 // 花朵的数量
 
       const container = document.querySelector('#flowers')
       const baseFlower = document.querySelector('#base-flower')
       const collection = document.createDocumentFragment()
 
-      const spacing = container.clientWidth / FLOWER_COUNT
-      for (let index = 0; index < FLOWER_COUNT; index++) {
+      const width = container.clientWidth
+      const flowerCount = Math.round(width / 1920 * BASE_COUNT)
+
+      const spacing = width / flowerCount
+      for (let index = 0; index < flowerCount; index++) {
         const flower = baseFlower.cloneNode(true)
         flower.setAttribute('id', '')
         const left = random(-30, 30) + (spacing * index)
-        const top = random(0, 150)
+        const bottom = random(150, 300)
         const scale = random(0.5, 0.9)
         const delay = random(0, 3)
         const petalRotate = random(0, 72, 0)
         const stemRotate = random(0, 5, 0)
-        flower.style.cssText = `left: ${left}px; top: ${top}px;
+        flower.style.cssText = `left: ${left}px; bottom: ${bottom}px;
           transform: scale(${scale})`
         flower.querySelector('.flower-main').style.cssText = `animation-delay: ${delay}s`
         flower.querySelector('.stem').style.cssText = `animation-delay: ${delay}s`
@@ -305,8 +408,36 @@
       container.appendChild(collection)
     }
 
+    function addLeafs() {
+      const BASE_COUNT = 20 // 叶子的数量
+
+      const container = document.querySelector('#leafs')
+      const baseLeaf = document.querySelector('#base-leaf')
+      const collection = document.createDocumentFragment()
+
+      const width = container.clientWidth
+      const leafCount = Math.round(width / 1920 * BASE_COUNT)
+
+      const spacing = width / leafCount
+      for (let index = 0; index < leafCount; index++) {
+        const leaf = baseLeaf.cloneNode(true)
+        leaf.setAttribute('id', '')
+        const left = random(-50, 50) + (spacing * index)
+        const bottom = random(0, 10)
+        const scale = random(0.6, 1.2)
+        const rotate = random(40, 100, 0)
+        const delay = random(0, 3)
+        leaf.style.cssText = `left: ${left}px; bottom: ${bottom}px;
+          transform: rotateZ(${rotate}deg) scale(${scale})`
+          leaf.querySelector('.leaf-animation-wrapper').style.cssText = `animation-delay: ${delay}s`
+        collection.appendChild(leaf)
+      }
+      container.appendChild(collection)
+    }
+
     addStars()
     addFlowers()
+    addLeafs()
   </script>
 </body>
 </html>
