@@ -286,7 +286,7 @@
     };
 
     var launch = function () {
-      launchFrom(SCREEN_WIDTH * Math.random(), 300 * Math.random() + 400);
+      launchFrom(SCREEN_WIDTH * Math.random(), SCREEN_HEIGHT / 2 * Math.random() + SCREEN_HEIGHT / 2);
     };
 
     // Append the canvas and start the loops
