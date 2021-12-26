@@ -32,6 +32,10 @@ class Word {
     canvas.style.cssText = `width: ${width}px; height: ${height}px;`
 
     this.ctx = canvas.getContext('2d')
+    
+    const offScreenCanvas = canvas.cloneNode()
+    console.log(offScreenCanvas.width)
+    this.offScreenCtx = offScreenCanvas.getContext('2d')
   }
 
   loadImage(image) {
@@ -123,20 +127,17 @@ class Word {
 
   renderStars() {
     this.updateStars()
-
-    // 离屏 canvas，以便使用 globalCompositeOperation
     const { width, height } = this.ctx.canvas
-    const canvas = document.createElement('canvas')
-    canvas.width = width
-    canvas.height = width
-    const ctx = canvas.getContext('2d')
+
+    // star 使用离屏 canvas，以便使用 globalCompositeOperation
+    this.offScreenCtx.clearRect(0, 0, width, height)
     this.stars.forEach(star => {
-      star.render(ctx)
+      star.render(this.offScreenCtx)
     })
 
     this.ctx.save()
     this.ctx.globalCompositeOperation = 'source-in'
-    this.ctx.drawImage(canvas, 0, 0, width, height)
+    this.ctx.drawImage(this.offScreenCtx.canvas, 0, 0, width, height)
     this.ctx.restore()
   }
 }
@@ -145,7 +146,7 @@ class Star {
   x = 0
   y = 0
   size = 3
-  maxSize = 10
+  maxSize = 8
   color = 'rgba(240, 230, 210, 0.8)'
   shrink = 0.99
 
@@ -178,6 +179,7 @@ class Star {
     // gradient.addColorStop(1, this.shadowColor)
 
     // ctx.fillStyle = gradient
+
     ctx.fillStyle = this.color
 
     ctx.beginPath()
