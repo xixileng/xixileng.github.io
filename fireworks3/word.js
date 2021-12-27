@@ -80,8 +80,8 @@ class Word {
 
   createStars() {
     const { width, height } = this.ctx.canvas
-    for (let x = 0; x < width; x += 10) {
-     for (let y = 0; y < height; y += 10) {
+    for (let x = 0; x < width; x += 6) {
+     for (let y = 0; y < height; y += 6) {
         const data = this.ctx.getImageData(x, y, 1, 1).data
         if (data[3] > 0) {
           const star = new Star({ x, y })
@@ -162,8 +162,8 @@ class Word {
 class Star {
   x = 0
   y = 0
-  size = 3
-  maxSize = 8
+  size = 1
+  maxSize = 5
   color = 'rgba(248, 241, 224, 0.8)'
   shrink = 0.99
 
@@ -188,7 +188,7 @@ class Star {
     ctx.save()
 
     const { x, y } = this
-    const radius = this.size / 2
+    // const radius = this.size / 2
 
     // const gradient = ctx.createRadialGradient(x, y, 0.1, x, y, radius)
     // gradient.addColorStop(0.1, 'rgba(255,255,255,0.5)')
@@ -208,6 +208,6 @@ class Star {
   }
 
   isBurnOff() {
-    return this.size < 1.2
+    return this.size < 1
   }
 }
