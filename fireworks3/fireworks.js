@@ -1,9 +1,4 @@
-// const DEFAULT_COLORS = [210, 270, 255, 30, 285].map(item => `hsla(${item}, 100%, 50%, 1)`)
-
-const DEFAULT_COLORS = ['#BDC9E5', '#F5D488', '#F5B488', '#DCBBA3', '#BE88DC',
-  '#FFE2A0', '#C9FFA0', '#A0ECFF', '#A0C0FF', '#FFA0A0']
-
-  // 焰火集合类
+// 焰火集合类
 class Fireworks {
   _timer = null
   _animater = null
@@ -154,14 +149,9 @@ class Fireworks {
   }
 }
 
-
-const STATUS = {
-  HEALTH: 'health',
-  BURN_OFF: 'burnOff'
-}
 // 焰火类
 class Firework {
-  _status = STATUS.HEALTH
+  _status = STATUS.INIT
 
   x = 0
   y = 0
@@ -176,7 +166,7 @@ class Firework {
     this.y = y
     this.particleCount = particleCount
     this.particleOptions = particleOptions
-    this._status = STATUS.HEALTH
+    this._status = STATUS.INIT
 
     this.initParticles()
   }
@@ -207,7 +197,7 @@ class Firework {
 
      // 拥有的粒子都燃尽了，自己也就结束了
     if (this.particles.length === 0) {
-      this._status = STATUS.BURN_OFF
+      this._status = STATUS.COMPLETED
     }
   }
 
@@ -222,7 +212,7 @@ class Firework {
   }
 
   isBurnOff() {
-    return this._status === STATUS.BURN_OFF
+    return this._status === STATUS.COMPLETED
   }
 }
 

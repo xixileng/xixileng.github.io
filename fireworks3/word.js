@@ -1,8 +1,3 @@
-const WORD_STATUS = {
-  INIT: 'init',
-  COMPLETE: 'complete'
-}
-
 class Word {
   _loadImagePromise = null
   _animater = null
@@ -10,7 +5,8 @@ class Word {
   _scale = 0.1
   _maxScale = 1
   _step = 0.01
-  _status = WORD_STATUS.INIT
+  _precision = 3
+  _status = STATUS.INIT
 
   ctx = null
   image = null
@@ -62,7 +58,7 @@ class Word {
   }
 
   start() {
-    this._status = WORD_STATUS.INIT
+    this._status = STATUS.INIT
     this._loadImagePromise.then(() => {
       this.renderImage()
       this.createStars()
@@ -72,7 +68,7 @@ class Word {
 
   stop() {
     this.clearCtx()
-    this._status = WORD_STATUS.COMPLETE
+    this._status = STATUS.COMPLETED
 
     this._animater && cancelAnimationFrame(this._animater)
     this._animater = null
@@ -80,10 +76,10 @@ class Word {
 
   createStars() {
     const { width, height } = this.ctx.canvas
-    for (let x = 0; x < width; x += 6) {
-     for (let y = 0; y < height; y += 6) {
+    for (let x = 0; x < width; x += this._precision) {
+     for (let y = 0; y < height; y += this._precision) {
         const data = this.ctx.getImageData(x, y, 1, 1).data
-        if (data[3] > 0) {
+        if (data[3] === 255) { // 实心的才创建对象
           const star = new Star({ x, y })
           this.stars.push(star)
         }
@@ -98,11 +94,12 @@ class Word {
       if (this._scale < this._maxScale) {
         this.ctx.canvas.style.transform = `scale(${this._scale})`
         this._scale += this._step
+        this._step += 0.002
       }
 
       this.clearCtx()
 
-      this.renderImage()
+      // this.renderImage()
       this.renderStars()
 
       this.render()
@@ -149,36 +146,45 @@ class Word {
     })
 
     this.ctx.save()
-    this.ctx.globalCompositeOperation = 'source-in'
+    this.ctx.globalCompositeOperation = 'source-over'
     this.ctx.drawImage(this.offScreenCtx.canvas, 0, 0, width, height)
     this.ctx.restore()
   }
 
   isBurnOff() {
-    return this._status === WORD_STATUS.COMPLETE
+    return this._status === STATUS.COMPLETED
   }
 }
 
+const MIN_SIZE = 0.3
+const MAX_SIZE = 1
+const SHRINK = 0.98
+const GRAVITY = 2
 class Star {
   x = 0
   y = 0
-  size = 1
-  maxSize = 5
+  fall = false
+  gravity = GRAVITY
+  size = MIN_SIZE
+  maxSize = MAX_SIZE
   color = 'rgba(248, 241, 224, 0.8)'
-  shrink = 0.99
+  shrink = SHRINK
 
   constructor(options = {}) {
     Object.keys(options).forEach(key => {
       this[key] = options[key]
     })
-    this.shadowColor = tinycolor(this.color).setAlpha(0.1)
   }
 
   update() {
     this.size /= this.shrink
 
+    if (this.fall) {
+      this.y += Math.random(0.5, 1) * this.gravity
+    }
     if (this.size >= this.maxSize) {
       this.shrink = 1 / this.shrink
+      this.fall = true
     }
   }
 
@@ -188,14 +194,6 @@ class Star {
     ctx.save()
 
     const { x, y } = this
-    // const radius = this.size / 2
-
-    // const gradient = ctx.createRadialGradient(x, y, 0.1, x, y, radius)
-    // gradient.addColorStop(0.1, 'rgba(255,255,255,0.5)')
-    // gradient.addColorStop(0.8, this.color)
-    // gradient.addColorStop(1, this.shadowColor)
-
-    // ctx.fillStyle = gradient
 
     ctx.fillStyle = this.color
 
@@ -208,6 +206,6 @@ class Star {
   }
 
   isBurnOff() {
-    return this.size < 1
+    return this.size < MIN_SIZE
   }
 }
