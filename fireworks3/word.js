@@ -1,3 +1,8 @@
+const WORD_STATUS = {
+  INIT: 'init',
+  COMPLETE: 'complete'
+}
+
 class Word {
   _loadImagePromise = null
   _animater = null
@@ -5,6 +10,7 @@ class Word {
   _scale = 0.1
   _maxScale = 1
   _step = 0.01
+  _status = WORD_STATUS.INIT
 
   ctx = null
   image = null
@@ -56,6 +62,7 @@ class Word {
   }
 
   start() {
+    this._status = WORD_STATUS.INIT
     this._loadImagePromise.then(() => {
       this.renderImage()
       this.createStars()
@@ -65,6 +72,7 @@ class Word {
 
   stop() {
     this.clearCtx()
+    this._status = WORD_STATUS.COMPLETE
 
     this._animater && cancelAnimationFrame(this._animater)
     this._animater = null
@@ -84,6 +92,8 @@ class Word {
   }
 
   render() {
+    if (this.isBurnOff()) return
+
     this._animater = requestAnimationFrame(() => {
       if (this._scale < this._maxScale) {
         this.ctx.canvas.style.transform = `scale(${this._scale})`
@@ -143,6 +153,10 @@ class Word {
     this.ctx.drawImage(this.offScreenCtx.canvas, 0, 0, width, height)
     this.ctx.restore()
   }
+
+  isBurnOff() {
+    return this._status === WORD_STATUS.COMPLETE
+  }
 }
 
 class Star {
@@ -150,7 +164,7 @@ class Star {
   y = 0
   size = 3
   maxSize = 8
-  color = 'rgba(240, 230, 210, 0.8)'
+  color = 'rgba(248, 241, 224, 0.8)'
   shrink = 0.99
 
   constructor(options = {}) {

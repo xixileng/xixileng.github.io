@@ -1,6 +1,9 @@
-const DEFAULT_COLORS = [210, 270, 255, 30, 285].map(item => `hsla(${item}, 100%, 50%, 1)`)
+// const DEFAULT_COLORS = [210, 270, 255, 30, 285].map(item => `hsla(${item}, 100%, 50%, 1)`)
 
-// 焰火集合类
+const DEFAULT_COLORS = ['#BDC9E5', '#F5D488', '#F5B488', '#DCBBA3', '#BE88DC',
+  '#FFE2A0', '#C9FFA0', '#A0ECFF', '#A0C0FF', '#FFA0A0']
+
+  // 焰火集合类
 class Fireworks {
   _timer = null
   _animater = null
@@ -10,8 +13,8 @@ class Fireworks {
   offScreenCtx = null // 离屏 canvas，优化性能
   fps = 60 // 帧率控制
   fireworks = [] // 焰火数组
-  fireworkCount = 10 // 焰火数量
-  fireworkInterval = 300 // 焰火爆炸间隔💥
+  fireworkCount = 8 // 焰火数量
+  fireworkInterval = 400 // 焰火爆炸间隔💥
   fireworkColors = DEFAULT_COLORS // 焰火颜色随机取值数组
   particleOptions = { // 粒子配置
     size: 15, // 几块钱的烟花
@@ -158,7 +161,7 @@ const STATUS = {
 }
 // 焰火类
 class Firework {
-  status = STATUS.HEALTH
+  _status = STATUS.HEALTH
 
   x = 0
   y = 0
@@ -173,6 +176,7 @@ class Firework {
     this.y = y
     this.particleCount = particleCount
     this.particleOptions = particleOptions
+    this._status = STATUS.HEALTH
 
     this.initParticles()
   }
@@ -203,7 +207,7 @@ class Firework {
 
      // 拥有的粒子都燃尽了，自己也就结束了
     if (this.particles.length === 0) {
-      this.status = STATUS.BURN_OFF
+      this._status = STATUS.BURN_OFF
     }
   }
 
@@ -218,7 +222,7 @@ class Firework {
   }
 
   isBurnOff() {
-    return this.status === STATUS.BURN_OFF
+    return this._status === STATUS.BURN_OFF
   }
 }
 
@@ -277,14 +281,15 @@ class Particle {
     // 绘制阴影性能损耗太大，顶不住，砍需求！
     // ctx.shadowColor = 'rgba(255,255,255,0.6)'
     // ctx.shadowBlur = 5
+    // ctx.globalCompositeOperation = 'lighter'
 
     const { x, y } = this
     const radius = this.size / 2
 
     // 红里透白，像极了爱情
     const gradient = ctx.createRadialGradient(x, y, 0.1, x, y, radius)
-    gradient.addColorStop(0.1, 'rgba(255,255,255,0.5)')
-    gradient.addColorStop(0.8, this.color)
+    gradient.addColorStop(0.1, 'rgba(255,255,255,0.3)')
+    gradient.addColorStop(0.6, this.color)
     gradient.addColorStop(1, this.shadowColor)
 
     ctx.fillStyle = gradient
