@@ -40,6 +40,7 @@
       <canvas id="word" class="word-canvas"></canvas>
     </div>
 
+    <script src="./imageSrc.js"></script>
     <script src="./tinycolor.js"></script>
     <script src="./fireworks.js"></script>
     <script src="./word.js"></script>
@@ -55,7 +56,7 @@
       
       {
         const dom = document.querySelector('#word')
-        const image = './word.png'
+        const image = imageSrc
         const word = new Word(dom, image)
         word.start()
       }

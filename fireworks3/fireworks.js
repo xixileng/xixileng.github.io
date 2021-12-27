@@ -7,7 +7,8 @@ class Fireworks {
   _useAnimationFrame = true
   
   ctx = null // 画布上下文，都画这上面
-  fps = 40 // 帧率控制
+  offScreenCtx = null // 离屏 canvas，优化性能
+  fps = 60 // 帧率控制
   fireworks = [] // 焰火数组
   fireworkCount = 10 // 焰火数量
   fireworkInterval = 300 // 焰火爆炸间隔💥
@@ -56,6 +57,9 @@ class Fireworks {
     canvas.style.cssText = `width: ${width}px; height: ${height}px;`
 
     this.ctx = canvas.getContext('2d')
+
+    const offScreenCanvas = canvas.cloneNode()
+    this.offScreenCtx = offScreenCanvas.getContext('2d')
   }
 
   // 创建单个焰火
@@ -64,7 +68,7 @@ class Fireworks {
     const x = random(width * 0.1, width * 0.9)
     const y = random(height * 0.1, height * 0.9)
     const color = random(this.fireworkColors)
-    const firework = new Firework({ ctx: this.ctx, ...this.particleOptions, x, y, color })
+    const firework = new Firework({ ...this.particleOptions, x, y, color })
     this.fireworks.push(firework)
   }
 
@@ -94,27 +98,36 @@ class Fireworks {
   }
 
   // 绘制焰火
-  render() {
-    // 60 帧就用 requestAnimationFrame，否则用 setTimeout
-    const animationFunction = this._useAnimationFrame ? requestAnimationFrame : setTimeout
-    const interval = 16.67 * (60 / this.fps)
+  render(animationFunction, interval) {
     this._animater = animationFunction(() => {
+      const { width, height } = this.ctx.canvas
+
       // 通过绘制黑色透明图层，达到尾焰的效果
       this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'
-      const { width, height } = this.ctx.canvas
       this.ctx.fillRect(0, 0, width, height)
+      
+      this.offScreenCtx.clearRect(0, 0, width, height)
 
       this.fireworks.forEach(firework => {
-        firework.render() // @TODO 使用离屏 canvas
+        firework.render(this.offScreenCtx)
       })
-      this.render()
+
+      this.ctx.save()
+      this.ctx.globalCompositeOperation = 'lighter'
+      this.ctx.drawImage(this.offScreenCtx.canvas, 0, 0, width, height)
+      this.ctx.restore()
+
+      this.render(animationFunction, interval)
     }, interval)
   }
 
   // 前进四 ！！！
   start() {
     this.loop()
-    this.render()
+    // 60 帧就用 requestAnimationFrame，否则用 setTimeout
+    const animationFunction = this._useAnimationFrame ? requestAnimationFrame : setTimeout
+    const interval = 16.67 * (60 / this.fps)
+    this.render(animationFunction, interval)
   }
 
   // 休息一下
@@ -147,7 +160,6 @@ const STATUS = {
 class Firework {
   status = STATUS.HEALTH
 
-  ctx = null
   x = 0
   y = 0
 
@@ -156,8 +168,7 @@ class Firework {
   particleOptions = {}
 
   constructor(options = {}) {
-    const { ctx, x, y, particleCount = 80, ...particleOptions } = options
-    this.ctx = ctx
+    const { x, y, particleCount = 80, ...particleOptions } = options
     this.x = x
     this.y = y
     this.particleCount = particleCount
@@ -197,12 +208,12 @@ class Firework {
   }
 
   // 渲染粒子
-  render() {
+  render(ctx) {
     this.updateParticles()
     if (this.isBurnOff()) return
 
     this.particles.forEach(particle => {
-      particle.render(this.ctx)
+      particle.render(ctx)
     })
   }
 
@@ -262,8 +273,6 @@ class Particle {
     if (this.isBurnOff()) return
 
     ctx.save()
-
-    ctx.globalCompositeOperation = 'lighter'
 
     // 绘制阴影性能损耗太大，顶不住，砍需求！
     // ctx.shadowColor = 'rgba(255,255,255,0.6)'
