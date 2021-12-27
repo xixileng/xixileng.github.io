@@ -34,7 +34,6 @@ class Word {
     this.ctx = canvas.getContext('2d')
     
     const offScreenCanvas = canvas.cloneNode()
-    console.log(offScreenCanvas.width)
     this.offScreenCtx = offScreenCanvas.getContext('2d')
   }
 
@@ -58,6 +57,7 @@ class Word {
 
   start() {
     this._loadImagePromise.then(() => {
+      this.renderImage()
       this.createStars()
       this.render()
     })
@@ -72,10 +72,13 @@ class Word {
 
   createStars() {
     const { width, height } = this.ctx.canvas
-    for (let x = 0; x < width; x += 12) {
-     for (let y = 0; y < height; y += 12) {
-        const star = new Star({ x, y })
-        this.stars.push(star)
+    for (let x = 0; x < width; x += 10) {
+     for (let y = 0; y < height; y += 10) {
+        const data = this.ctx.getImageData(x, y, 1, 1).data
+        if (data[3] > 0) {
+          const star = new Star({ x, y })
+          this.stars.push(star)
+        }
       }
     }
   }

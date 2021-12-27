@@ -1,4 +1,4 @@
-const defaultColors = [210, 270, 255, 30, 285].map(item => `hsla(${item}, 100%, 50%, 1)`)
+const DEFAULT_COLORS = [210, 270, 255, 30, 285].map(item => `hsla(${item}, 100%, 50%, 1)`)
 
 // 焰火集合类
 class Fireworks {
@@ -11,7 +11,7 @@ class Fireworks {
   fireworks = [] // 焰火数组
   fireworkCount = 10 // 焰火数量
   fireworkInterval = 300 // 焰火爆炸间隔💥
-  fireworkColors = defaultColors // 焰火颜色随机取值数组
+  fireworkColors = DEFAULT_COLORS // 焰火颜色随机取值数组
   particleOptions = { // 粒子配置
     size: 15, // 几块钱的烟花
     speed: 15, // 燃烧的速度
@@ -105,7 +105,7 @@ class Fireworks {
       this.ctx.fillRect(0, 0, width, height)
 
       this.fireworks.forEach(firework => {
-        firework.render()
+        firework.render() // @TODO 使用离屏 canvas
       })
       this.render()
     }, interval)
