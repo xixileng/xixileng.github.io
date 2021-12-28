@@ -1,11 +1,12 @@
+const STEP = 0.008
 class Word {
   _loadImagePromise = null
   _animater = null
   _timer = null
   _scale = 0.1
   _maxScale = 1
-  _step = 0.01
-  _precision = 2
+  _step = STEP
+  _precision = 2.5
   _status = STATUS.INIT
 
   ctx = null
@@ -95,7 +96,7 @@ class Word {
       if (this._scale < this._maxScale) {
         this.ctx.canvas.style.transform = `scale(${this._scale})`
         this._scale += this._step
-        this._step += 0.001
+        this._step += STEP / 10
       }
 
       this.renderStars()
@@ -146,9 +147,9 @@ class Word {
 }
 
 const MIN_SIZE = 0.15
-const INIT_SIZE = 0.3
+const INIT_SIZE = 0.5
 const MAX_SIZE = 2
-const SHRINK = 0.98
+const SHRINK = 0.99
 const GRAVITY = 2
 class Star {
   x = 0
