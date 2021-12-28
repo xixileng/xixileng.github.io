@@ -180,8 +180,12 @@ class Star {
     this.size /= this.shrink
 
     if (this.fall) {
-      this.y += Math.random(0.5, 1) * this.gravity
+      this.y += random(0.5, 1) * this.gravity
+    } else {
+      this.x += random(-0.3, 0.3)
+      this.y += random(-0.2, 0.2)
     }
+    this.color = `rgba(${~~random(200, 255)}, ${~~random(200, 255)}, 220, 0.9)`
     if (this.size >= this.maxSize) {
       this.shrink = 1 / this.shrink
       this.fall = true
