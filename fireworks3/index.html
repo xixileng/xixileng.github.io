@@ -26,6 +26,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        pointer-events: none;
       }
 
       .word-canvas {
@@ -54,6 +55,10 @@
 
         const fireworks = new Fireworks(dom, options)
         fireworks.start()
+
+        dom.addEventListener('click', (event) => {
+          fireworks.createFirework(event.offsetX, event.offsetY)
+        })
       }
       
       {

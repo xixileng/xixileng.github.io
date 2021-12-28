@@ -61,11 +61,11 @@ class Fireworks {
   }
 
   // 创建单个焰火
-  createFirework() {
+  createFirework(x, y, color) {
     const { width, height } = this.ctx.canvas
-    const x = random(width * 0.1, width * 0.9)
-    const y = random(height * 0.1, height * 0.9)
-    const color = random(this.fireworkColors)
+    x = x ?? random(width * 0.1, width * 0.9)
+    y = y ?? random(height * 0.1, height * 0.9)
+    color = color ?? random(this.fireworkColors)
     const firework = new Firework({ ...this.particleOptions, x, y, color })
     this.fireworks.push(firework)
   }
