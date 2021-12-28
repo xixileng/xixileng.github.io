@@ -16,7 +16,7 @@ class Fireworks {
     speed: 15, // 燃烧的速度
     gravity: 0.08, // 🌍 地球的引力，向下的
     power: 0.93, // 动力，值越大冲越远
-    shrink: 0.96, // 燃料消耗的速度
+    shrink: 0.97, // 燃料消耗的速度
     jitter: 1, // 摇摇晃摇
     color: 'hsla(210, 100%, 50%, 1)', // 颜色
   }
@@ -62,23 +62,20 @@ class Fireworks {
 
   // 创建单个焰火
   createFirework(x, y, color) {
-    const { width, height } = this.ctx.canvas
+    const { ctx, particleOptions, fireworkColors } = this
+    const { width, height } = ctx.canvas
     x = x ?? random(width * 0.1, width * 0.9)
     y = y ?? random(height * 0.1, height * 0.9)
-    color = color ?? random(this.fireworkColors)
-    const firework = new Firework({ ...this.particleOptions, x, y, color })
+    color = color ?? random(fireworkColors)
+    const particleCount = random(80, 100)
+
+    const firework = new Firework({ particleOptions, particleCount, x, y, color })
     this.fireworks.push(firework)
   }
 
   // 焰火燃尽，无情灭之
   checkFireworks() {
-    const indexArray = []
-    this.fireworks.forEach((firework, index) => {
-      if (firework.isBurnOff()) {
-        indexArray.push(index)
-      }
-    })
-    indexArray.reverse().forEach(index => this.fireworks.splice(index, 1))
+    this.fireworks = this.fireworks.filter(firework => !firework.isBurnOff())
   }
 
   // 检查是否需要创建焰火
@@ -156,16 +153,13 @@ class Firework {
   x = 0
   y = 0
 
+  color = 'rgba(255, 255, 255, 1)'
   particleCount = 80
   particles = []
   particleOptions = {}
 
   constructor(options = {}) {
-    const { x, y, particleCount = 80, ...particleOptions } = options
-    this.x = x
-    this.y = y
-    this.particleCount = particleCount
-    this.particleOptions = particleOptions
+    Object.keys(options).forEach(key => this[key] = options[key])
     this._status = STATUS.INIT
 
     this.initParticles()
@@ -173,27 +167,21 @@ class Firework {
 
   // 初始化粒子
   initParticles() {
-    const { x, y, particleOptions } = this
-    const { size: pSize } = particleOptions
+    const { x, y, color, particleOptions } = this
+    const { size: baseSize } = particleOptions
+
     for (let index = 0; index < this.particleCount; index++) {
-      const shrink = random() * 0.05 + particleOptions.shrink
-      const size = random(-pSize / 2, pSize / 2) + pSize
-      const particle = new Particle({ x, y, shrink, size, ...particleOptions })
+      const size = random(-baseSize / 2, baseSize / 2) + baseSize
+      const particle = new Particle({ ...particleOptions, x, y, size, color })
       this.particles.push(particle)
     }
   }
 
   // 更新粒子
   updateParticles() {
-    const indexArray = []
-    this.particles.forEach((particle, index) => {
-      particle.update()
-      if (particle.isBurnOff()) {
-        indexArray.push(index)
-      }
-    })
+    this.particles.forEach(particle => particle.update())
 
-    indexArray.reverse().forEach(index => this.particles.splice(index, 1))
+    this.particles = this.particles.filter(particle => !particle.isBurnOff())
 
      // 拥有的粒子都燃尽了，自己也就结束了
     if (this.particles.length === 0) {
@@ -239,8 +227,8 @@ class Particle {
     Object.keys(options).forEach(key => {
       this[key] = options[key]
     })
-    const angle = random() * Math.PI * 2
-    const speed = Math.cos((random() * Math.PI) / 2) * this.speed
+    const angle = random(0, Math.PI * 2)
+    const speed = Math.cos(random(0, Math.PI / 2)) * this.speed
     this.vel = {
       x: Math.cos(angle) * speed,
       y: Math.sin(angle) * speed,
@@ -268,26 +256,22 @@ class Particle {
 
     ctx.save()
 
-    // 绘制阴影性能损耗太大，顶不住，砍需求！
-    // ctx.shadowColor = 'rgba(255,255,255,0.6)'
-    // ctx.shadowBlur = 5
-    // ctx.globalCompositeOperation = 'lighter'
-
-    const { x, y } = this
-    const radius = this.size / 2
-
+    const { x, y, size, color, shadowColor } = this
     // 红里透白，像极了爱情
-    const gradient = ctx.createRadialGradient(x, y, 0.1, x, y, radius)
-    gradient.addColorStop(0.1, 'rgba(255,255,255,0.3)')
-    gradient.addColorStop(0.6, this.color)
-    gradient.addColorStop(1, this.shadowColor)
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, size / 2)
+    gradient.addColorStop(0.1, 'rgba(255, 255, 255, 0.3)')
+    gradient.addColorStop(0.6, color)
+    gradient.addColorStop(1, shadowColor)
 
     ctx.fillStyle = gradient
 
-    ctx.beginPath()
-    ctx.arc(x, y, this.size, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
+    // ctx.beginPath()
+    // ctx.arc(x, y, size, 0, Math.PI * 2, true)
+    // ctx.closePath()
+    // ctx.fill()
+
+    // 绘制矩形性能更好
+    ctx.fillRect(x, y, size, size)
 
     ctx.restore()
   }

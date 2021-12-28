@@ -5,10 +5,11 @@ class Word {
   _scale = 0.1
   _maxScale = 1
   _step = 0.01
-  _precision = 3
+  _precision = 2
   _status = STATUS.INIT
 
   ctx = null
+  offScreenCtx = null
   image = null
   stars = []
 
@@ -94,12 +95,9 @@ class Word {
       if (this._scale < this._maxScale) {
         this.ctx.canvas.style.transform = `scale(${this._scale})`
         this._scale += this._step
-        this._step += 0.002
+        this._step += 0.001
       }
 
-      this.clearCtx()
-
-      // this.renderImage()
       this.renderStars()
 
       this.render()
@@ -120,15 +118,9 @@ class Word {
   }
 
   updateStars() {
-    const indexArray = []
-    this.stars.forEach((star, index) => {
-      star.update()
-      if (star.isBurnOff()) {
-        indexArray.push(index)
-      }
-    })
+    this.stars.forEach(star => star.update())
 
-    indexArray.reverse().forEach(index => this.stars.splice(index, 1))
+    this.stars = this.stars.filter(star => !star.isBurnOff())
 
     if (this.stars.length === 0) {
       this.stop()
@@ -139,16 +131,13 @@ class Word {
     this.updateStars()
     const { width, height } = this.ctx.canvas
 
-    // star 使用离屏 canvas，以便使用 globalCompositeOperation
     this.offScreenCtx.clearRect(0, 0, width, height)
     this.stars.forEach(star => {
       star.render(this.offScreenCtx)
     })
 
-    this.ctx.save()
-    this.ctx.globalCompositeOperation = 'source-over'
+    this.ctx.clearRect(0, 0, width, height)
     this.ctx.drawImage(this.offScreenCtx.canvas, 0, 0, width, height)
-    this.ctx.restore()
   }
 
   isBurnOff() {
@@ -156,8 +145,9 @@ class Word {
   }
 }
 
-const MIN_SIZE = 0.3
-const MAX_SIZE = 1
+const MIN_SIZE = 0.15
+const INIT_SIZE = 0.3
+const MAX_SIZE = 2
 const SHRINK = 0.98
 const GRAVITY = 2
 class Star {
@@ -165,27 +155,29 @@ class Star {
   y = 0
   fall = false
   gravity = GRAVITY
-  size = MIN_SIZE
+  size = INIT_SIZE
   maxSize = MAX_SIZE
   color = 'rgba(248, 241, 224, 0.8)'
-  shrink = SHRINK
+  shrink = SHRINK * random(0.99, 1)
 
   constructor(options = {}) {
     Object.keys(options).forEach(key => {
       this[key] = options[key]
     })
+
+    this.color = options.color || `rgba(${~~random(180, 240)}, ${~~random(180, 220)}, 180, 0.9)`
   }
 
   update() {
     this.size /= this.shrink
 
     if (this.fall) {
+      this.x += random(-0.2, 0.2)
       this.y += random(0.5, 1) * this.gravity
     } else {
       this.x += random(-0.3, 0.3)
       this.y += random(-0.2, 0.2)
     }
-    this.color = `rgba(${~~random(200, 255)}, ${~~random(200, 255)}, 220, 0.9)`
     if (this.size >= this.maxSize) {
       this.shrink = 1 / this.shrink
       this.fall = true
@@ -197,14 +189,10 @@ class Star {
 
     ctx.save()
 
-    const { x, y } = this
+    const { x, y, size } = this
 
     ctx.fillStyle = this.color
-
-    ctx.beginPath()
-    ctx.arc(x, y, this.size, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
+    ctx.fillRect(x, y, size, size)
 
     ctx.restore()
   }
