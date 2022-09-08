@@ -13,7 +13,7 @@
         padding: 0;
       }
       body {
-        background-color: #111;
+        background-image: linear-gradient(to left top, rgb(40, 70, 141), rgb(14, 31, 70));
         overflow: hidden;
       }
       /* 月亮 */
@@ -22,8 +22,8 @@
         z-index: 1;
         left: 10%;
         top: 10%;
-        width: 120px;
-        height: 120px;
+        width: 150px;
+        height: 150px;
         background-image: linear-gradient(to right, #e4e0b7 10%, #fff 90%);
         box-shadow: 0 0 60px 40px rgb(0, 0, 255, 0.2),
           inset 0 0 20px 5px rgba(0, 0, 255, 0.1);
@@ -48,9 +48,7 @@
         top: 100%;
         width: 400px;
         height: 400px;
-        transform-origin: 0 0;
-        transform: translate(-100%, -100%);
-        /* animation: penguin-move 3s linear infinite alternate; */
+        animation: penguin-move 5s ease-in-out infinite ;
       }
 
       @keyframes moon-twinkle {
@@ -79,26 +77,14 @@
 
       @keyframes penguin-move {
         0% {
-          left: 100%;
-          top: 100%;
-          transform: translate(-100%, -100%) scale(1);
-        }
-        25% {
-          left: 75%;
-          top: 75%;
-        }
-        50% {
-          left: 50%;
-          top: 50%;
-        }
-        75% {
-          left: 25%;
-          top: 25%;
+          left: calc(100% - 400px);
+          top: calc(100% - 400px);
+          transform: scale(1) rotateZ(0);
         }
         100% {
-          left: 10%;
-          top: 10%;
-          transform: translate(-100%, -100%) scale(0.3);
+          left: 0%;
+          top: calc(0% - 40px);
+          transform: scale(0.5) rotateZ(1080deg);
         }
       }
     </style>
