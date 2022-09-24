@@ -1,0 +1,61 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.home {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.header, .footer {
+  width: calc(100% - 40px);
+  margin: 20px;
+}
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.title {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  top: 30%;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+}
+.book {
+  width: 40px;
+  margin-left: 8px;
+}
+.action {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  height: 32px;
+  transform: translateX(-50%);
+  background: transparent;
+  border-radius: 4px;
+  border: 1px solid #407ad0;
+  font-size: 14px;
+  cursor: pointer;
+}
+.action:hover {
+  background-color: rgba(64,122,208,0.1);
+}
+.desc {
+  position: absolute;
+  display: inline-block;
+  top: 30%;
+  margin: 0;
+  font-size: 20px;
+  text-align: left;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: serif;
+}

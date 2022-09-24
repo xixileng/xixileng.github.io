@@ -7,21 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>程序员答案之书</title>
+    <link rel="stylesheet" href="./style.css" />
     <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-      .home {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
       .answer {
-        position: relative;
+        position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -29,12 +18,12 @@
         height: 200px;
         top: 30%;
         margin: 0;
-        padding: 5px 10px;
+        padding: 5px 12px;
         font-family: serif;
         font-size: 20px;
         left: 50%;
         transform: translateX(-50%);
-        border: 1px solid #000;
+        border: 1px dashed #000;
         border-radius: 4px;
       }
       .ask {
@@ -45,54 +34,77 @@
         text-align: center;
         opacity: 0;
       }
-      .action {
+      .decorate {
         position: absolute;
-        top: 70%;
-        left: 50%;
-        width: 98px;
-        height: 32px;
-        transform: translateX(-50%);
-        background: transparent;
-        border-radius: 4px;
-        border: 1px solid #407ad0;
-        font-size: 14px;
-        cursor: pointer;
+        width: 100px;
+        right: 0;
+        top: 30%;
+        margin-top: 200px;
+        transform: translate(5%, -50%);
+        background-color: #fff;
+        opacity: 0;
       }
-      .action:hover {
-        background-color: rgba(64, 122, 208, 0.1);
+      .boy {
+        position: absolute;
+        left: 0;
+        top: 70%;
+        width: 180px;
+        transform: translate(-20%, -50%);
       }
     </style>
   </head>
   <body>
     <div class="home">
+      <img src="./images/header.png" alt="" class="header" />
+
       <p id="answer" class="answer"></p>
+
+      <img id="decorate" src="./images/blink.png" alt="" class="decorate" />
 
       <button id="action" class="action" onclick="stop()">停止</button>
 
-      <p id="ask" class="ask">解决你的问题了吗？<br>没有就再来一次吧</p>
+      <img src="./images/boy.png" alt="" class="boy" />
+
+      <p id="ask" class="ask">解决你的问题了吗？<br />没有就再来一次吧！</p>
 
       <script src="./answers.js"></script>
       <script>
-        let interval = null
+        let interval = null;
         window.onload = function () {
-          const answerDom = document.querySelector('#answer')
+          const answerDom = document.querySelector("#answer");
           interval = setInterval(() => {
-            const answerIndex = Math.floor(Math.random() * ANSWERS.length)
-            const currentAnswer = ANSWERS[answerIndex]
-            answerDom.innerHTML = currentAnswer
+            const answerIndex = Math.floor(Math.random() * ANSWERS.length);
+            const currentAnswer = ANSWERS[answerIndex];
+            answerDom.innerHTML = currentAnswer;
           }, 100);
         };
 
         function stop() {
-          clearInterval(interval)
-          const askDom = document.querySelector('#ask')
-          askDom.style.opacity = 1
+          clearInterval(interval);
 
-          const actionDom = document.querySelector('#action')
-          actionDom.innerHTML = '重启答案之书'
+          showAsk();
+          showDecorate();
+
+          const actionDom = document.querySelector("#action");
+          actionDom.innerHTML = "重启答案之书";
           actionDom.onclick = function () {
-            location.href = './question.html'
-          }
+            location.href = "./question.html";
+          };
+        }
+
+        function showAsk(params) {
+          const askDom = document.querySelector("#ask");
+          askDom.style.opacity = 1;
+        }
+
+        function showDecorate() {
+          const decorates = ["god", "blink", "fish", "cat"];
+          const decorateDom = document.querySelector("#decorate");
+          const decorateIndex = Math.floor(Math.random() * decorates.length);
+          decorateDom.src = `./images/${decorates[decorateIndex]}.png`;
+          decorateDom.onload = () => {
+            decorateDom.style.opacity = 1;
+          };
         }
       </script>
     </div>
