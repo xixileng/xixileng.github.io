@@ -48,6 +48,9 @@
           transform: translateY(0);
         }
       }
+      iframe {
+        height: 0;
+      }
     </style>
   </head>
   <body>
@@ -59,6 +62,10 @@
       <img src="./images/duck.png" alt="" class="duck" />
 
       <button class="action" onclick="openBook()">打开书本</button>
+
+      <!-- 黑魔法的预加载，减少页面跳转时的等待 -->
+      <iframe src="./question.html" frameborder="0"></iframe>
+      <iframe src="./answer.html" frameborder="0"></iframe>
 
       <script>
         function openBook() {
