@@ -63,10 +63,9 @@
           const desc = document.querySelector('#desc')
           for (let index = 0; index < desc.childElementCount; index++) {
             const child = desc.children[index];
-            console.log(child);
             setTimeout(() => {
               child.style.opacity = 1
-            }, index * 1000);
+            }, (index + 1) * 1000);
           }
         }
         function startAsk() {
