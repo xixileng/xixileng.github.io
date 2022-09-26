@@ -14,17 +14,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 80%;
+        width: 70%;
         height: 200px;
-        top: 30%;
+        top: 25%;
         margin: 0;
-        padding: 5px 12px;
+        padding: 10px 30px 10px 35px;
         font-family: serif;
-        font-size: 20px;
+        font-size: 18px;
         left: 50%;
         transform: translateX(-50%);
-        border: 1px dashed #000;
-        border-radius: 4px;
+        background-image: url(./images/border.png);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
       }
       .ask {
         position: absolute;
@@ -36,12 +37,11 @@
       }
       .decorate {
         position: absolute;
-        width: 100px;
+        width: 110px;
         right: 0;
-        top: 30%;
-        margin-top: 200px;
-        transform: translate(5%, -50%);
-        background-color: #fff;
+        top: 25%;
+        margin-top: 170px;
+        transform: translate(2%, -50%);
         opacity: 0;
       }
       .boy {
@@ -55,8 +55,6 @@
   </head>
   <body>
     <div class="home">
-      <img src="./images/header.png" alt="" class="header" />
-
       <p id="answer" class="answer"></p>
 
       <img id="decorate" src="" alt="" class="decorate" />
