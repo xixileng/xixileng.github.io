@@ -5,8 +5,9 @@ html, body {
 }
 .home {
   position: relative;
-  width: 100%;
+  max-width: 750px;
   height: 100%;
+  margin: 0 auto;
   overflow: hidden;
 }
 .header, .footer {
