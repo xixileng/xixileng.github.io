@@ -59,11 +59,11 @@
 
       <p id="answer" class="answer"></p>
 
-      <img id="decorate" src="./images/blink.png" alt="" class="decorate" />
+      <img id="decorate" src="" alt="" class="decorate" />
 
       <button id="action" class="action" onclick="stop()">停止</button>
 
-      <img src="./images/boy.png" alt="" class="boy" />
+      <img src="./images/good.png" alt="" class="boy" />
 
       <p id="ask" class="ask">解决你的问题了吗？<br />没有就再来一次吧！</p>
 
@@ -98,10 +98,10 @@
         }
 
         function showDecorate() {
-          const decorates = ["god", "blink", "fish", "cat"];
+          const decoratesLength = 4;
           const decorateDom = document.querySelector("#decorate");
-          const decorateIndex = Math.floor(Math.random() * decorates.length);
-          decorateDom.src = `./images/${decorates[decorateIndex]}.png`;
+          const decorate = Math.floor(Math.random() * decoratesLength);
+          decorateDom.src = `./images/decorates/${decorate}.png`;
           decorateDom.onload = () => {
             decorateDom.style.opacity = 1;
           };

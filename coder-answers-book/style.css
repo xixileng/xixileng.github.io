@@ -60,3 +60,42 @@ html, body {
   transform: translateX(-50%);
   font-family: serif;
 }
+.duck {
+  position: absolute;
+  z-index: 1;
+  width: 100px;
+  top: 50%;
+  animation: duck-move 3s linear infinite;
+}
+
+@keyframes duck-move {
+  0% {
+    right: -100px;
+    transform: translateY(0);
+  }
+  12.5% {
+    transform: translateY(-30px);
+  }
+  25% {
+    transform: translateY(0);
+  }
+  37.5% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  62.5% {
+    transform: translateY(-30px);
+  }
+  75% {
+    transform: translateY(0);
+  }
+  87.5% {
+    transform: translateY(-30px);
+  }
+  100% {
+    right: 100%;
+    transform: translateY(0);
+  }
+}
