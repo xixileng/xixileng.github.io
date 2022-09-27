@@ -48,7 +48,6 @@ const ANSWERS = [
   "别和我提什么测试环境,就在线上开测",
   "拿开源项目改改就当自己的项目上线,出成绩了归自己,出问题了推给原作者（坏笑）",
   "微创新",
-  "bug? 都是实习生写的！",
   "重构，还是得重构",
   "StackOverflow",
   "GOP （Google-Orient Programming）",
