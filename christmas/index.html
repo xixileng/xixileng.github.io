@@ -12,107 +12,20 @@
         height: 100%;
       }
       body {
-        display: flex;
+        background-color: #f4f4f4;
       }
-      #myCanvas {
+      canvas {
+        position: absolute;
+        left: 50%;
         height: 100%;
-        margin: 0 auto;
+        transform: translateX(-50%);
       }
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="1000" height="1000"></canvas>
-    <script>
-      const canvas = document.getElementById('myCanvas')
-      const ctx = canvas.getContext('2d')
-
-      // 先画一棵圣诞树
-      function drawTree() {
-        ctx.save()
-
-        const top = 100
-        const level = 6
-        const topWidth = 100
-        const widthStep = 80
-        const topHeight = 80
-        const heightStep = 20
-        const topCurve = 10
-        const curveStep = 5
-
-        const getX = index => canvas.width / 2
-        const getY = index => Array(index - 1).fill(0).map((_, i) => i + 1).reduce((current, next) => current + getHeight(next) * 3/5, 0) + top
-
-        const getWidth = index => topWidth + (index - 1) * widthStep
-        const getHeight = index => topHeight + (index - 1) * heightStep
-        const getCurve = index => topCurve + (index - 1) * curveStep
-
-        // 从下面开始画，上面的好盖住下面的
-        let x
-        let y
-        let width
-        let height
-        let curve
-
-        function drawLayer(index) {
-          if (index <= 0) return
-
-          x = getX(index)
-          y = getY(index)
-          width = getWidth(index)
-          height = getHeight(index)
-          curve = getCurve(index)
-
-          const leftEndX = x - width / 2
-          const leftEndY = y + height
-          const leftControlX = (x + leftEndX) / 2 + curve
-          const leftControlY = (y + leftEndY) / 2 + curve
-
-          ctx.beginPath()
-          ctx.moveTo(x, y)
-          ctx.quadraticCurveTo(leftControlX, leftControlY, leftEndX, leftEndY)
-
-          const rightEndX = x * 2 - leftEndX
-          const rightEndY = leftEndY
-          ctx.quadraticCurveTo(x, leftEndY + curve * 2, rightEndX, rightEndY)
-
-          const rightControlX = (x + rightEndX) / 2 - curve
-          const rightControlY = (y + rightEndY) / 2 + curve
-          ctx.quadraticCurveTo(rightControlX, rightControlY, x, y)
-          ctx.closePath()
-          
-          ctx.fill()
-          ctx.stroke()
-
-          drawLayer(index - 1)
-        }
-
-        ctx.fillStyle = 'green'
-        ctx.strokeStyle = 'brown'
-        drawLayer(level)
-
-        function drawTrunk() {
-          ctx.beginPath()
-
-          const x = getX(level)
-          const y = getY(level)
-          const height = 150
-          const width = 30
-
-          ctx.rect(x - width / 2, y + getHeight(level), width, height)
-          ctx.closePath()
-          ctx.fillStyle = 'brown'
-          ctx.strokeStyle = 'black'
-          ctx.lineWidth = '2px'
-          ctx.globalCompositeOperation = 'destination-over'
-          ctx.fill()
-          ctx.stroke()
-        }
-        drawTrunk()
-
-        ctx.restore()
-      }
-      drawTree()
-
-    </script>
+    <canvas id="tree" width="1000" height="1000"></canvas>
+    <canvas id="snow" width="800" height="1000"></canvas>
+    <script src="./tree.js"></script>
+    <script src="./snow.js"></script>
   </body>
 </html>
