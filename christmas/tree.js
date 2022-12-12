@@ -132,8 +132,8 @@
       const endX = getX(index + 1) + getWidth(index + 1) / 2 - 5;
       const startY = getY(index) + getHeight(index);
       const endY = getY(index + 1) + getHeight(index + 1);
-      const controlX = (starX + endX) / 2 - 20;
-      const controlY = (startY + endY) / 2 + 20;
+      const controlX = (starX + endX) / 2 - index * 15;
+      const controlY = (startY + endY) / 2 + index * 25;
 
       ctx.moveTo(starX, startY);
       ctx.quadraticCurveTo(controlX, controlY, endX, endY);
@@ -149,8 +149,8 @@
       const endX = getX(index + 1) - getWidth(index + 1) / 2 + 5;
       const startY = getY(index) + getHeight(index);
       const endY = getY(index + 1) + getHeight(index + 1);
-      const controlX = (starX + endX) / 2 - 20;
-      const controlY = (startY + endY) / 2 + 20;
+      const controlX = (starX + endX) / 2 - index * 15;
+      const controlY = (startY + endY) / 2 + index * 25;
 
       ctx.moveTo(starX, startY);
       ctx.quadraticCurveTo(controlX, controlY, endX, endY);
