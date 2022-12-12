@@ -163,7 +163,6 @@
   ctx.save();
   ctx.strokeStyle = "rgba(205, 190, 85)";
   ctx.lineWidth = 3
-  // ctx.globalCompositeOperation = "source-atop";
   drawRope()
   ctx.restore();
 
@@ -190,18 +189,21 @@
           return;
         }
         if (pointInTree(x, y)) {
-          drawDecorator(x, y);
+          // 错落有致
+          const realX = x + ~~random(-30, 30)
+          const realY = y + ~~random(-30, 30)
+          drawDecorator(realX, realY);
           count -= 1;
         }
-        x += (~~random(50, 80));
+        x += 60
       }
-      y -= (~~random(50, 80));
+      y -= 60
     }
   }
   function drawDecorator(x, y) {
     const count = 13;
     const index = ~~random(0, count);
-    const size = ~~random(40, 70);
+    const size = ~~random(20, 70);
     const decoratorSrc = `./decorators/${index}.png`;
     loadImage(decoratorSrc).then((img) => {
       ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
