@@ -47,7 +47,7 @@
     ctx.moveTo(x, y);
     ctx.quadraticCurveTo(leftControlX, leftControlY, leftEndX, leftEndY);
 
-    const rightEndX = x * 2 - leftEndX;
+    const rightEndX = x + width / 2;
     const rightEndY = leftEndY;
     ctx.quadraticCurveTo(x, leftEndY + curve * 2, rightEndX, rightEndY);
 
@@ -64,7 +64,7 @@
 
   ctx.save();
   ctx.fillStyle = "green";
-  ctx.strokeStyle = "brown";
+  ctx.strokeStyle = "rgb(0,110,0)";
   drawLayer(level);
   ctx.restore();
 
@@ -92,8 +92,8 @@
   function drawStar() {
     const cx = getX(1);
     const cy = getY(1);
-    const outerRadius = 40;
-    const innerRadius = 20;
+    const outerRadius = 36;
+    const innerRadius = 22;
     const spikes = 5;
 
     const step = Math.PI / spikes;
@@ -117,14 +117,54 @@
     ctx.lineTo(cx, cy - outerRadius);
     ctx.closePath();
 
-    ctx.fillStyle = "yellow";
-    ctx.strokeStyle = "brown";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "#F7C21D";
     ctx.fill();
-    ctx.stroke();
   }
   ctx.save();
   drawStar();
+  ctx.restore();
+
+  function drawRope() {
+    for (let index = 1; index <= level;) {
+      ctx.beginPath()
+
+      const starX = getX(index) - getWidth(index) / 2 + 5;
+      const endX = getX(index + 1) + getWidth(index + 1) / 2 - 5;
+      const startY = getY(index) + getHeight(index);
+      const endY = getY(index + 1) + getHeight(index + 1);
+      const controlX = (starX + endX) / 2 - 20;
+      const controlY = (startY + endY) / 2 + 20;
+
+      ctx.moveTo(starX, startY);
+      ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+      ctx.stroke();
+      ctx.closePath()
+
+      index += 2
+    }
+    for (let index = 2; index < level;) {
+      ctx.beginPath()
+
+      const starX = getX(index) + getWidth(index) / 2 - 5;
+      const endX = getX(index + 1) - getWidth(index + 1) / 2 + 5;
+      const startY = getY(index) + getHeight(index);
+      const endY = getY(index + 1) + getHeight(index + 1);
+      const controlX = (starX + endX) / 2 - 20;
+      const controlY = (startY + endY) / 2 + 20;
+
+      ctx.moveTo(starX, startY);
+      ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+      ctx.stroke();
+      ctx.closePath()
+
+      index += 2
+    }
+  }
+  ctx.save();
+  ctx.strokeStyle = "rgba(205, 190, 85)";
+  ctx.lineWidth = 3
+  // ctx.globalCompositeOperation = "source-atop";
+  drawRope()
   ctx.restore();
 
   function drawDecorators() {
@@ -136,7 +176,7 @@
     const y2 = getY(level) + height;
     const x3 = getX(level) + width / 2;
     const y3 = getY(level) + height;
-    let count = 80;
+    let count = 60;
 
     const minX = x2;
     const maxX = x3;
@@ -144,28 +184,41 @@
     const maxY = y2;
     const pointInTree = pointInTriangle(x1, y1, x2, y2, x3, y3);
 
-    for (let index = 0; index < count; index++) {
-      const x = random(minX, maxX);
-      const y = random(minY, maxY);
-      if (pointInTree(x, y)) {
-        drawDecorator(x, y);
-      } else {
-        count += 1;
+    for (let y = maxY; y >= minY; ) {
+      for (let x = minX; x < maxX; ) {
+        if (count === 0) {
+          return;
+        }
+        if (pointInTree(x, y)) {
+          drawDecorator(x, y);
+          count -= 1;
+        }
+        x += (~~random(50, 80));
       }
+      y -= (~~random(50, 80));
     }
   }
   function drawDecorator(x, y) {
-    ctx.beginPath();
+    const count = 13;
+    const index = ~~random(0, count);
+    const size = ~~random(40, 70);
+    const decoratorSrc = `./decorators/${index}.png`;
+    loadImage(decoratorSrc).then((img) => {
+      ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+    });
+  }
 
-    const r = random(3, 10);
-    ctx.arc(x, y, r, 0, 2 * Math.PI);
-
-    const red = ~~random(0, 255);
-    const green = ~~random(0, 255);
-    const blue = ~~random(0, 255);
-
-    ctx.fillStyle = `rgba(${red}, ${green}, ${blue})`;
-    ctx.fill();
+  function loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const imageElement = new Image();
+      imageElement.src = src;
+      imageElement.onload = function () {
+        resolve(this);
+      };
+      imageElement.onerror = function (error) {
+        reject(error);
+      };
+    });
   }
   ctx.save();
   drawDecorators();
