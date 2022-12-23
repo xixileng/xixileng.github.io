@@ -92,7 +92,7 @@ class Word {
   render() {
     if (this.isBurnOff()) return
 
-    this._animater = requestAnimationFrame(() => {
+    this._animater = setTimeout(() => {
       if (this._scale < this._maxScale) {
         this.ctx.canvas.style.transform = `scale(${this._scale})`
         this._scale += this._step
@@ -102,7 +102,7 @@ class Word {
       this.renderStars()
 
       this.render()
-    })
+    }, 16.6)
   }
 
   clearCtx() {

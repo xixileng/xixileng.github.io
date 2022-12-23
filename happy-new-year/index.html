@@ -51,7 +51,7 @@
     <script>
       {
         const dom = document.querySelector('#fireworks')
-        const options = {}
+        const options = { fps: 60, useAnimationFrame: false }
 
         const fireworks = new Fireworks(dom, options)
         fireworks.start()

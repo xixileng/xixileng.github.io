@@ -2,7 +2,7 @@
 class Fireworks {
   _timer = null
   _animater = null
-  _useAnimationFrame = true
+  useAnimationFrame = true
   
   ctx = null // 画布上下文，都画这上面
   offScreenCtx = null // 离屏 canvas，优化性能
@@ -35,8 +35,6 @@ class Fireworks {
     const { particleOptions = {}, ...others } = options
     this.particleOptions = { ...this.particleOptions, ...particleOptions }
     Object.keys(others).forEach(key => this[key] = others[key])
-
-    this._useAnimationFrame = this.fps >= 60
   }
 
   // 初始化画布
@@ -120,7 +118,7 @@ class Fireworks {
   start() {
     this.loop()
     // 60 帧就用 requestAnimationFrame，否则用 setTimeout
-    const animationFunction = this._useAnimationFrame ? requestAnimationFrame : setTimeout
+    const animationFunction = this.useAnimationFrame ? requestAnimationFrame : setTimeout
     const interval = 16.67 * (60 / this.fps)
     this.render(animationFunction, interval)
   }
@@ -128,7 +126,7 @@ class Fireworks {
   // 休息一下
   pause() {
     this._timer && clearTimeout(this._timer)
-    this._animater && (this._useAnimationFrame ? cancelAnimationFrame(this._animater)
+    this._animater && (this.useAnimationFrame ? cancelAnimationFrame(this._animater)
       : clearTimeout(this._animater))
 
     this._timer = null
