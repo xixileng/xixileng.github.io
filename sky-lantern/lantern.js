@@ -1,15 +1,19 @@
 (function () {
+  const WIDTH = window.innerWidth
+  const HEIGHT = window.innerHeight
+
   const svg = document.querySelector('svg')
-  const WIDTH = svg.viewBox.baseVal.width
-  const HEIGHT = svg.viewBox.baseVal.height
+  svg.setAttribute('width', WIDTH)
+  svg.setAttribute('height', HEIGHT)
+  svg.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`)
   
   const container = document.querySelector('.lanternContainer')
   const originLantern = document.querySelector('#lantern')
 
-  const COUNT = 30
+  const COUNT = 60
   
   for (let index = 0; index < COUNT; index++) {
-    const interval = random(0.8, 1.5) * index * 1000
+    const interval = random(0.2, 0.5) * index * 1000
     setTimeout(() => {
       const lantern = createLantern(originLantern)
       container.appendChild(lantern)
@@ -18,10 +22,12 @@
 
   function createLantern(originLantern) {
     const lantern = originLantern.cloneNode(true)
-    const x = random(0, WIDTH)
+    const x = random(WIDTH * 0.1, WIDTH * 0.9)
     const y = HEIGHT
-    lantern.style.transformOrigin = `0px 0px 0px`
-    lantern.style.transform = `translate3d(${x}px, ${y}px ,0)`
+    const transformOrigin = `0 0`
+    const transform = `translate(${x}, ${y})`
+    lantern.setAttribute('transformOrigin', transformOrigin)
+    lantern.setAttribute('transform', transform)
     lantern.x = x
     lantern.y = y
     lantern.deltaX = random(-0.5, 0.5)
@@ -40,7 +46,8 @@
       if (y <= HEIGHT - 100) {
         scale *= 0.996
       }
-      lantern.style.transform = `translate3d(${x}px, ${y}px ,0) scale3d(${scale}, ${scale}, 1)`
+      const transform = `translate(${x}, ${y}) scale(${scale}, ${scale})`
+      lantern.setAttribute('transform', transform)
 
       if (y <= -100 || x <= -100 || x > WIDTH) {
         x = random(0, WIDTH)
