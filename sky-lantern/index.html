@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🧙‍♀️孔明灯💡</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background-color: #111;
+        overflow: hidden;
+      }
+      #fireworks,
+      #lanterns {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+      }
+      /* 星星 */
+      .star {
+        position: absolute;
+        background-color: #fff;
+        border-radius: 50%;
+        opacity: 0.1;
+        box-shadow: 0 0 5px 2px rgb(255, 255, 255, 0.2);
+        animation: star-twinkle 1s linear infinite alternate;
+      }
+      @keyframes star-twinkle {
+        from {
+          opacity: 0.2;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="fireworks"></canvas>
+    <div id="sky"></div>
+    <div id="lanterns">
+      <svg
+        viewBox="0 0 800 600"
+        xmlns="https://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <filter id="brightness">
+            <feComponentTransfer>
+              <feFuncR type="linear" slope="0.3" />
+              <feFuncG type="linear" slope="0.3" />
+              <feFuncB type="linear" slope="0.3" />
+            </feComponentTransfer>
+          </filter>
+          <path
+            id="lantern"
+            fill="url(#lanternGrad)"
+            d="M47.7,61.6c0,2.6-6.3,5.6-14.7,5.6s-14.7-2.9-14.7-5.6c0-2.6,6.3-5.6,14.7-5.6S47.7,58.9,47.7,61.6z
+        M26.4,0C19.2,0-1.5,15.1,0.1,21.4C1.6,27.7,15.4,62,15.4,62s0.1,0.1,0.2,0.3c-0.1-0.3-0.1-0.5-0.1-0.8c0-4.7,7.5-8.3,17.4-8.3
+        c9.9,0,17.4,3.6,17.4,8.3c0,0.1,0,0.2,0,0.2c2-3.6,10.9-33.1,11.9-42.7C63.3,9.3,34.2,0,26.4,0z"
+          />
+          <radialGradient
+            id="lanternGrad"
+            cx="33.4551"
+            cy="63.1367"
+            r="59.6359"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0" style="stop-color: #fcffdd" />
+            <stop offset="0.1218" style="stop-color: #fffeb8" />
+            <stop
+              class="lanternMid"
+              offset="0.2386"
+              style="stop-color: #fcf954"
+            >
+              <animate
+                attributeName="stop-color"
+                values="#fd9e2e;#fcf954;#fd9e2e;"
+                dur="0.3s"
+                repeatCount="indefinite"
+              ></animate>
+            </stop>
+            <stop class="flicker" offset="0.5838" style="stop-color: #ff510f">
+              <animate
+                attributeName="stop-color"
+                values="#BF3A0B;#ff510f;#BF3A0B;"
+                dur="2.6s"
+                repeatCount="indefinite"
+              ></animate>
+            </stop>
+            <stop class="flicker" offset="0.9036" style="stop-color: #501004">
+              <animate
+                attributeName="stop-color"
+                values="#BF3A0B;#501004;#BF3A0B;"
+                dur="2.6s"
+                repeatCount="indefinite"
+              ></animate>
+            </stop>
+
+            <stop class="flicker" offset="0.9492" style="stop-color: #3d0a06">
+              <animate
+                attributeName="stop-color"
+                values="#BF3A0B;#3d0a06;#BF3A0B;"
+                dur="2.6s"
+                repeatCount="indefinite"
+              ></animate>
+            </stop>
+            <stop class="lanternTop" offset="1" style="stop-color: #501004">
+              <animate
+                attributeName="stop-color"
+                values="#290e09;#501004;#290e09;"
+                dur="0.3s"
+                repeatCount="indefinite"
+              ></animate>
+            </stop>
+          </radialGradient>
+        </defs>
+        <g class="lanternContainer"></g>
+      </svg>
+    </div>
+    <div id="wish"></div>
+
+    <script>
+      // 缝合怪随机函数，业务代码勿用，容易被砍
+      function random(numbers, ...args) {
+        if (numbers === null || numbers === void 0) {
+          return Math.random();
+        }
+        if (Array.isArray(numbers)) {
+          return numbers[Math.floor(Math.random() * numbers.length)];
+        }
+        if (args.length > 1) {
+          numbers = [numbers].concat(args);
+          return numbers[Math.floor(Math.random() * numbers.length)];
+        }
+        const min = numbers;
+        const max = args[0];
+        return Math.random() * (max - min) + min;
+      }
+    </script>
+    <script src="./sky.js"></script>
+    <script src="./tinycolor.js"></script>
+    <script src="./fireworks.js"></script>
+    <script src="./lantern.js"></script>
+  </body>
+</html>

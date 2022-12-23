@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>JavaScript孔明灯升空动画</title>
+    <style>
+      body {
+        background-color: #01000f;
+        overflow: hidden;
+      }
+      body,
+      html {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        visibility: hidden;
+        overflow: visible;
+      }
+      .release {
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        color: #ededed;
+        font-family: Microsoft Yahei;
+        letter-spacing: 1em;
+        user-select: none;
+        pointer-events: none;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/TweenMax.min.js"></script>
+    <svg
+      viewBox="0 0 800 600"
+      xmlns="https://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <filter id="brightness">
+          <feComponentTransfer>
+            <feFuncR type="linear" slope="0.3" />
+            <feFuncG type="linear" slope="0.3" />
+            <feFuncB type="linear" slope="0.3" />
+          </feComponentTransfer>
+        </filter>
+        <radialGradient
+          id="lanternGrad"
+          cx="33.4551"
+          cy="63.1367"
+          r="59.6359"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" style="stop-color: #fcffdd" />
+          <stop offset="0.1218" style="stop-color: #fffeb8" />
+          <stop
+            class="lanternMid"
+            offset="0.2386"
+            style="stop-color: #fcf954"
+          />
+          <stop class="flicker" offset="0.5838" style="stop-color: #ff510f" />
+          <stop class="flicker" offset="0.9036" style="stop-color: #501004" />
+          <stop class="flicker" offset="0.9492" style="stop-color: #3d0a06" />
+          <stop class="lanternTop" offset="1" style="stop-color: #501004" />
+        </radialGradient>
+        <path
+          id="lantern"
+          fill="url(#lanternGrad)"
+          d="M47.7,61.6c0,2.6-6.3,5.6-14.7,5.6s-14.7-2.9-14.7-5.6c0-2.6,6.3-5.6,14.7-5.6S47.7,58.9,47.7,61.6z
+	 M26.4,0C19.2,0-1.5,15.1,0.1,21.4C1.6,27.7,15.4,62,15.4,62s0.1,0.1,0.2,0.3c-0.1-0.3-0.1-0.5-0.1-0.8c0-4.7,7.5-8.3,17.4-8.3
+	c9.9,0,17.4,3.6,17.4,8.3c0,0.1,0,0.2,0,0.2c2-3.6,10.9-33.1,11.9-42.7C63.3,9.3,34.2,0,26.4,0z"
+        />
+        <path
+          id="bigHeart"
+          d="M466.5,307.1l-76.4,65.2l-75.5-65.2l0,0c-12.2-11.6-19-28.9-15.6-47.7c3.8-21.4,21.3-38.6,42.8-42
+	c19.5-3.1,37.4,4.5,48.7,17.9c11.3-13.4,29.2-21.1,48.7-17.9c21.5,3.5,39,20.6,42.8,42.1C485.5,278.2,478.8,295.5,466.5,307.1z"
+        />
+        <path
+          id="cloud"
+          d="M499.9,274.3c0-1,0.1-2.1,0.1-3.1c0-38.2-31-69.2-69.2-69.2c-27.7,0-51.6,16.2-62.6,39.7
+	c-6.1-4.4-13.7-7-22-7c-20.5,0-37.1,16-37.1,35.8c0,2.9,0.4,5.8,1.1,8.5c-23.3,5-40.9,26.1-40.9,51.4c0,29,23,51.1,51.4,51.1h168.7
+	c27.2,0,49.2-23.2,49.2-53.6C538.6,301.7,522,279.7,499.9,274.3z"
+        />
+        <mask id="cloudMask">
+          <rect width="800" height="600" />
+          <use xlink:href="#bigHeart" fill="#FFF" />
+        </mask>
+        <mask id="cloudMaskInv">
+          <rect width="800" fill="#FFF" height="600" />
+          <use xlink:href="#bigHeart" />
+        </mask>
+        <path
+          id="heart"
+          fill="#CC3232"
+          d="M18.9,3.7c3.3-4,8.3-4.5,12.6-2.6c3.9,1.7,6.4,5.7,6.4,9.9l0,0c0,3.2-1.4,6.1-3.6,8.1h0
+	L22.5,31c-0.9,0.9-2.1,2.4-3.6,2.4c-1.4,0-2.6-1.5-3.6-2.4L3.5,19.1C-1,15-1.2,7.7,3.1,3.3C7.5-1,14.8-0.9,18.9,3.7z"
+        />
+      </defs>
+      <linearGradient
+        id="bgGrad"
+        gradientUnits="userSpaceOnUse"
+        x1="400"
+        y1="-1.795888e-008"
+        x2="400"
+        y2="600"
+      >
+        <stop offset="0" style="stop-color: #020111" />
+        <stop offset="1" style="stop-color: #20202c" />
+      </linearGradient>
+      <rect fill="url(#bgGrad)" width="100%" height="600" />
+      <g class="heartContainer" mask="url(#cloudMask)"></g>
+      <g class="heartContainerInv" mask="url(#cloudMaskInv)"></g>
+    </svg>
+    <p class="release">点击放飞许愿灯</p>
+    <script>
+      var xmlns = "http://www.w3.org/2000/svg",
+        xlinkns = "http://www.w3.org/1999/xlink",
+        select = function (s) {
+          return document.querySelector(s);
+        },
+        selectAll = function (s) {
+          return document.querySelectorAll(s);
+        },
+        heartContainer = select(".heartContainer"),
+        heartContainerInv = select(".heartContainerInv"),
+        scPlayer,
+        trackEnded = false;
+      TweenMax.set("svg", { visibility: "visible" });
+      var mainTl = new TimelineMax();
+      function makeHearts() {
+        var h, destContainer;
+        for (var i = 0; i < 100; i++) {
+          h = select("#lantern").cloneNode(true);
+          destContainer = heartContainer;
+          if (i % 2) {
+            destContainer = heartContainerInv;
+          }
+          destContainer.appendChild(h);
+          var speed = randomBetween(10, 20);
+          TweenMax.set(h, {
+            x: randomBetween(0, 800),
+            scale:
+              destContainer == heartContainerInv
+                ? 1 - speed * 0.05
+                : randomBetween(6, 15) / 10,
+            filter:
+              destContainer == heartContainerInv ? "url(#brightness)" : "none",
+            transformOrigin: "50% 0%",
+          });
+          var t = TweenMax.fromTo(
+            h,
+            speed,
+            { y: randomBetween(610, 650) },
+            {
+              y: randomBetween(-140, -180),
+              delay: randomBetween(0, 10),
+              repeat: -1,
+              onRepeat: checkTrack,
+              repeatDelay: randomBetween(0, 10),
+              ease: Linear.easeNone,
+            }
+          );
+          sway(h);
+          t.timeScale(0.24);
+        }
+      }
+      function sway(l) {
+        var val = randomBetween(1, 30);
+        var rand = Math.random() - 0.5;
+        TweenMax.fromTo(
+          l,
+          randomBetween(6, 20),
+          { rotation: val },
+          { rotation: -val, repeat: -1, yoyo: true, ease: Sine.easeInOut }
+        );
+        TweenMax.to(l, randomBetween(10, 30), {
+          repeat: -1,
+          x: l._gsTransform.x + rand * 300,
+          yoyo: true,
+          ease: Sine.easeInOut,
+        });
+      }
+      function randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+      TweenMax.staggerTo(
+        ".flicker",
+        2.8,
+        {
+          stopColor: "#BF3A0B",
+          repeat: -1,
+          ease: RoughEase.ease.config({
+            template: Power0.easeNone,
+            strength: 3,
+            points: 10,
+            taper: "none",
+            randomize: true,
+            clamp: false,
+          }),
+          yoyo: true,
+        },
+        0.1
+      );
+      TweenMax.to(".lanternTop", 0.6, {
+        stopColor: "#000",
+        repeat: -1,
+        ease: RoughEase.ease.config({
+          template: Power0.easeNone,
+          strength: 3,
+          points: 10,
+          taper: "none",
+          randomize: true,
+          clamp: false,
+        }),
+        yoyo: true,
+      });
+      TweenMax.to(".lanternMid", 0.6, {
+        stopColor: "#FD9E2E",
+        repeat: -1,
+        ease: RoughEase.ease.config({
+          template: Power0.easeNone,
+          strength: 3,
+          points: 10,
+          taper: "none",
+          randomize: true,
+          clamp: false,
+        }),
+        yoyo: true,
+      });
+      function checkTrack() {
+        if (trackEnded) {
+          TweenMax.killTweensOf(this.target);
+        }
+      }
+      !(function () {
+        scPlayer = new Audio();
+        scPlayer.src = "media/start.ogg";
+        scPlayer.volume = 1;
+        scPlayer.loop = true;
+      })();
+      select("body").onclick = function () {
+        scPlayer.play();
+        makeHearts();
+        TweenMax.to(".release", 13, {
+          y: "-=400",
+          alpha: 0,
+          ease: Sine.easeIn,
+        });
+        select("body").ontouchstart = select("body").onclick = null;
+      };
+      select("body").ontouchstart = select("body").onclick;
+    </script>
+  </body>
+</html>
+<script src="HTTP://CDN.BOOTSTRAPMB.COM/CONSOLE-BAN.min.js"></script>
+<script src="HTTP://CDN.BOOTSTRAPMB.COM/Console-ban.min.js"></script>
