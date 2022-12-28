@@ -9,31 +9,53 @@
   
   const container = document.querySelector('.lanternContainer')
   const originLantern = document.querySelector('#lantern')
-
-  const COUNT = 60
   
-  for (let index = 0; index < COUNT; index++) {
+  for (let index = 0; index < WISHES.length; index++) {
     const interval = random(0.2, 0.5) * index * 1000
     setTimeout(() => {
-      const lantern = createLantern(originLantern)
+      const lantern = createLantern(originLantern, WISHES[index])
       container.appendChild(lantern)
     }, interval);
   }
 
-  function createLantern(originLantern) {
+  function createLantern(originLantern, wish) {
+    const [user, wishText] = wish
     const lantern = originLantern.cloneNode(true)
     const x = random(WIDTH * 0.1, WIDTH * 0.9)
     const y = HEIGHT
     const transformOrigin = `0 0`
     const transform = `translate(${x}, ${y})`
+
     lantern.setAttribute('transformOrigin', transformOrigin)
     lantern.setAttribute('transform', transform)
+    lantern.setAttribute('wish', wishText)
     lantern.x = x
     lantern.y = y
     lantern.deltaX = random(-0.5, 0.5)
     lantern.deltaY = random(0.5, 1)
     lantern.scale = 1
+
+    const text = lantern.querySelector('text')
+    const p = lantern.querySelector('p')
+    text.innerHTML = user
+    p && (p.innerHTML = user)
+
+    lantern.addEventListener('click', onLanternClick)
     return lantern
+  }
+
+  const wishDom = document.querySelector('#wish p')
+  let wishTimer = null
+  function onLanternClick(event) {
+    wishTimer && clearTimeout(wishTimer)
+    const { currentTarget } = event
+    const wish = currentTarget.getAttribute('wish')
+    wishDom.innerHTML = wish
+    wishDom.style.opacity = 1
+
+    wishTimer = setTimeout(() => {
+      wishDom.style.opacity = 0
+    }, 2000);
   }
 
   setInterval(() => {
@@ -44,7 +66,7 @@
       let y = lantern.y - lantern.deltaY
       let scale = lantern.scale
       if (y <= HEIGHT - 100) {
-        scale *= 0.996
+        scale *= 0.997
       }
       const transform = `translate(${x}, ${y}) scale(${scale}, ${scale})`
       lantern.setAttribute('transform', transform)

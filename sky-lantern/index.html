@@ -24,6 +24,59 @@
         width: 100%;
         height: 100%;
       }
+      #lantern {
+        cursor: zoom-in;
+      }
+      .foreign-object {
+        overflow: visible;
+      }
+      .wish {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        font-family: cursive;
+        font-size: 12px;
+        color: #3b3b3b;
+        word-break: break-all;
+      }
+      p.wish {
+        /* svg text 加了这个会比较诡异 */
+        transform: translate(-50%, -50%);
+        background-color: #f3ec78;
+        background-image: linear-gradient(to right, #f3ec78, #e77b9a);
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        -moz-text-fill-color: transparent;
+      }
+      #wish {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translateY(-50%);
+        color: #fff;
+        text-align: center;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      #wish p {
+        font-family: cursive;
+        font-size: 28px;
+        padding: 0 20%;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        background-color: #f3ec78;
+        background-image: linear-gradient(to right, #f3ec78, #af4261);
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        -moz-text-fill-color: transparent;
+      }
       /* 星星 */
       .star {
         position: absolute;
@@ -61,13 +114,21 @@
               <feFuncB type="linear" slope="0.3" />
             </feComponentTransfer>
           </filter>
-          <path
-            id="lantern"
-            fill="url(#lanternGrad)"
-            d="M47.7,61.6c0,2.6-6.3,5.6-14.7,5.6s-14.7-2.9-14.7-5.6c0-2.6,6.3-5.6,14.7-5.6S47.7,58.9,47.7,61.6z
+          <g id="lantern" class="lantern">
+            <path
+              fill="url(#lanternGrad)"
+              d="M47.7,61.6c0,2.6-6.3,5.6-14.7,5.6s-14.7-2.9-14.7-5.6c0-2.6,6.3-5.6,14.7-5.6S47.7,58.9,47.7,61.6z
         M26.4,0C19.2,0-1.5,15.1,0.1,21.4C1.6,27.7,15.4,62,15.4,62s0.1,0.1,0.2,0.3c-0.1-0.3-0.1-0.5-0.1-0.8c0-4.7,7.5-8.3,17.4-8.3
         c9.9,0,17.4,3.6,17.4,8.3c0,0.1,0,0.2,0,0.2c2-3.6,10.9-33.1,11.9-42.7C63.3,9.3,34.2,0,26.4,0z"
-          />
+            />
+            <switch>
+              <foreignObject width="62" height="65" class="foreign-object"
+               requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+                <p class="wish" xmlns="http://www.w3.org/1999/xhtml">Text goes here</p>
+              </foreignObject>
+              <text x="0" y="30" class="wish"></text>
+            </switch>
+          </g>
           <radialGradient
             id="lanternGrad"
             cx="33.4551"
@@ -127,7 +188,7 @@
         <g class="lanternContainer"></g>
       </svg>
     </div>
-    <div id="wish"></div>
+    <div id="wish"><p></p></div>
 
     <script>
       // 缝合怪随机函数，业务代码勿用，容易被砍
@@ -150,6 +211,7 @@
     <script src="./sky.js"></script>
     <script src="./tinycolor.js"></script>
     <script src="./fireworks.js"></script>
+    <script src="./wishes.js"></script>
     <script src="./lantern.js"></script>
   </body>
 </html>
