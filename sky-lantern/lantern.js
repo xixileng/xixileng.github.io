@@ -36,9 +36,14 @@
     lantern.scale = 1
 
     const text = lantern.querySelector('text')
-    const p = lantern.querySelector('p')
+    const p = lantern.querySelector('.wish.p')
     text.innerHTML = user
-    p && (p.innerHTML = user)
+    if (p) {
+      p.innerHTML = user
+      if (!isMobile()) {
+        p.className += ' gradient'
+      }
+    }
 
     lantern.addEventListener('click', onLanternClick)
     return lantern

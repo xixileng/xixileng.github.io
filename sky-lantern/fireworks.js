@@ -45,6 +45,8 @@
       const { particleOptions = {}, ...others } = options;
       this.particleOptions = { ...this.particleOptions, ...particleOptions };
       Object.keys(others).forEach((key) => (this[key] = others[key]));
+
+      this.fireworkInterval = 3000 / this.fireworkCount
     }
 
     // 初始化画布
@@ -96,7 +98,7 @@
 
     // 检查是否需要创建焰火
     loop() {
-      let interval = this.fireworkInterval * random(0.5, 1);
+      let interval = this.fireworkInterval * random(0.5, 1.5);
       this._timer = setTimeout(() => {
         this.checkFireworks();
 
@@ -307,7 +309,8 @@
   }
 
   const dom = document.querySelector('#fireworks')
-  const options = { fps: 45, useAnimationFrame: false }
+
+  const options = { fps: 45, useAnimationFrame: false, fireworkCount: isMobile() ? 4 : 8 }
 
   const fireworks = new Fireworks(dom, options)
   fireworks.start()

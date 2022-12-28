@@ -28,23 +28,23 @@
         cursor: zoom-in;
       }
       .foreign-object {
+        position: relative;
         overflow: visible;
       }
       .wish {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        display: flex;
+        height: 100%;
         width: 100%;
-        margin: 0;
+        justify-content: center;
+        align-items: center;
         text-align: center;
         font-family: cursive;
+        font-weight: bold;
         font-size: 12px;
-        color: #3b3b3b;
+        color: #f3ec78;
         word-break: break-all;
       }
-      p.wish {
-        /* svg text 加了这个会比较诡异 */
-        transform: translate(-50%, -50%);
+      .gradient {
         background-color: #f3ec78;
         background-image: linear-gradient(to right, #f3ec78, #e77b9a);
         background-size: 100%;
@@ -66,17 +66,11 @@
       #wish p {
         font-family: cursive;
         font-size: 32px;
+        font-weight: bold;
         padding: 0 20%;
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.6s ease, transform 0.6s ease;
-        background-color: #f3ec78;
-        background-image: linear-gradient(to right, #f3ec78, #af4261);
-        background-size: 100%;
-        -webkit-background-clip: text;
-        -moz-background-clip: text;
-        -webkit-text-fill-color: transparent; 
-        -moz-text-fill-color: transparent;
       }
       /* 星星 */
       .star {
@@ -123,9 +117,19 @@
         c9.9,0,17.4,3.6,17.4,8.3c0,0.1,0,0.2,0,0.2c2-3.6,10.9-33.1,11.9-42.7C63.3,9.3,34.2,0,26.4,0z"
             />
             <switch>
-              <foreignObject width="62" height="65" class="foreign-object"
-               requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-                <p class="wish" xmlns="http://www.w3.org/1999/xhtml">Text goes here</p>
+              <foreignObject
+                x="0"
+                y="0"
+                width="62"
+                height="65"
+                class="foreign-object"
+              >
+                <span
+                  x="100"
+                  class="wish p"
+                  xmlns="http://www.w3.org/1999/xhtml"
+                  >占位</span
+                >
               </foreignObject>
               <text x="0" y="30" class="wish"></text>
             </switch>
@@ -189,26 +193,9 @@
         <g class="lanternContainer"></g>
       </svg>
     </div>
-    <div id="wish"><p></p></div>
+    <div id="wish"><p class="gradient"></p></div>
 
-    <script>
-      // 缝合怪随机函数，业务代码勿用，容易被砍
-      function random(numbers, ...args) {
-        if (numbers === null || numbers === void 0) {
-          return Math.random();
-        }
-        if (Array.isArray(numbers)) {
-          return numbers[Math.floor(Math.random() * numbers.length)];
-        }
-        if (args.length > 1) {
-          numbers = [numbers].concat(args);
-          return numbers[Math.floor(Math.random() * numbers.length)];
-        }
-        const min = numbers;
-        const max = args[0];
-        return Math.random() * (max - min) + min;
-      }
-    </script>
+    <script src="./utils.js"></script>
     <script src="./sky.js"></script>
     <script src="./tinycolor.js"></script>
     <script src="./fireworks.js"></script>
