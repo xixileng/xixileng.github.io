@@ -51,11 +51,21 @@
     const { currentTarget } = event
     const wish = currentTarget.getAttribute('wish')
     wishDom.innerHTML = wish
-    wishDom.style.opacity = 1
 
-    wishTimer = setTimeout(() => {
-      wishDom.style.opacity = 0
-    }, 2000);
+    wishDom.style.transition = 'none'
+    wishDom.style.transform = 'scale(0)'
+    wishDom.style.opacity = 0
+
+    setTimeout(() => {
+      wishDom.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
+      wishDom.style.opacity = 1
+      wishDom.style.transform = 'scale(1)'
+  
+      wishTimer = setTimeout(() => {
+        wishDom.style.transition = 'opacity 0.6s ease'
+        wishDom.style.opacity = 0
+      }, 2000);
+    }, 0);
   }
 
   setInterval(() => {
