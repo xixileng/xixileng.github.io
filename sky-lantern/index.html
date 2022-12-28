@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🧙‍♀️孔明灯💡</title>
     <style>
+      @font-face {
+        font-family: font;
+        src: url(./font.ttf);
+      }
       html,
       body {
         height: 100%;
@@ -31,7 +35,7 @@
         position: relative;
         overflow: visible;
       }
-      .wish {
+      .name {
         display: flex;
         height: 100%;
         width: 100%;
@@ -63,14 +67,24 @@
         pointer-events: none;
         overflow: hidden;
       }
-      #wish p {
-        font-family: cursive;
-        font-size: 32px;
-        font-weight: bold;
-        padding: 0 20%;
+      .wish-container {
+        display: inline-block;
+        font-family: font;
+        font-size: 48px;
+        padding: 0 12%;
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .wish-container .fans {
+        margin-top: 4px;
+        font-size: 24px;
+        text-align: right;
+        word-break: keep-all;
+        white-space: nowrap;
+      }
+      .wish-container .wish {
+        flex: 1;
       }
       /* 星星 */
       .star {
@@ -126,12 +140,12 @@
               >
                 <span
                   x="100"
-                  class="wish p"
+                  class="name span"
                   xmlns="http://www.w3.org/1999/xhtml"
-                  >占位</span
+                  ></span
                 >
               </foreignObject>
-              <text x="0" y="30" class="wish"></text>
+              <text x="0" y="30" class="name"></text>
             </switch>
           </g>
           <radialGradient
@@ -193,7 +207,12 @@
         <g class="lanternContainer"></g>
       </svg>
     </div>
-    <div id="wish"><p class="gradient"></p></div>
+    <div id="wish">
+      <div class="wish-container">
+        <div class="wish gradient"></div>
+        <div class="fans gradient"></div>
+      </div>
+    </div>
 
     <script src="./utils.js"></script>
     <script src="./sky.js"></script>

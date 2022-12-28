@@ -19,7 +19,7 @@
   }
 
   function createLantern(originLantern, wish) {
-    const [user, wishText] = wish
+    const [fans, wishText] = wish
     const lantern = originLantern.cloneNode(true)
     const x = random(WIDTH * 0.1, WIDTH * 0.9)
     const y = HEIGHT
@@ -29,46 +29,52 @@
     lantern.setAttribute('transformOrigin', transformOrigin)
     lantern.setAttribute('transform', transform)
     lantern.setAttribute('wish', wishText)
+    lantern.setAttribute('fans', fans)
     lantern.x = x
     lantern.y = y
     lantern.deltaX = random(-0.5, 0.5)
     lantern.deltaY = random(0.5, 1)
     lantern.scale = 1
 
-    const text = lantern.querySelector('text')
-    const p = lantern.querySelector('.wish.p')
-    text.innerHTML = user
-    if (p) {
-      p.innerHTML = user
-      if (!isMobile()) {
-        p.className += ' gradient'
-      }
-    }
+    // 解开注释后孔明灯上出现用户 id
+    // const text = lantern.querySelector('text')
+    // const span = lantern.querySelector('.name.span')
+    // text.innerHTML = fans
+    // if (span) {
+    //   span.innerHTML = fans
+    //   if (!isMobile()) {
+    //     span.className += ' gradient'
+    //   }
+    // }
 
     lantern.addEventListener('click', onLanternClick)
     return lantern
   }
 
-  const wishDom = document.querySelector('#wish p')
+  const wishContainer = document.querySelector('#wish .wish-container')
+  const fansDom = document.querySelector('#wish .fans')
+  const wishDom = document.querySelector('#wish .wish')
   let wishTimer = null
   function onLanternClick(event) {
     wishTimer && clearTimeout(wishTimer)
     const { currentTarget } = event
+    const fans = currentTarget.getAttribute('fans')
     const wish = currentTarget.getAttribute('wish')
+    fansDom.innerHTML = `—— ${fans}`
     wishDom.innerHTML = wish
 
-    wishDom.style.transition = 'none'
-    wishDom.style.transform = 'scale(0)'
-    wishDom.style.opacity = 0
+    wishContainer.style.transition = 'none'
+    wishContainer.style.transform = 'scale(0)'
+    wishContainer.style.opacity = 0
 
     setTimeout(() => {
-      wishDom.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
-      wishDom.style.opacity = 1
-      wishDom.style.transform = 'scale(1)'
+      wishContainer.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
+      wishContainer.style.opacity = 1
+      wishContainer.style.transform = 'scale(1)'
   
       wishTimer = setTimeout(() => {
-        wishDom.style.transition = 'opacity 0.6s ease'
-        wishDom.style.opacity = 0
+        wishContainer.style.transition = 'opacity 0.6s ease'
+        wishContainer.style.opacity = 0
       }, 2000);
     }, 0);
   }
