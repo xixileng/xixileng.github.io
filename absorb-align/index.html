@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>吸附对齐</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      .node {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        user-select: none;
+      }
+      #source {
+        left: 20px;
+        top: 20px;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+        cursor: grab;
+      }
+      .targets {
+        position: absolute;
+      }
+      .target {
+        width: 100px;
+        height: 50px;
+        background-color: blue;
+      }
+      #loading {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+      }
+      #canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .line,
+      .point {
+        stroke: red;
+        stroke-width: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas class="targets"></canvas>
+    <div id="source" class="node">拖我</div>
+    <div id="loading">初始化中，请稍后</div>
+    <svg
+      id="canvas"
+      width="1000"
+      height="1000"
+      xmlns="http://www.w3.org/2000/svg"
+    ></svg>
+    <script>
+      const AlignIndex = {
+        Left: 0,
+        Center: 1,
+        Right: 2,
+        Top: 0,
+        Middle: 1,
+        Bottom: 2,
+      };
+      // 吸附的阈值
+      const DEFAULT_THRESHOLD = 5;
+      const TARGET_COUNT = 1000000;
+      const RENDER_BATCH = 100000; // 单次绘制 50W 个矩形时，ctx 会绘制不出，所以分批绘制
+      const RECT_SIZE = 1;
+      const { width: bodyWidth, height: bodyHeight } =
+        document.body.getBoundingClientRect();
+
+      function generateTargetRects() {
+        const targetRects = [];
+        for (let index = 0; index < TARGET_COUNT; index++) {
+          targetRects.push({
+            x: Math.random() * bodyWidth,
+            y: Math.random() * bodyHeight,
+            width: Math.random() * RECT_SIZE + RECT_SIZE,
+            height: Math.random() * RECT_SIZE + RECT_SIZE,
+          });
+        }
+        return targetRects;
+      }
+      function drawTargetRects(targetRects) {
+        const canvas = document.querySelector('.targets');
+        canvas.width = bodyWidth;
+        canvas.height = bodyHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+        let index = 0;
+        while (index < TARGET_COUNT) {
+          ctx.beginPath();
+          for (let j = 0; j < RENDER_BATCH && j < TARGET_COUNT; j++) {
+            const { x, y, width, height } = targetRects[index];
+            ctx.rect(x, y, width, height);
+            index++;
+          }
+          ctx.fillStyle = 'blue';
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+      const targetRects = generateTargetRects();
+      drawTargetRects(targetRects);
+
+      let targetNetwork = { xAxis: [], yAxis: [] };
+      let sourceNetwork = { xAxis: [], yAxis: [] };
+      let alignIndices = { xAxis: [], yAxis: [] };
+
+      // 计算源轴和目标轴之间的对齐索引
+      function alignAxis2(sourceAxis, targetAxis, threshold) {
+        let minDiff = Infinity;
+        let indices = [];
+
+        for (let i = 0; i < targetAxis.length; i++) {
+          for (let j = 0; j < sourceAxis.length; j++) {
+            // 计算目标轴上的点和源轴上的点之间的差值
+            const diff = Math.abs(targetAxis[i] - sourceAxis[j]);
+            // 如果差值小于当前最小差值
+            if (diff < minDiff) {
+              // 更新最小差值
+              minDiff = diff;
+              // 清空索引数组，并将当前的索引对加入到数组中
+              indices = [[i, j]];
+            }
+            // 如果差值等于当前最小差值
+            else if (diff === minDiff) {
+              // 将当前的索引对加入到数组中
+              indices.push([i, j]);
+            }
+          }
+        }
+
+        // 如果最小差值大于阈值，则返回空数组
+        if (minDiff > threshold) {
+          return [];
+        }
+
+        return indices;
+      }
+
+      function alignAxis(sourceAxis, targetAxis, threshold) {
+        let minDiff = Infinity;
+        let indices = [];
+
+        function binarySearch(_targetAxis, j) {
+          const sourceElement = sourceAxis[j];
+          let left = 0;
+          let right = _targetAxis.length - 1;
+          let mid, diff;
+
+          while (left <= right) {
+            mid = Math.floor((left + right) / 2);
+            diff = Math.abs(_targetAxis[mid] - sourceElement);
+            let leftPointer = mid - 1;
+            let rightPointer = mid + 1;
+
+            if (diff < minDiff) {
+              minDiff = diff;
+              indices = [[mid, j]];
+              // 如果找到一个差值相等的元素，向左和向右检查是否还有差值相等的元素
+              // 检查左侧
+              while (
+                leftPointer >= left &&
+                Math.abs(_targetAxis[leftPointer] - sourceElement) === minDiff
+              ) {
+                indices.push([leftPointer, j]);
+                leftPointer--;
+              }
+              // 检查右侧
+              while (
+                rightPointer <= right &&
+                Math.abs(_targetAxis[rightPointer] - sourceElement) === minDiff
+              ) {
+                indices.push([rightPointer, j]);
+                rightPointer++;
+              }
+            }
+
+            if (_targetAxis[mid] > sourceElement) {
+              right = leftPointer;
+            } else if (_targetAxis[mid] < sourceElement) {
+              left = rightPointer;
+            } else {
+              break;
+            }
+          }
+        }
+
+        for (let i = 0; i < sourceAxis.length; i++) {
+          binarySearch(targetAxis, i);
+        }
+
+        if (minDiff > threshold) {
+          return [];
+        }
+
+        return indices;
+      }
+
+      function computedAdsorbPosition(
+        sourceAxis,
+        targetAxis,
+        alignAxisIndices,
+      ) {
+        if (alignAxisIndices.length === 0) {
+          return sourceAxis[AlignIndex.Left];
+        }
+        const size = sourceAxis[AlignIndex.Right] - sourceAxis[AlignIndex.Left];
+        // 差值一样，直接取第一项作取吸附值
+        const indices = alignAxisIndices[0];
+        const [targetNetworkIndex, alignIndex] = indices;
+        const alignPosition = targetAxis[targetNetworkIndex];
+        switch (alignIndex) {
+          case AlignIndex.Left || AlignIndex.Top:
+            return alignPosition;
+          case AlignIndex.Center || AlignIndex.Middle:
+            return alignPosition - size / 2;
+          case AlignIndex.Right || AlignIndex.Bottom:
+            return alignPosition - size;
+          default:
+            return sourceAxis[AlignIndex.Left];
+        }
+      }
+
+      const useAuxiliaryAlign = (threshold = DEFAULT_THRESHOLD) => {
+        // 设置吸附匹配目标矩形框
+        const setTargetRects = (targetRects, callback) => {
+          const network = {
+            xAxis: [],
+            yAxis: [],
+            xAxisIndices: [],
+            yAxisIndices: [],
+            originXAxis: [],
+            originYAxis: [],
+          };
+          const indicesMap = {
+            xAxis: [],
+            yAxis: [],
+          };
+          targetRects.forEach((rect, index) => {
+            const xAxis = [
+              rect.x,
+              rect.x + rect.width / 2,
+              rect.x + rect.width,
+            ];
+            const yAxis = [
+              rect.y,
+              rect.y + rect.height / 2,
+              rect.y + rect.height,
+            ];
+            for (let i = 0; i < 3; i++) {
+              indicesMap.xAxis.push({ value: xAxis[i], index });
+              indicesMap.yAxis.push({ value: yAxis[i], index });
+            }
+            network.originXAxis.push(xAxis);
+            network.originYAxis.push(yAxis);
+          });
+          requestIdleCallback(() => {
+            indicesMap.xAxis.sort((a, b) => a.value - b.value);
+            indicesMap.yAxis.sort((a, b) => a.value - b.value);
+            indicesMap.xAxis.forEach(item => {
+              network.xAxisIndices.push(item.index);
+              network.xAxis.push(item.value);
+            });
+            indicesMap.yAxis.forEach(item => {
+              network.yAxisIndices.push(item.index);
+              network.yAxis.push(item.value);
+            });
+            callback();
+          });
+          targetNetwork = network;
+        };
+
+        // 执行辅助对齐
+        const auxiliaryAlign = (sourceRect, onAbsorb) => {
+          console.time('辅助对齐耗时');
+          sourceNetwork = {
+            xAxis: [
+              sourceRect.x,
+              sourceRect.x + sourceRect.width / 2,
+              sourceRect.x + sourceRect.width,
+            ],
+            yAxis: [
+              sourceRect.y,
+              sourceRect.y + sourceRect.height / 2,
+              sourceRect.y + sourceRect.height,
+            ],
+          };
+          alignIndices = {
+            xAxis: alignAxis(
+              sourceNetwork.xAxis,
+              targetNetwork.xAxis,
+              threshold,
+            ),
+            yAxis: alignAxis(
+              sourceNetwork.yAxis,
+              targetNetwork.yAxis,
+              threshold,
+            ),
+          };
+
+          const adsorbX = computedAdsorbPosition(
+            sourceNetwork.xAxis,
+            targetNetwork.xAxis,
+            alignIndices.xAxis,
+          );
+          const adsorbY = computedAdsorbPosition(
+            sourceNetwork.yAxis,
+            targetNetwork.yAxis,
+            alignIndices.yAxis,
+          );
+          if (adsorbX !== sourceRect.x || adsorbY !== sourceRect.y) {
+            // 吸附结果交给外面处理，保证内部逻辑纯粹
+            onAbsorb(adsorbX, adsorbY);
+          }
+          console.timeEnd('辅助对齐耗时');
+        };
+
+        return {
+          setTargetRects,
+          auxiliaryAlign,
+        };
+      };
+
+      let isDragging = false;
+      let currentPosition = { x: 0, y: 0 };
+      let sourcePosition = { x: 0, y: 0 };
+      const { setTargetRects, auxiliaryAlign } = useAuxiliaryAlign();
+      console.time('初始化耗时');
+      setTargetRects(targetRects, () => {
+        console.timeEnd('初始化耗时');
+        document.querySelector('#loading').style.display = 'none';
+      });
+      const source = document.getElementById('source');
+      const { width: sourceWidth, height: sourceHeight } =
+        source.getBoundingClientRect();
+      source.addEventListener('mousedown', e => {
+        isDragging = true;
+        currentPosition = { x: e.clientX, y: e.clientY };
+        sourcePosition = {
+          x: source.getBoundingClientRect().x,
+          y: source.getBoundingClientRect().y,
+        };
+      });
+      document.body.addEventListener('mousemove', e => {
+        if (isDragging) {
+          const deltaX = e.clientX - currentPosition.x;
+          const deltaY = e.clientY - currentPosition.y;
+          const newX = sourcePosition.x + deltaX;
+          const newY = sourcePosition.y + deltaY;
+
+          source.style.left = `${newX}px`;
+          source.style.top = `${newY}px`;
+
+          currentPosition = { x: e.clientX, y: e.clientY };
+          sourcePosition = { x: newX, y: newY };
+
+          auxiliaryAlign(source.getBoundingClientRect(), (absorbX, absorbY) => {
+            source.style.left = `${absorbX}px`;
+            source.style.top = `${absorbY}px`;
+          });
+          clearLinesAndPoints();
+          drawLinesAndPoints();
+        }
+      });
+      document.body.addEventListener('mouseup', e => {
+        isDragging = false;
+        clearLinesAndPoints();
+      });
+
+      /** 画线代码区 */
+      const Axis = {
+        X: 0,
+        Y: 1,
+      };
+      const AlignIndicesIndex = {
+        NetworkIndex: 0,
+        SourceSideIndex: 1,
+      };
+      const getAlignAxisGroup = (isXAxis, targetNetwork, networkIndex) => {
+        const originAxis = isXAxis
+          ? targetNetwork.originYAxis
+          : targetNetwork.originXAxis;
+        const indices = isXAxis
+          ? targetNetwork.xAxisIndices
+          : targetNetwork.yAxisIndices;
+        const index = indices[networkIndex];
+        return originAxis[index];
+      };
+
+      // 根据索引找到对齐位置
+      const computeAlignPosition = (targetAxis, axisIndices) =>
+        targetAxis[axisIndices[AlignIndicesIndex.NetworkIndex]];
+
+      // 取点集的最大值和最小值作为连线的起点终点
+      const computeAlignLinePoints = points => [
+        Math.min(...points),
+        Math.max(...points),
+      ];
+
+      // 计算对齐位置上当前图形和目标图形的点集
+      const computeAlignPoints = (
+        isXAxis,
+        sourceAxis,
+        targetNetwork,
+        axisIndices,
+      ) => {
+        const targetAxisValues = getAlignAxisGroup(
+          isXAxis,
+          targetNetwork,
+          axisIndices[AlignIndicesIndex.NetworkIndex],
+        );
+
+        const sourceAxisValues =
+          axisIndices[AlignIndicesIndex.SourceSideIndex] === AlignIndex.Center
+            ? [sourceAxis[AlignIndex.Center]]
+            : [sourceAxis[AlignIndex.Left], sourceAxis[AlignIndex.Right]];
+
+        return [
+          targetAxisValues[AlignIndex.Left],
+          targetAxisValues[AlignIndex.Right],
+          ...sourceAxisValues,
+        ];
+      };
+
+      // 根据坐标轴创建点
+      const createPoint = (isXAxis, position, coordinate) =>
+        isXAxis
+          ? { x: position, y: coordinate }
+          : { x: coordinate, y: position };
+
+      // 渲染对齐线和点
+      const renderAlignLinesAndPoints = (
+        alignIndices,
+        sourceAxis,
+        targetNetwork,
+        axis,
+      ) => {
+        alignIndices.forEach(axisIndices => {
+          const isXAxis = axis === Axis.X;
+
+          const position = computeAlignPosition(
+            isXAxis ? targetNetwork.xAxis : targetNetwork.yAxis,
+            axisIndices,
+          );
+          const points = computeAlignPoints(
+            isXAxis,
+            sourceAxis,
+            targetNetwork,
+            axisIndices,
+          );
+          const [start, end] = computeAlignLinePoints(points);
+
+          const linePoint1 = createPoint(isXAxis, position, start);
+          const linePoint2 = createPoint(isXAxis, position, end);
+
+          renderLine(linePoint1, linePoint2);
+          points.map(point =>
+            renderPoint(createPoint(isXAxis, position, point)),
+          );
+        });
+      };
+
+      function drawLinesAndPoints() {
+        renderAlignLinesAndPoints(
+          alignIndices.xAxis,
+          sourceNetwork.yAxis,
+          targetNetwork,
+          Axis.X,
+        );
+        renderAlignLinesAndPoints(
+          alignIndices.yAxis,
+          sourceNetwork.xAxis,
+          targetNetwork,
+          Axis.Y,
+        );
+      }
+
+      const canvas = document.getElementById('canvas');
+      function renderLine(point1, point2) {
+        const path = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'path',
+        );
+        path.setAttribute('class', 'line');
+        path.setAttribute(
+          'd',
+          `M ${point1.x} ${point1.y} L ${point2.x} ${point2.y}`,
+        );
+        canvas.appendChild(path);
+      }
+      function renderPoint(point) {
+        const path = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'path',
+        );
+        path.setAttribute('class', 'point');
+        path.setAttribute('d', `M-3,-3L3,3M-3,3L3,-3`);
+        path.setAttribute('transform', `translate(${point.x}, ${point.y})`);
+        canvas.appendChild(path);
+      }
+      function clearLinesAndPoints() {
+        canvas.innerHTML = '';
+      }
+    </script>
+  </body>
+</html>

@@ -4,6 +4,7 @@
 
 快捷访问：
 
+- [吸附对齐](https://xixileng.github.io/absorb-align/)
 - [背景移除](https://xixileng.github.io/rembg-web/)
 - [圣诞树 🎄](https://xixileng.github.io/christmas/)
 - [程序员答案书 📖](https://xixileng.github.io/coder-answers-book/)
