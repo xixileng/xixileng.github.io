@@ -1,5 +1,5 @@
 // 页面导航走网络优先（保证拿到新版本），静态资源走缓存优先（文件名带 hash）
-const CACHE = 'pig-feast-v2';
+const CACHE = 'pig-feast-v3';
 const PRECACHE = ['./', './index.html', './manifest.webmanifest', './favicon.svg', './icons/icon-192.png'];
 
 // 构建产物带 hash，从 index.html 中解析出来一并预缓存，首次访问后即可离线
