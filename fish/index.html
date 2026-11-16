@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#06223a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>鲸吞 · 深海进化</title>
+    <script type="module" crossorigin src="/assets/index-BKcHCwch.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-9e_Dvo01.css">
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+    <div id="touch-layer"></div>
+    <div id="joy-base"><div id="joy-knob"></div></div>
+
+    <div id="hud" class="hidden">
+      <div id="hud-status" class="panel">
+        <div class="row">
+          <span id="hud-species"></span>
+          <span id="hud-tier"></span>
+        </div>
+        <div class="bar"><div id="hud-xpbar"></div></div>
+        <div id="hud-xptext" class="sub"></div>
+        <div class="row sub"><span>体力</span><span id="hud-stamina-text"></span></div>
+        <div class="bar stamina"><div id="hud-stamina"></div></div>
+        <div id="hud-buffs"></div>
+      </div>
+
+      <div id="hud-hold" class="panel hidden">
+        <div class="row"><span>👑 称霸倒计时</span><b id="hud-hold-text"></b></div>
+        <div class="bar gold"><div id="hud-holdbar"></div></div>
+      </div>
+
+      <div id="hud-board" class="panel"></div>
+      <canvas id="minimap" width="140" height="140"></canvas>
+
+      <div id="controls">
+        <button id="btn-boost" class="ctrl-btn">加速</button>
+        <button id="btn-skill" class="ctrl-btn">
+          <span id="skill-icon"></span>
+          <span id="skill-name"></span>
+          <span id="skill-cd"></span>
+          <span id="skill-key">E / 右键</span>
+        </button>
+      </div>
+      <div id="toast"></div>
+    </div>
+
+    <div id="menu" class="overlay">
+      <div class="menu-card">
+        <h1>鲸吞</h1>
+        <p class="tagline">大鱼吞小鱼，小鱼咬尾巴。进化成利维坦，称霸深海 60 秒。</p>
+        <input id="name-input" maxlength="10" placeholder="给你的鱼起个名字" />
+        <div id="species-grid"></div>
+        <div id="species-detail"></div>
+        <button id="start-btn" class="primary">下 海</button>
+        <div id="help" class="sub"></div>
+      </div>
+    </div>
+
+    <div id="result" class="overlay hidden">
+      <div class="menu-card small">
+        <h2 id="result-title"></h2>
+        <p id="result-desc"></p>
+        <div id="result-stats"></div>
+        <button id="again-btn" class="primary">再来一局</button>
+      </div>
+    </div>
+
+  </body>
+</html>
