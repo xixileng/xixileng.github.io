@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#06223a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>鲸吞 · 深海进化</title>
-    <script type="module" crossorigin src="./assets/index-CdPlUkVt.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BCUuKWxf.css">
+    <script type="module" crossorigin src="./assets/index-MtOFf0Rv.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-tDwRBUos.css">
   </head>
   <body>
     <canvas id="game"></canvas>
@@ -81,7 +81,9 @@
         <div class="menu-actions">
           <button id="start-btn" class="primary">下 海</button>
           <button id="daily-btn" class="ghost">今日挑战</button>
+          <button id="profile-btn" class="ghost">深海档案</button>
         </div>
+        <div id="equipped-title" class="sub title-line"></div>
         <div id="daily-info" class="sub daily-info"></div>
         <div id="help" class="sub"></div>
       </div>
@@ -95,6 +97,7 @@
         <div id="result-detail" class="sub records"></div>
         <div id="result-best" class="sub records"></div>
         <div id="result-daily" class="sub records"></div>
+        <div id="result-unlock" class="sub unlock"></div>
         <div class="result-actions">
           <button id="again-btn" class="primary">再来一局</button>
           <button id="copy-btn" class="ghost">复制战绩</button>
@@ -104,10 +107,25 @@
     </div>
 
     <div id="mutation" class="overlay hidden">
-      <div class="menu-card small">
-        <h2 id="mutation-title">进化选择</h2>
+      <div class="menu-card small mutation-draft">
+        <div class="mutation-head">
+          <h2 id="mutation-title">进化选择</h2>
+          <span id="mutation-countdown"></span>
+        </div>
         <p id="mutation-sub" class="sub"></p>
         <div id="mutation-cards"></div>
+        <div class="mutation-timer"><div id="mutation-timerbar"></div></div>
+      </div>
+    </div>
+
+    <div id="profile" class="overlay hidden">
+      <div class="menu-card">
+        <h2>深海档案</h2>
+        <p id="profile-summary" class="sub"></p>
+        <div id="profile-species"></div>
+        <h3 class="profile-heading">称号</h3>
+        <div id="profile-titles"></div>
+        <button id="profile-close" class="primary">返回</button>
       </div>
     </div>
 
