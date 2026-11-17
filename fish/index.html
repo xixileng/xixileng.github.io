@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#06223a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>鲸吞 · 深海进化</title>
-    <script type="module" crossorigin src="./assets/index-BM8pvym7.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BzX1cchr.css">
+    <script type="module" crossorigin src="./assets/index-74c_j2_1.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D6ib-MIT.css">
   </head>
   <body>
     <canvas id="game"></canvas>
@@ -78,8 +78,21 @@
         <h2 id="result-title"></h2>
         <p id="result-desc"></p>
         <div id="result-stats"></div>
+        <div id="result-detail" class="sub records"></div>
         <div id="result-best" class="sub records"></div>
-        <button id="again-btn" class="primary">再来一局</button>
+        <div class="result-actions">
+          <button id="again-btn" class="primary">再来一局</button>
+          <button id="copy-btn" class="ghost">复制战绩</button>
+        </div>
+        <div id="copy-status" class="sub"></div>
+      </div>
+    </div>
+
+    <div id="mutation" class="overlay hidden">
+      <div class="menu-card small">
+        <h2 id="mutation-title">进化选择</h2>
+        <p id="mutation-sub" class="sub"></p>
+        <div id="mutation-cards"></div>
       </div>
     </div>
 
