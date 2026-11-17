@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#06223a" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>鲸吞 · 深海进化</title>
-    <script type="module" crossorigin src="./assets/index-B7mybKUQ.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-QKrfw7hx.css">
+    <script type="module" crossorigin src="./assets/index-BM8pvym7.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BzX1cchr.css">
   </head>
   <body>
     <canvas id="game"></canvas>
@@ -40,6 +40,10 @@
         <div class="bar gold"><div id="hud-holdbar"></div></div>
       </div>
 
+      <div id="hud-hunt" class="panel hunt hidden">
+        <div class="row"><span>🩸 深海震怒 · 猎手围猎中</span><b id="hud-hunt-text"></b></div>
+      </div>
+
       <div id="hud-board" class="panel"></div>
       <canvas id="minimap" width="140" height="140"></canvas>
 
@@ -63,6 +67,7 @@
         <div id="species-grid"></div>
         <div id="species-detail"></div>
         <div id="records" class="sub records"></div>
+        <div id="nemesis" class="sub nemesis"></div>
         <button id="start-btn" class="primary">下 海</button>
         <div id="help" class="sub"></div>
       </div>
